@@ -1,0 +1,102 @@
+<mat-toolbar class="toolbar-title" color="primary" >
+    Controle de Acessórios
+</mat-toolbar>
+
+<mat-card class="card">
+  <mat-card-content>
+    <form class="form" [formGroup]="form">
+      <div class="grid">
+        <!-- name -->
+        <mat-form-field appearance="outline">
+          <mat-label>Nome</mat-label>
+          <input matInput formControlName="name" placeholder="Ex.: Tocantins" />
+          @if (form.get('name')?.hasError('backendError') && form.get('name')?.touched) {
+            <mat-error>{{ form.get('name')?.getError('backendError') }}</mat-error>
+          }
+        </mat-form-field>
+
+                <!-- acessorioTipo -->
+        <mat-form-field appearance="outline">
+          <mat-label>Tipo de Acessório</mat-label>
+          <input matInput formControlName="acessorioTipo" placeholder="Ex.: Joia" />
+          @if (form.get('acessorioTipo')?.hasError('backendError') && form.get('acessorioTipo')?.touched) {
+            <mat-error>{{ form.get('acessorioTipo')?.getError('backendError') }}</mat-error>
+          }
+        </mat-form-field>
+
+                <!-- material -->
+        <mat-form-field appearance="outline">
+          <mat-label>Material</mat-label>
+          <input matInput formControlName="material" placeholder="Ex.: Ouro" />
+          @if (form.get('material')?.hasError('backendError') && form.get('material')?.touched) {
+            <mat-error>{{ form.get('material')?.getError('backendError') }}</mat-error>
+          }
+        </mat-form-field>
+
+                <!-- tamanho -->
+        <mat-form-field appearance="outline">
+          <mat-label>Tamanho</mat-label>
+          <input matInput formControlName="tamanho" placeholder="Ex.: P" />
+          @if (form.get('tamanho')?.hasError('backendError') && form.get('tamanho')?.touched) {
+            <mat-error>{{ form.get('tamanho')?.getError('backendError') }}</mat-error>
+          }
+        </mat-form-field>
+
+                <!-- price -->
+        <mat-form-field appearance="outline">
+          <mat-label>Preço</mat-label>
+          <input matInput formControlName="price" placeholder="Ex.: 100.00" />
+          @if (form.get('price')?.hasError('backendError') && form.get('price')?.touched) {
+            <mat-error>{{ form.get('price')?.getError('backendError') }}</mat-error>
+          }
+        </mat-form-field>
+
+                <!-- estoque -->
+        <mat-form-field appearance="outline">
+          <mat-label>Estoque</mat-label>
+          <input matInput formControlName="estoque" placeholder="Ex.: 10" />
+          @if (form.get('estoque')?.hasError('backendError') && form.get('estoque')?.touched) {
+            <mat-error>{{ form.get('estoque')?.getError('backendError') }}</mat-error>
+          }
+        </mat-form-field>
+
+                <!-- fornecedor -->
+        <mat-form-field appearance="outline">
+          <mat-label>Fornecedor</mat-label>
+          <input matInput formControlName="fornecedor" placeholder="Ex.: Tocantins" />
+          @if (form.get('fornecedor')?.hasError('backendError') && form.get('fornecedor')?.touched) {
+            <mat-error>{{ form.get('fornecedor')?.getError('backendError') }}</mat-error>
+          }
+        </mat-form-field>
+
+
+      </div>
+
+      <div class="actions">
+        <button 
+          type="button"
+          mat-raised-button
+          routerLink="/acessorios">
+          Cancelar
+        </button>
+
+        <button 
+          mat-raised-button 
+          color="warn" 
+          (click)="excluir()"
+          [disabled]="!form.value.id">
+          Excluir
+        </button>
+
+        <button 
+          mat-raised-button 
+          color="primary" 
+          (click)="salvar()"
+          [disabled]="form.invalid">
+          Salvar
+        </button>
+
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
