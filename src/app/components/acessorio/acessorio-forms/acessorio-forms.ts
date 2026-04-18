@@ -40,14 +40,14 @@ export class AcessorioForms implements OnInit {
     private router: Router
   ) {
     this.form = this.fb.group({
-      id: [null],
-      name: [''],
-      acessorioTipo: [''],
-      material: [''],
-      tamanho: [null],
-      price: [null],
-      estoque: [null],
-      fornecedor: ['']
+      id: [null, [Validators.required]],
+      name: ['', [Validators.required]],
+      acessorioTipo: [null, [Validators.required]],
+      material: ['', [Validators.required]],
+      tamanho: [null, [Validators.required]],
+      price: [null, [Validators.required]],
+      quantidadeEstoque: [null, [Validators.required]],
+      fornecedor: [null, [Validators.required]]
     });
 
   }
@@ -63,7 +63,7 @@ export class AcessorioForms implements OnInit {
             material: acessorio.material,
             tamanho: acessorio.tamanho,
             price: acessorio.price,
-            estoque: acessorio.estoque,
+            quantidadeEstoque: acessorio.quantidadeEstoque,
             fornecedor: acessorio.fornecedor
           });
         }

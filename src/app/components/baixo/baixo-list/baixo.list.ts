@@ -6,14 +6,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { Acessorio } from '../../../models/acessorio.model';
-import { AcessorioService } from '../../../services/acessorio.service';
 import { PageEvent } from '@angular/material/paginator';
 import { forkJoin } from 'rxjs';
 import { RouterLink } from '@angular/router';
+import { Baixo } from '../../../models/baixo.model';
+import { BaixoService } from '../../../services/baixo.service';
 
 @Component({
-  selector: 'acessorio-list',
+  selector: 'baixo-list',
   imports: [
     MatToolbarModule,
     MatIconModule,
@@ -25,21 +25,21 @@ import { RouterLink } from '@angular/router';
     RouterLink,
 ],
 
-  styleUrls: ['acessorio-list.css'],
-  templateUrl: 'acessorio-list.html',
+  styleUrls: ['baixo-list.css'],
+  templateUrl: 'baixo-list.html',
 })
-export class AcessorioList implements OnInit {
+export class BaixoList implements OnInit {
 
   // variaveis de controle de paginacao
   totalRecords = 0;
   page = 0;
   pageSize = 12;
 
-  displayedColumns: string[] = ['id', 'name', 'acessorioTipo', 'material', 'tamanho', 'price', 'quantidadeEstoque', 'fornecedor', 'acao'];
-  dataSource = new MatTableDataSource<Acessorio>([]);
+  displayedColumns: string[] = ['id', 'name', 'baixoModeloBase', 'numeroCordas', 'baixoCor', 'price', 'quantidadeEstoque', 'fornecedor', 'acao'];
+  dataSource = new MatTableDataSource<Baixo>([]);
   searchTerm = '';
 
-  constructor(private acessorioService: AcessorioService) { }
+  constructor(private baixoService: BaixoService) { }
 
   ngOnInit(): void {
     this.loadData();
@@ -47,13 +47,13 @@ export class AcessorioList implements OnInit {
 
   loadData(): void {
     if (this.searchTerm) {
-      this.acessorioService.searchByName(this.searchTerm, this.page, this.pageSize).subscribe({
+      this.baixoService.searchByName(this.searchTerm, this.page, this.pageSize).subscribe({
         next: (items) => {
           this.dataSource.data = items;
           this.totalRecords = items.length;
         },
         error: (error) => {
-          console.error('Erro ao buscar acessórios', error);
+          console.error('Erro ao buscar baixo', error);
         }
       });
       return;
@@ -62,25 +62,25 @@ export class AcessorioList implements OnInit {
     // Se for a primeira carga (page = 0), buscar total também
     if (this.page === 0) {
       forkJoin({
-        items: this.acessorioService.findAll(this.page, this.pageSize),
-        total: this.acessorioService.count()
+        items: this.baixoService.findAll(this.page, this.pageSize),
+        total: this.baixoService.count()
       }).subscribe({
         next: ({ items, total }) => {
           this.dataSource.data = items;
           this.totalRecords = total;
         },
         error: (error) => {
-          console.error('Erro ao carregar acessórios', error);
+          console.error('Erro ao carregar baixo', error);
         }
       });
     } else {
       // Próximas páginas, só buscar items
-      this.acessorioService.findAll(this.page, this.pageSize).subscribe({
+      this.baixoService.findAll(this.page, this.pageSize).subscribe({
         next: (items) => {
           this.dataSource.data = items;
         },
         error: (error) => {
-          console.error('Erro ao carregar acessórios', error);
+          console.error('Erro ao carregar baixo', error);
         }
       });
     }
@@ -99,7 +99,7 @@ export class AcessorioList implements OnInit {
   }
 
   excluir(id: number) {
-    this.acessorioService.delete(id).subscribe({
+    this.baixoService.delete(id).subscribe({
       next: () => {
         this.loadData();
       }

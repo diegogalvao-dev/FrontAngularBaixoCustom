@@ -12,7 +12,7 @@
   </div>
 
   <!--botão de adicionar-->
-  <button class="custom-btn" routerLink="/acessorios/new">
+  <button class="custom-btn" routerLink="/baixo/new">
     <span class="icon">+</span>
     Adicionar
   </button>
@@ -36,22 +36,22 @@
     <td mat-cell *matCellDef="let obj"> {{obj.name}} </td>
   </ng-container>
 
-  <!-- acessorioTipo Column -->
-  <ng-container matColumnDef="acessorioTipo">
-    <th mat-header-cell *matHeaderCellDef> tipo </th>
-    <td mat-cell *matCellDef="let obj"> {{obj.acessorioTipo}} </td>
+  <!-- baixoModeloBase Column -->
+  <ng-container matColumnDef="baixoModeloBase">
+    <th mat-header-cell *matHeaderCellDef> Modelo </th>
+    <td mat-cell *matCellDef="let obj"> {{obj.baixoModeloBase}} </td>
   </ng-container>
 
-  <!-- material Column -->
-  <ng-container matColumnDef="material">
-    <th mat-header-cell *matHeaderCellDef> Material </th>
-    <td mat-cell *matCellDef="let obj"> {{obj.material}} </td>
+  <!-- numeroCordas Column -->
+  <ng-container matColumnDef="numeroCordas">
+    <th mat-header-cell *matHeaderCellDef> Número de Cordas </th>
+    <td mat-cell *matCellDef="let obj"> {{obj.numeroCordas}} </td>
   </ng-container>
 
-  <!-- tamanho Column -->
-  <ng-container matColumnDef="tamanho">
-    <th mat-header-cell *matHeaderCellDef> Tamanho </th>
-    <td mat-cell *matCellDef="let obj"> {{obj.tamanho}} </td>
+  <!-- baixoCor Column -->
+  <ng-container matColumnDef="baixoCor">
+    <th mat-header-cell *matHeaderCellDef> Cor </th>
+    <td mat-cell *matCellDef="let obj"> {{obj.baixoCor}} </td>
   </ng-container>
 
   <!-- price Column -->
@@ -76,7 +76,7 @@
   <ng-container matColumnDef="acao">
     <th mat-header-cell *matHeaderCellDef> Ação </th>
     <td mat-cell *matCellDef="let obj">
-      <button matIconButton color="primary" routerLink="/acessorios/edit/{{obj.id}}">
+      <button matIconButton color="primary" routerLink="/baixo/edit/{{obj.id}}">
         <mat-icon>edit</mat-icon>
       </button>
       <button class="buttonDelete" matIconButton color="warm" (click)="excluir(obj.id)">

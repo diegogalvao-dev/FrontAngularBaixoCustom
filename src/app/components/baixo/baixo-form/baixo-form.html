@@ -1,5 +1,5 @@
 <mat-toolbar class="toolbar-title" color="primary" >
-    Controle de Acessórios
+    Controle de Baixos
 </mat-toolbar>
 
 <mat-card class="card">
@@ -9,51 +9,58 @@
         <!-- name -->
         <mat-form-field appearance="outline">
           <mat-label>Nome</mat-label>
-          <input matInput formControlName="name" placeholder="Ex.: knobs" />
+          <input matInput formControlName="name" placeholder="Ex.: Fender" />
           @if (form.get('name')?.hasError('backendError') && form.get('name')?.touched) {
             <mat-error>{{ form.get('name')?.getError('backendError') }}</mat-error>
           }
         </mat-form-field>
 
-                <!-- acessorioTipo -->
+        <!-- baixoModeloBase -->
         <mat-form-field appearance="fill">
-          <mat-label>Tipo de acessorio</mat-label>
-          <mat-select formControlName="acessorioTipo" disableRipple>
-            <mat-option value="CORREIA">Correia</mat-option>
-            <mat-option value="CABO">Cabo</mat-option>
-            <mat-option value="PALHETA">Palheta</mat-option>
-            <mat-option value="CASE">Case</mat-option>
-            <mat-option value="AFINADOR">Afinador</mat-option>
-            <mat-option value="SUPORTE">Suporte</mat-option>
-        </mat-select>
-          @if (form.get('acessorioTipo')?.hasError('backendError') && form.get('acessorioTipo')?.touched) {
-            <mat-error>{{ form.get('acessorioTipo')?.getError('backendError') }}</mat-error>
+          <mat-label>Selecione o Modelo</mat-label>
+          <mat-select formControlName="baixoModeloBase" disableRipple>
+            <mat-option value="JAZZ_BASS">Jazz Bass</mat-option>
+            <mat-option value="PRECISION">Precision</mat-option>
+            <mat-option value="STINGRAY">Stingray</mat-option>
+            <mat-option value="THUNDERBIRD">Thunderbird</mat-option>
+          </mat-select>
+          
+          @if (form.get('baixoModeloBase')?.hasError('backendError') && form.get('baixoModeloBase')?.touched) {
+            <mat-error>{{ form.get('baixoModeloBase')?.getError('backendError') }}</mat-error>
           }
         </mat-form-field>
-                
+
         <!-- <mat-form-field appearance="outline">
-          <mat-label>Tipo de Acessório</mat-label>
-          <input matInput formControlName="acessorioTipo" placeholder="Ex.: Correia" />
-          @if (form.get('acessorioTipo')?.hasError('backendError') && form.get('acessorioTipo')?.touched) {
-            <mat-error>{{ form.get('acessorioTipo')?.getError('backendError') }}</mat-error>
+        <mat-label>Modelo</mat-label>
+          <input matInput formControlName="baixoModeloBase" placeholder="Ex.: Fender" />
+          @if (form.get('baixoModeloBase')?.hasError('backendError') && form.get('baixoModeloBase')?.touched) {
+            <mat-error>{{ form.get('baixoModeloBase')?.getError('backendError') }}</mat-error>
           }
         </mat-form-field> -->
 
-                <!-- material -->
+                <!-- numeroCordas -->
         <mat-form-field appearance="outline">
-          <mat-label>Material</mat-label>
-          <input matInput formControlName="material" placeholder="Ex.: fibra de carbono" />
-          @if (form.get('material')?.hasError('backendError') && form.get('material')?.touched) {
-            <mat-error>{{ form.get('material')?.getError('backendError') }}</mat-error>
+          <mat-label>Número de Cordas</mat-label>
+          <input matInput formControlName="numeroCordas" placeholder="Ex.: 4" />
+          @if (form.get('numeroCordas')?.hasError('backendError') && form.get('numeroCordas')?.touched) {
+            <mat-error>{{ form.get('numeroCordas')?.getError('backendError') }}</mat-error>
           }
         </mat-form-field>
 
-                <!-- tamanho -->
-        <mat-form-field appearance="outline">
-          <mat-label>Tamanho</mat-label>
-          <input matInput formControlName="tamanho" placeholder="Ex.: 2cm" />
-          @if (form.get('tamanho')?.hasError('backendError') && form.get('tamanho')?.touched) {
-            <mat-error>{{ form.get('tamanho')?.getError('backendError') }}</mat-error>
+
+                <!-- baixoCor -->
+        <mat-form-field appearance="fill">
+          <mat-label>Selecione a cor</mat-label>
+          <mat-select formControlName="baixoCor" disableRipple>
+            <mat-option value="PRETO">Preto</mat-option>
+            <mat-option value="BRANCO">Branco</mat-option>
+            <mat-option value="VERMELHO">Vermelho</mat-option>
+            <mat-option value="AZUL">Azul</mat-option>
+            <mat-option value="VERDE">Verde</mat-option>
+            <mat-option value="SUNBURST">Sunburst</mat-option>
+        </mat-select>
+          @if (form.get('baixoCor')?.hasError('backendError') && form.get('baixoCor')?.touched) {
+            <mat-error>{{ form.get('baixoCor')?.getError('backendError') }}</mat-error>
           }
         </mat-form-field>
 
@@ -78,7 +85,7 @@
                 <!-- fornecedor -->
         <mat-form-field appearance="outline">
           <mat-label>Fornecedor</mat-label>
-          <input matInput formControlName="fornecedor" placeholder="Ex.: 1" />
+          <input matInput formControlName="fornecedor" placeholder="Ex.: 2" />
           @if (form.get('fornecedor')?.hasError('backendError') && form.get('fornecedor')?.touched) {
             <mat-error>{{ form.get('fornecedor')?.getError('backendError') }}</mat-error>
           }
@@ -91,7 +98,7 @@
         <button 
           type="button"
           mat-raised-button
-          routerLink="/acessorios">
+          routerLink="/baixo">
           Cancelar
         </button>
 

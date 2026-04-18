@@ -1,1 +1,12 @@
-<router-outlet />
+<div class="main-wrapper" [class.collapsed]="isLeftSidebarCollapsed()">
+  
+  <app-left-side-bar
+    [isLeftSidebarCollapsed]="isLeftSidebarCollapsed()"
+    (changeIsLeftSidebarCollapsed)="changeIsLeftSidebarCollapsed($event)">
+  </app-left-side-bar>
+
+  <div class="content-area">
+    <router-outlet></router-outlet>
+  </div>
+
+</div>

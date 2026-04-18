@@ -1,0 +1,150 @@
+<mat-toolbar class="toolbar-title" color="primary" >
+    Controle de BaixoCustomizado
+</mat-toolbar>
+
+<mat-card class="card">
+  <mat-card-content>
+    <form class="form" [formGroup]="form">
+      <div class="grid">
+        <!-- baixoModeloBase -->
+        <mat-form-field appearance="fill">
+          <mat-label>Selecione o Modelo</mat-label>
+          <mat-select formControlName="baixoModeloBase" disableRipple>
+            <mat-option value="JAZZ_BASS">Jazz Bass</mat-option>
+            <mat-option value="PRECISION">Precision</mat-option>
+            <mat-option value="STINGRAY">Stingray</mat-option>
+            <mat-option value="THUNDERBIRD">Thunderbird</mat-option>
+          </mat-select>
+          
+          @if (form.get('baixoModeloBase')?.hasError('backendError') && form.get('baixoModeloBase')?.touched) {
+            <mat-error>{{ form.get('baixoModeloBase')?.getError('backendError') }}</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- <mat-form-field appearance="outline">
+        <mat-label>Modelo</mat-label>
+          <input matInput formControlName="baixoModeloBase" placeholder="Ex.: Fender" />
+          @if (form.get('baixoModeloBase')?.hasError('backendError') && form.get('baixoModeloBase')?.touched) {
+            <mat-error>{{ form.get('baixoModeloBase')?.getError('backendError') }}</mat-error>
+          }
+        </mat-form-field> -->
+
+                <!-- description -->
+        <mat-form-field appearance="outline">
+          <mat-label>Descrição</mat-label>
+          <input matInput formControlName="description" placeholder="Ex.: Baixo elétrico" />
+          @if (form.get('description')?.hasError('backendError') && form.get('description')?.touched) {
+            <mat-error>{{ form.get('description')?.getError('backendError') }}</mat-error>
+          }
+        </mat-form-field>
+
+
+                <!-- baixoCor -->
+        <mat-form-field appearance="fill">
+          <mat-label>Selecione a cor</mat-label>
+          <mat-select formControlName="baixoCor" disableRipple>
+            <mat-option value="PRETO">Preto</mat-option>
+            <mat-option value="BRANCO">Branco</mat-option>
+            <mat-option value="VERMELHO">Vermelho</mat-option>
+            <mat-option value="AZUL">Azul</mat-option>
+            <mat-option value="VERDE">Verde</mat-option>
+            <mat-option value="SUNBURST">Sunburst</mat-option>
+        </mat-select>
+          @if (form.get('baixoCor')?.hasError('backendError') && form.get('baixoCor')?.touched) {
+            <mat-error>{{ form.get('baixoCor')?.getError('backendError') }}</mat-error>
+          }
+        </mat-form-field>
+
+                <!-- configuracaoEletronica -->
+        <mat-form-field appearance="outline">
+          <mat-label>Configuração Eletrônica</mat-label>
+          <input matInput formControlName="configuracaoEletronica" placeholder="Ex.: 1" />
+          @if (form.get('configuracaoEletronica')?.hasError('backendError') && form.get('configuracaoEletronica')?.touched) {
+            <mat-error>{{ form.get('configuracaoEletronica')?.getError('backendError') }}</mat-error>
+          }
+        </mat-form-field>
+
+                <!-- captadorList -->
+        <mat-form-field appearance="outline">
+          <mat-label>Captadores</mat-label>
+          <input matInput formControlName="captadorList" placeholder="Ex.: 4" />
+          @if (form.get('captadorList')?.hasError('backendError') && form.get('captadorList')?.touched) {
+            <mat-error>{{ form.get('captadorList')?.getError('backendError') }}</mat-error>
+          }
+        </mat-form-field>
+
+
+
+                <!-- estimatedPrice -->
+        <mat-form-field appearance="outline">
+          <mat-label>Preço Estimado</mat-label>
+          <input matInput formControlName="estimatedPrice" placeholder="Ex.: 100.00" />
+          @if (form.get('estimatedPrice')?.hasError('backendError') && form.get('estimatedPrice')?.touched) {
+            <mat-error>{{ form.get('estimatedPrice')?.getError('backendError') }}</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- baixoStatus -->
+        <mat-form-field appearance="fill">
+          <mat-label>Selecione o status</mat-label>
+          <mat-select formControlName="baixoStatus" disableRipple>
+            <mat-option value="PROJETANDO">Projetando</mat-option>
+            <mat-option value="EM_CONSTRUCAO">Em construção</mat-option>
+            <mat-option value="EM_TESTE">Em teste</mat-option>
+            <mat-option value="FINALIZADO">Finalizado</mat-option>
+            <mat-option value="ENTREGUE">Entregue</mat-option>
+        </mat-select>
+          @if (form.get('baixoStatus')?.hasError('backendError') && form.get('baixoStatus')?.touched) {
+            <mat-error>{{ form.get('baixoStatus')?.getError('backendError') }}</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- pessoaCliente -->
+        <mat-form-field appearance="outline">
+          <mat-label>Pessoa Cliente</mat-label>
+          <input matInput formControlName="pessoaCliente" placeholder="Ex.: João da Silva" />
+          @if (form.get('pessoaCliente')?.hasError('backendError') && form.get('pessoaCliente')?.touched) {
+            <mat-error>{{ form.get('pessoaCliente')?.getError('backendError') }}</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- pessoaLuthier -->
+        <mat-form-field appearance="outline">
+          <mat-label>Pessoa Luthier</mat-label>
+          <input matInput formControlName="pessoaLuthier" placeholder="Ex.: Maria Oliveira" />
+          @if (form.get('pessoaLuthier')?.hasError('backendError') && form.get('pessoaLuthier')?.touched) {
+            <mat-error>{{ form.get('pessoaLuthier')?.getError('backendError') }}</mat-error>
+          }
+        </mat-form-field>
+
+
+      </div>
+
+      <div class="actions">
+        <button 
+          type="button"
+          mat-raised-button
+          routerLink="/baixo-custom">
+          Cancelar
+        </button>
+
+        <button 
+          mat-raised-button 
+          color="warn" 
+          (click)="excluir()"
+          [disabled]="!form.value.id">
+          Excluir
+        </button>
+
+        <button 
+          mat-raised-button 
+          color="primary" 
+          (click)="salvar()"
+          [disabled]="form.invalid">
+          Salvar
+        </button>
+
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

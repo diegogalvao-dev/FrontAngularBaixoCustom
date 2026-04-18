@@ -14,7 +14,7 @@
      usando clamp (mín: 12px, preferido: 2vw, máx: 24px) */
 :host {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   padding: clamp(12px, 2vw, 24px);
   align-items: center;
   margin-top: 20px;

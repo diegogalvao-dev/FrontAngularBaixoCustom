@@ -1,11 +1,12 @@
-export class Acessorio {
+export class Baixo {
+
     id!: number;
     name!: string;
-    acessorioTipo!: string;
-    material!: string;
-    tamanho!: string;
     price!: number;
     quantidadeEstoque!: number;
     fornecedor!: string;
-}
+    baixoModeloBase!: string;
+    numeroCordas!: number;
+    baixoCor!: string;
 
+}

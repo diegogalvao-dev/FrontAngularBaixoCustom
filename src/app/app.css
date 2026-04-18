@@ -1,0 +1,29 @@
+/* app.component.css */
+
+.main-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+}
+
+app-left-side-bar {
+  position: fixed; /* Fixa a sidebar na tela */
+  left: 0;
+  top: 0;
+  height: 100vh;
+  z-index: 1000; /* Garante que ela fique por cima de tudo */
+  transition: width 0.3s ease;
+  width: 260px; /* Tamanho dela aberta */
+}
+
+/* Quando a sidebar está reduzida no app.html */
+.collapsed app-left-side-bar {
+  width: 80px; /* Tamanho dela fechada */
+}
+
+.content-area {
+  /* O conteúdo SEMPRE respeita os 80px da sidebar fechada */
+  margin-left: 5rem; 
+  padding: 1.5rem;
+  transition: none; /* O conteúdo não se mexe quando a sidebar expande */
+}
