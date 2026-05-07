@@ -7,23 +7,235 @@
 }
 
 app-left-side-bar {
-  position: fixed; /* Fixa a sidebar na tela */
+  position: fixed;
   left: 0;
   top: 0;
   height: 100vh;
-  z-index: 1000; /* Garante que ela fique por cima de tudo */
+  z-index: 1002; /* Higher than top-bar */
   transition: width 0.3s ease;
-  width: 260px; /* Tamanho dela aberta */
+  width: 260px;
 }
 
 /* Quando a sidebar está reduzida no app.html */
 .collapsed app-left-side-bar {
-  width: 80px; /* Tamanho dela fechada */
+  width: 80px;
+  /* Tamanho dela fechada */
+}
+
+.router-outlet {
+  padding: 2rem 2.5rem;
 }
 
 .content-area {
-  /* O conteúdo SEMPRE respeita os 80px da sidebar fechada */
-  margin-left: 5rem; 
-  padding: 1.5rem;
-  transition: none; /* O conteúdo não se mexe quando a sidebar expande */
+  margin-left: 260px;
+  padding-top: 64px;
+  /* Espaço para o header fixo */
+  transition: margin-left 0.3s ease;
+}
+
+.collapsed .content-area {
+  margin-left: 80px;
+}
+
+/* Top Bar Styling */
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: calc(100% - 260px);
+  margin-left: 260px;
+  height: 64px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 40px 0 1rem;
+  background-color: #400606;
+  z-index: 1001; /* Lower than sidebar */
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.collapsed .top-bar {
+  margin-left: 80px;
+  width: calc(100% - 80px);
+}
+
+.top-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.brand-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--on-surface);
+  letter-spacing: 0.5px;
+  margin-left: 2rem;
+}
+
+.sidebar-toggle {
+  background: transparent;
+  border: none;
+  padding: 0;
+  width: 2rem;
+  /* 2rem (32px) alinha com a largura dos icones na sidebar */
+  color: var(--on-surface);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-toggle:hover {
+  color: var(--primary);
+}
+
+.top-bar .search-container {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  width: 400px;
+}
+
+.top-bar .search-icon {
+  margin-right: 0.75rem;
+  color: var(--on-surface-variant);
+}
+
+.top-bar .search-input {
+  border: none;
+  background: transparent;
+  color: var(--on-surface);
+  width: 100%;
+  outline: none;
+}
+
+.top-bar .search-input::placeholder {
+  color: var(--on-surface-variant);
+}
+
+.top-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.top-bar-actions .icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--on-surface);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.top-bar-actions .icon-btn:hover {
+  color: var(--primary);
+}
+
+.top-bar-actions .user-profile {
+  font-size: 2rem;
+  color: var(--on-surface);
+  cursor: pointer;
+}
+
+/* Footer Styling */
+.main-footer {
+  margin-top: 2rem;
+  padding: 1.5rem 2.5rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2rem;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.brand-text {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--on-surface);
+  letter-spacing: 1px;
+}
+
+.brand-tagline {
+  font-size: 0.75rem;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: 600;
+}
+
+.copyright {
+  font-size: 0.875rem;
+  color: var(--on-surface-variant);
+  opacity: 0.6;
+}
+
+.footer-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
+.social-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.social-icon {
+  color: var(--on-surface);
+  font-size: 1.25rem;
+  transition: all 0.3s ease;
+  opacity: 0.7;
+}
+
+.social-icon:hover {
+  color: var(--primary);
+  opacity: 1;
+  transform: translateY(-3px);
+}
+
+.footer-nav {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.footer-nav a {
+  color: var(--on-surface-variant);
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 0.3s ease;
+}
+
+.footer-nav a:hover {
+  color: var(--on-surface);
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .footer-right {
+    align-items: center;
+  }
 }

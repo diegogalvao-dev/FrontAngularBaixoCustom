@@ -1,30 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { MatToolbar } from "@angular/material/toolbar";
-import { MatCardModule } from '@angular/material/card';
-import { MatFormField, MatLabel, MatError } from "@angular/material/form-field";
 import { MatButtonModule } from '@angular/material/button';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BaixoService } from '../../../services/baixo.service';
 import { Baixo } from '../../../models/baixo.model';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ConfirmationDialog } from '../../confirmation-dialog/confirmation-dialog';
 
 
 @Component({
   selector: 'app-baixo-forms',
   imports: [
-    MatToolbar,
-    MatCardModule,
-    MatFormField,
-    MatLabel,
-    MatError,
-    MatButtonModule,
     ReactiveFormsModule,
-    MatInputModule,
-    MatSelectModule,
-    RouterLink],
+    RouterLink,
+    MatDialogModule],
   templateUrl: 'baixo-form.html',
   styleUrl: 'baixo-form.css',
 })
@@ -37,10 +27,11 @@ export class BaixoForm implements OnInit {
     private BaixoService: BaixoService,
     private activatedRoute: ActivatedRoute,
     private snack: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {
     this.form = this.fb.group({
-      id: [null, [Validators.required]],
+      id: [null],
       name: ['', [Validators.required]],
       price: [null, [Validators.required]],
       quantidadeEstoque: [null, [Validators.required]],
@@ -97,7 +88,7 @@ export class BaixoForm implements OnInit {
 
   resultado.subscribe({
     next: (obj) => {
-      this.router.navigateByUrl('/baixo');
+      this.router.navigate(['/produto'], { queryParams: { tab: 0 } });
       this.exibirMensagem('Baixo salvo com sucesso!');
     },
     error: (erro) => {
@@ -119,19 +110,27 @@ export class BaixoForm implements OnInit {
 }
 
   excluir() {
-    if (this.form.valid) {
-      const baixo = this.form.value;
-      if (baixo.id != null) {
-        this.BaixoService.delete(baixo.id).subscribe({
-          next: () => {
-            this.router.navigateByUrl('/baixos');
-            this.exibirMensagem('Baixo excluído com sucesso!');
-          },
-          error: (erro) => {
-            this.exibirMensagem('Problema ao excluir o baixo, entre em contato com o suporte!');
-          }
-        })
-      }
+    if (this.form.value.id) {
+      const dialogRef = this.dialog.open(ConfirmationDialog, {
+        data: {
+          title: 'Confirmar Exclusão',
+          message: 'Tem certeza que deseja excluir este baixo?'
+        }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.BaixoService.delete(this.form.value.id).subscribe({
+            next: () => {
+              this.router.navigate(['/produto'], { queryParams: { tab: 0 } });
+              this.exibirMensagem('Baixo excluído com sucesso!');
+            },
+            error: (erro) => {
+              this.exibirMensagem('Problema ao excluir o baixo, entre em contato com o suporte!');
+            }
+          });
+        }
+      });
     }
   }
 

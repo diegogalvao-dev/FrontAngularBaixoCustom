@@ -44,7 +44,7 @@ export class BaixocustomForm implements OnInit {
       baixoModeloBase: [null, [Validators.required]],
       description: ['', [Validators.required]],
       baixoCor: ['', [Validators.required]],
-      configuracaoEletronica: [null, [Validators.required, Validators.min(1)]],
+      configuracaoEletronica: [null, [Validators.required]],
       captadorList: [null, [Validators.required, Validators.min(1)]],
       estimatedPrice: [null, [Validators.required, Validators.min(0.01)]],
       baixoStatus: ['', [Validators.required]],
@@ -88,10 +88,10 @@ export class BaixocustomForm implements OnInit {
     baixoCor: dados.baixoCor,
     baixoStatus: dados.baixoStatus,
     estimatedPrice: Number(dados.estimatedPrice), // Garante que é número
-    configuracaoEletronica: { id: Number(dados.configuracaoEletronica) },
-    captadorList: [{ id: Number(dados.captadorList) }],
-    pessoaCliente: { id: Number(dados.pessoaCliente) },
-    pessoaLuthier: { id: Number(dados.pessoaLuthier) }
+    configuracaoEletronica: Number(dados.configuracaoEletronica),
+    captadorList: [Number(dados.captadorList) ],
+    pessoaCliente: Number(dados.pessoaCliente),
+    pessoaLuthier: Number(dados.pessoaLuthier) 
   };
 
   console.log('JSON enviado:', JSON.stringify(baixocustom)); // Use isso para conferir no console!

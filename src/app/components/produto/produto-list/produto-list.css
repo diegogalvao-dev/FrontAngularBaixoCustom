@@ -1,0 +1,69 @@
+/* Estilos da pagina de produtos (container para abas) */
+::ng-deep .mat-mdc-tab-body-content {
+  overflow-y: auto !important;
+  /* Permite rolar o conteúdo */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE/Edge */
+}
+
+::ng-deep .mat-mdc-tab-body-content::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari e Opera */
+}
+
+
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.page-title-section h1 {
+  font-size: var(--font-headline-md-size);
+  font-weight: var(--font-headline-md-weight);
+  margin: 0 0 0.5rem 0;
+  color: var(--on-surface);
+}
+
+.page-title-section p {
+  color: var(--on-surface-variant);
+  margin: 0;
+  font-size: var(--font-body-md-size);
+}
+
+.custom-tabs ::ng-deep .mat-mdc-tab-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 1.5rem;
+}
+
+.custom-tabs ::ng-deep .mat-mdc-tab-labels {
+  justify-content: flex-start !important;
+}
+
+.custom-tabs ::ng-deep .mat-mdc-tab {
+  min-width: unset !important;
+  padding: 0 20px !important;
+  height: 48px !important;
+  flex-grow: 0 !important;
+}
+
+.custom-tabs ::ng-deep .mat-mdc-tab .mdc-tab__text-label {
+  color: var(--on-surface-variant) !important;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.custom-tabs ::ng-deep .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: var(--primary) !important;
+}
+
+.custom-tabs ::ng-deep .mdc-tab-indicator__content--underline {
+  border-color: var(--primary) !important;
+  border-top-width: 2px !important;
+}

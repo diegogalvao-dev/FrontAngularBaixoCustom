@@ -54,13 +54,14 @@
 }
 
 
-/* Responsividade: 
-   - quando a tela for menor que 640px, a grid passa a ter apenas 1 coluna */
-@media (max-width: 800px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
+.items{
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
 
+section{
+  margin-bottom: 20px;
 }
 
 /* Faz com que os campos de formulário Material ocupem 100% da largura */
@@ -102,3 +103,15 @@ mat-card-title {
   font-weight: 700;
   letter-spacing: 0.2px;
 }
+
+@media (max-width: 1024px) {
+  .items {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 800px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

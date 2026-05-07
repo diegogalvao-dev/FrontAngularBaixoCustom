@@ -1,4 +1,5 @@
-import {Component, computed, input, OnInit} from '@angular/core';
+import { Component, computed, input, OnInit } from '@angular/core';
+import { NgFor, NgIf, NgClass } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,6 +12,8 @@ import { AcessorioService } from '../../../services/acessorio.service';
 import { PageEvent } from '@angular/material/paginator';
 import { forkJoin } from 'rxjs';
 import { RouterLink } from '@angular/router';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ConfirmationDialog } from '../../confirmation-dialog/confirmation-dialog';
 
 @Component({
   selector: 'acessorio-list',
@@ -23,7 +26,11 @@ import { RouterLink } from '@angular/router';
     MatInputModule,
     MatPaginatorModule,
     RouterLink,
-],
+    NgFor,
+    NgIf,
+    NgClass,
+    MatDialogModule
+  ],
 
   styleUrls: ['acessorio-list.css'],
   templateUrl: 'acessorio-list.html',
@@ -35,11 +42,11 @@ export class AcessorioList implements OnInit {
   page = 0;
   pageSize = 12;
 
-  displayedColumns: string[] = ['id', 'name', 'acessorioTipo', 'material', 'tamanho', 'price', 'quantidadeEstoque', 'fornecedor', 'acao'];
+  displayedColumns: string[] = ['imagem', 'name', 'acessorioTipo', 'price', 'status', 'acao'];
   dataSource = new MatTableDataSource<Acessorio>([]);
   searchTerm = '';
-
-  constructor(private acessorioService: AcessorioService) { }
+  
+  constructor(private acessorioService: AcessorioService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.loadData();
@@ -99,11 +106,39 @@ export class AcessorioList implements OnInit {
   }
 
   excluir(id: number) {
-    this.acessorioService.delete(id).subscribe({
-      next: () => {
-        this.loadData();
+    const dialogRef = this.dialog.open(ConfirmationDialog, {
+      data: {
+        title: 'Confirmar Exclusão',
+        message: 'Tem certeza que deseja excluir este acessório?'
       }
     });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.acessorioService.delete(id).subscribe({
+          next: () => {
+            this.loadData();
+          }
+        });
+      }
+    });
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.totalRecords / this.pageSize);
+  }
+
+  get pages(): number[] {
+    const total = this.totalPages;
+    if (total <= 1) return [0];
+    return Array.from({ length: total }, (_, i) => i);
+  }
+
+  goToPage(page: number): void {
+    if (page >= 0 && page < this.totalPages) {
+      this.page = page;
+      this.loadData();
+    }
   }
 
 

@@ -8,6 +8,7 @@ import { baixoResolver } from './resolvers/baixo-resolver';
 import { BaixocustomForm } from './components/baixocustom/baixocustom-forms/baixocustom-forms';
 import { baixocustomResolver } from './resolvers/baixocustom-resolver';
 import { BaixocustomList } from './components/baixocustom/baixocustom-list/baixocustom-list';
+import { ProdutoList } from './components/produto/produto-list/produto-list'; 
 
 export const routes: Routes = [
 
@@ -25,6 +26,8 @@ export const routes: Routes = [
    {path: 'baixo-custom/edit/:id', component: BaixocustomForm, title: 'Edição de Baixo', 
       resolve: {baixo: baixocustomResolver}  },
    {path: 'baixo-custom/new', component: BaixocustomForm, title: 'Cadastro de Baixo'},
+
+   {path: 'produto', component: ProdutoList, title: 'Listagem de Produtos'},
 
 
 ];

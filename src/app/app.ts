@@ -28,4 +28,8 @@ export class App {
     this.isLeftSidebarCollapsed.set(isLeftSidebarCollapsed);
   }
 
+  toggleSidebar(): void {
+    this.isLeftSidebarCollapsed.update(val => !val);
+  }
+
 }

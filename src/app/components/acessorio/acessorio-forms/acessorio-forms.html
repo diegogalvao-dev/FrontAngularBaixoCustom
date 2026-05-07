@@ -1,117 +1,184 @@
-<mat-toolbar class="toolbar-title" color="primary" >
-    Controle de Acessórios
-</mat-toolbar>
+<form [formGroup]="form" class="max-w-[1200px] mx-auto p-6 animate-in fade-in duration-700 text-on-surface">
 
-<mat-card class="card">
-  <mat-card-content>
-    <form class="form" [formGroup]="form">
-      <div class="grid">
-        <!-- name -->
-        <mat-form-field appearance="outline">
-          <mat-label>Nome</mat-label>
-          <input matInput formControlName="name" placeholder="Ex.: knobs" />
-          @if (form.get('name')?.hasError('backendError') && form.get('name')?.touched) {
-            <mat-error>{{ form.get('name')?.getError('backendError') }}</mat-error>
-          }
-        </mat-form-field>
+  <!-- Page Header -->
+  <div class="flex justify-between items-end mb-10">
+    <div>
+      <nav class="flex gap-2 text-xs text-zinc-500 uppercase tracking-widest font-bold mb-2">
+        <a routerLink="/produto" [queryParams]="{tab: 1}"
+          class="hover:text-red-500 cursor-pointer transition-colors">Inventory</a>
+        <span>/</span>
+        <span class="text-zinc-300">Novo Acessório</span>
+      </nav>
+      <h1 class="font-headline-xl text-4xl font-extrabold text-zinc-100">Novo Acessório</h1>
+    </div>
+    <div class="flex gap-4">
+      <button type="button" routerLink="/produto" [queryParams]="{tab: 1}"
+        class="px-6 py-3 rounded text-zinc-400 font-bold text-sm uppercase tracking-widest border border-white/10 bg-white/5 hover:bg-white/10 transition-all active:scale-95 cursor-pointer">
+        Cancelar
+      </button>
+      <button type="button" (click)="salvar()" [disabled]="form.invalid"
+        class="px-8 py-3 rounded bg-[#a60321] text-white font-bold text-sm uppercase tracking-widest hover:bg-[#86021a] transition-all active:scale-95 shadow-xl shadow-red-950/40 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
+        Salvar Produto
+      </button>
+    </div>
+  </div>
 
-                <!-- acessorioTipo -->
-        <mat-form-field appearance="fill">
-          <mat-label>Tipo de acessorio</mat-label>
-          <mat-select formControlName="acessorioTipo" disableRipple>
-            <mat-option value="CORREIA">Correia</mat-option>
-            <mat-option value="CABO">Cabo</mat-option>
-            <mat-option value="PALHETA">Palheta</mat-option>
-            <mat-option value="CASE">Case</mat-option>
-            <mat-option value="AFINADOR">Afinador</mat-option>
-            <mat-option value="SUPORTE">Suporte</mat-option>
-        </mat-select>
-          @if (form.get('acessorioTipo')?.hasError('backendError') && form.get('acessorioTipo')?.touched) {
-            <mat-error>{{ form.get('acessorioTipo')?.getError('backendError') }}</mat-error>
-          }
-        </mat-form-field>
-                
-        <!-- <mat-form-field appearance="outline">
-          <mat-label>Tipo de Acessório</mat-label>
-          <input matInput formControlName="acessorioTipo" placeholder="Ex.: Correia" />
-          @if (form.get('acessorioTipo')?.hasError('backendError') && form.get('acessorioTipo')?.touched) {
-            <mat-error>{{ form.get('acessorioTipo')?.getError('backendError') }}</mat-error>
-          }
-        </mat-form-field> -->
+  <!-- Bento Grid Layout -->
+  <div class="items">
 
-                <!-- material -->
-        <mat-form-field appearance="outline">
-          <mat-label>Material</mat-label>
-          <input matInput formControlName="material" placeholder="Ex.: fibra de carbono" />
-          @if (form.get('material')?.hasError('backendError') && form.get('material')?.touched) {
-            <mat-error>{{ form.get('material')?.getError('backendError') }}</mat-error>
-          }
-        </mat-form-field>
+    <!-- Left Column: Main Forms -->
+    <div class="leftSide">
 
-                <!-- tamanho -->
-        <mat-form-field appearance="outline">
-          <mat-label>Tamanho</mat-label>
-          <input matInput formControlName="tamanho" placeholder="Ex.: 2cm" />
-          @if (form.get('tamanho')?.hasError('backendError') && form.get('tamanho')?.touched) {
-            <mat-error>{{ form.get('tamanho')?.getError('backendError') }}</mat-error>
-          }
-        </mat-form-field>
+      <!-- Basic Info Card -->
+      <section
+        class="bg-gradient-to-br from-[#121212] to-[#260108]/20 border border-white/10 rounded-lg p-6 shadow-2xl backdrop-blur-md">
+        <h3 class="text-zinc-500 font-bold text-sm uppercase tracking-widest mb-6">Informações Básicas</h3>
 
-                <!-- price -->
-        <mat-form-field appearance="outline">
-          <mat-label>Preço</mat-label>
-          <input matInput formControlName="price" placeholder="Ex.: 100.00" />
-          @if (form.get('price')?.hasError('backendError') && form.get('price')?.touched) {
-            <mat-error>{{ form.get('price')?.getError('backendError') }}</mat-error>
-          }
-        </mat-form-field>
+        <div class="grid grid-cols-2 gap-6">
+          <div class="col-span-2">
+            <label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Nome do Produto</label>
+            <input type="text" formControlName="name" placeholder="Ex: Correia Fender"
+              class="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-zinc-200 focus:border-red-600/50 focus:ring-1 focus:ring-red-600/30 transition-all outline-none" />
+            @if (form.get('name')?.hasError('backendError') && form.get('name')?.touched) {
+            <p class="text-red-500 text-xs mt-1">{{ form.get('name')?.getError('backendError') }}</p>
+            }
+          </div>
 
-                <!-- estoque -->
-        <mat-form-field appearance="outline">
-          <mat-label>Estoque</mat-label>
-          <input matInput formControlName="quantidadeEstoque" placeholder="Ex.: 10" />
-          @if (form.get('quantidadeEstoque')?.hasError('backendError') && form.get('quantidadeEstoque')?.touched) {
-            <mat-error>{{ form.get('quantidadeEstoque')?.getError('backendError') }}</mat-error>
-          }
-        </mat-form-field>
+          <div class="col-span-1">
+            <label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Categoria</label>
+            <select formControlName="acessorioTipo"
+              class="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-zinc-200 focus:border-red-600/50 focus:ring-1 focus:ring-red-600/30 transition-all outline-none [&>option]:bg-[#121212]">
+              <option value="CORREIA">Correia</option>
+              <option value="CABO">Cabo</option>
+              <option value="PALHETA">Palheta</option>
+              <option value="CASE">Case</option>
+              <option value="AFINADOR">Afinador</option>
+              <option value="SUPORTE">Suporte</option>
+            </select>
+            @if (form.get('acessorioTipo')?.hasError('backendError') && form.get('acessorioTipo')?.touched) {
+            <p class="text-red-500 text-xs mt-1">{{ form.get('acessorioTipo')?.getError('backendError') }}</p>
+            }
+          </div>
 
-                <!-- fornecedor -->
-        <mat-form-field appearance="outline">
-          <mat-label>Fornecedor</mat-label>
-          <input matInput formControlName="fornecedor" placeholder="Ex.: 1" />
-          @if (form.get('fornecedor')?.hasError('backendError') && form.get('fornecedor')?.touched) {
-            <mat-error>{{ form.get('fornecedor')?.getError('backendError') }}</mat-error>
-          }
-        </mat-form-field>
+          <div class="col-span-1">
+            <label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Fornecedor</label>
+            <div class="relative">
+              <input type="text" placeholder="Digite para buscar..." formControlName="fornecedor"
+                [matAutocomplete]="auto"
+                class="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-zinc-200 focus:border-red-600/50 focus:ring-1 focus:ring-red-600/30 transition-all outline-none" />
+              <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                @for (option of filteredOptions | async; track option.id) {
+                <mat-option [value]="option"
+                  class="!bg-[#121212] !text-zinc-200 hover:!bg-red-900/30">{{option.name}}</mat-option>
+                }
+              </mat-autocomplete>
+            </div>
+            @if (form.get('fornecedor')?.hasError('backendError') && form.get('fornecedor')?.touched) {
+            <p class="text-red-500 text-xs mt-1">{{ form.get('fornecedor')?.getError('backendError') }}</p>
+            }
+          </div>
+        </div>
+      </section>
 
+      <!-- Technical Specs Card -->
+      <section
+        class="bg-gradient-to-br from-[#121212] to-[#260108]/20 border border-white/10 rounded-lg p-6 shadow-2xl backdrop-blur-md">
+        <h3 class="text-zinc-500 font-bold text-sm uppercase tracking-widest mb-6">Especificações Técnicas</h3>
 
-      </div>
+        <div class="grid grid-cols-2 gap-6">
+          <div class="col-span-1">
+            <label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Material</label>
+            <input type="text" formControlName="material" placeholder="Ex: Couro / Nylon"
+              class="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-zinc-200 focus:border-red-600/50 focus:ring-1 focus:ring-red-600/30 transition-all outline-none" />
+            @if (form.get('material')?.hasError('backendError') && form.get('material')?.touched) {
+            <p class="text-red-500 text-xs mt-1">{{ form.get('material')?.getError('backendError') }}</p>
+            }
+          </div>
 
-      <div class="actions">
-        <button 
-          type="button"
-          mat-raised-button
-          routerLink="/acessorios">
-          Cancelar
-        </button>
+          <div class="col-span-1">
+            <label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Tamanho</label>
+            <input type="text" formControlName="tamanho" placeholder="Ex: 2m"
+              class="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-zinc-200 focus:border-red-600/50 focus:ring-1 focus:ring-red-600/30 transition-all outline-none" />
+            @if (form.get('tamanho')?.hasError('backendError') && form.get('tamanho')?.touched) {
+            <p class="text-red-500 text-xs mt-1">{{ form.get('tamanho')?.getError('backendError') }}</p>
+            }
+          </div>
 
-        <button 
-          mat-raised-button 
-          color="warn" 
-          (click)="excluir()"
-          [disabled]="!form.value.id">
-          Excluir
-        </button>
+        </div>
+      </section>
 
-        <button 
-          mat-raised-button 
-          color="primary" 
-          (click)="salvar()"
-          [disabled]="form.invalid">
-          Salvar
-        </button>
+      <!-- Pricing & Inventory Card -->
+      <section
+        class="bg-gradient-to-br from-[#121212] to-[#260108]/20 border border-white/10 rounded-lg p-6 shadow-2xl backdrop-blur-md">
+        <h3 class="text-zinc-500 font-bold text-sm uppercase tracking-widest mb-6">Preço & Estoque</h3>
 
-      </div>
-    </form>
-  </mat-card-content>
-</mat-card>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Preço (R$)</label>
+            <div class="relative">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 text-sm font-bold">R$</span>
+              <input type="number" formControlName="price" placeholder="0.00"
+                class="w-full bg-black/40 border border-white/10 rounded pl-12 pr-4 py-3 text-zinc-200 focus:border-red-600/50 focus:ring-1 focus:ring-red-600/30 transition-all font-bold outline-none" />
+            </div>
+            @if (form.get('price')?.hasError('backendError') && form.get('price')?.touched) {
+            <p class="text-red-500 text-xs mt-1">{{ form.get('price')?.getError('backendError') }}</p>
+            }
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Quantidade em
+              Estoque</label>
+            <input type="number" formControlName="quantidadeEstoque" placeholder="Ex: 10"
+              class="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-zinc-200 focus:border-red-600/50 focus:ring-1 focus:ring-red-600/30 transition-all outline-none" />
+            @if (form.get('quantidadeEstoque')?.hasError('backendError') && form.get('quantidadeEstoque')?.touched) {
+            <p class="text-red-500 text-xs mt-1">{{ form.get('quantidadeEstoque')?.getError('backendError') }}</p>
+            }
+          </div>
+        </div>
+      </section>
+
+      <!-- Actions Card -->
+      <section
+        class="bg-gradient-to-br from-[#121212] to-[#260108]/20 border border-white/10 rounded-lg p-6 shadow-2xl backdrop-blur-md">
+        <h3 class="text-zinc-500 font-bold text-sm uppercase tracking-widest mb-6">Ações</h3>
+
+        <div class="space-y-4">
+          <button type="button" (click)="excluir()" [disabled]="!form.value.id"
+            class="w-full py-3 rounded border border-red-900/50 text-red-500 hover:bg-red-900/20 font-bold text-sm uppercase tracking-widest transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
+            <i class="fa-solid fa-trash mr-2"></i> Excluir Acessório
+          </button>
+        </div>
+        
+      </section>
+    </div>
+
+    <!-- Right Column: Sidebar Actions -->
+    <div class="rightSide">
+
+      <!-- Media Upload Card -->
+      <section class="bg-gradient-to-br from-[#121212] to-[#260108]/20 border border-white/10 rounded-lg p-6 shadow-2xl backdrop-blur-md">
+        <h3 class="text-zinc-500 font-bold text-sm uppercase tracking-widest mb-6">Mídia do Produto</h3>
+        <div class="border-2 border-dashed border-white/10 rounded-lg p-8 flex flex-col items-center justify-center text-center group hover:border-red-600/50 transition-all cursor-pointer">
+          <span class="material-symbols-outlined text-4xl text-zinc-600 group-hover:text-red-500 transition-colors mb-4">upload_file</span>
+          <p class="text-sm text-zinc-400 mb-1">Arraste e solte fotos aqui</p>
+          <p class="text-xs text-zinc-600 uppercase font-bold tracking-wider">ou clique para selecionar</p>
+        </div>
+        <div class="grid grid-cols-3 gap-2 mt-4">
+          <div class="aspect-square rounded border border-white/10 overflow-hidden relative group">
+            <img alt="Wood Detail" class="object-cover w-full h-full opacity-60 group-hover:opacity-100 transition-opacity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDItz1waN0Qp4AqMsw7NSH0iasEanEEVo7_ISVPd2SmZkpjMY1oF3g3i1yBO4KvYn-GG1lYdLRH_UVlS270RGbVAjLN2w0l2RVlG6KJ9z40knbvTDPh4BrrRjqCzPHdXZzPoWsp_9fkwWYIvYrspjCvNNGm03dDVgARn-OnMnaPPdB5svGPUHyLVwRz_325dpbofjPqwgTSiO1v2HKLSHsQC1qEesApE-bsZfgXSEkrqLLuGfc3rd8-7n1lPbBsQHCYZc-KdszBQi8l"/>
+            <button type="button" class="absolute top-1 right-1 material-symbols-outlined text-xs bg-black/80 rounded-full p-1 text-red-500 hover:bg-red-500 hover:text-white transition-all cursor-pointer">close</button>
+          </div>
+          <div class="aspect-square rounded border border-white/10 overflow-hidden relative group">
+            <img alt="Headstock Detail" class="object-cover w-full h-full opacity-60 group-hover:opacity-100 transition-opacity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOLt4NA_YkLJ55KJnNWjk8r8_1qXgNqtqhQ4BEC83lztI4VFsAaUF3B5ocJjsu0zNu-dvbOFBwxCjMCG-BQHWjxnnOvOGr99ZXmRdQ64zyjGyFP9OxqVJhpws-YNIjUKjeGzVZd8SVLtNrkVJr9K7fU4boC1QHclbuy-02muopYnezzoGsOCuQQ89ymgCVAjEoqoiX6nmU4bGV_r5sry7lp4yS9fM8OfeYeZV7LKkZLfvzsw3fb4kCR7CtDUrQvAUo8UgUYNqQjLr7"/>
+            <button type="button" class="absolute top-1 right-1 material-symbols-outlined text-xs bg-black/80 rounded-full p-1 text-red-500 hover:bg-red-500 hover:text-white transition-all cursor-pointer">close</button>
+          </div>
+          <div class="aspect-square rounded border border-white/10 flex items-center justify-center bg-white/5 text-zinc-600 text-xs font-bold">
+            +3
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+</form>

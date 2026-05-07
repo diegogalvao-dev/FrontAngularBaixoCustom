@@ -53,6 +53,16 @@
   padding-right: 8px;
 }
 
+.items{
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
+
+section{
+  margin-bottom: 20px;
+}
+
 
 /* Responsividade: 
    - quando a tela for menor que 640px, a grid passa a ter apenas 1 coluna */

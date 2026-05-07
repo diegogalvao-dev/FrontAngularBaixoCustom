@@ -3,6 +3,7 @@ import { Acessorio } from '../models/acessorio.model';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { Fornecedor } from '../models/fornecedor.model';
 
 @Injectable({
   providedIn: 'root',
@@ -27,6 +28,30 @@ export class AcessorioService {
     return this.httpClient.get<any>(`${this.api}/count`);
   }
 
+  searchByFornecedor(name: string, page?: number, pageSize?: number): Observable<Fornecedor[]> {
+
+    let params = new HttpParams().set('query', name);
+
+    if (page !== undefined && pageSize !== undefined) {
+
+      params = params.set('page', page.toString()).set('pageSize', pageSize.toString());
+
+    }
+    
+    return this.httpClient.get<Fornecedor[]>(`${this.api}/searchFornecedor`, { params }).pipe(
+
+      tap((response) => {
+
+        console.log('✅ Resposta do Quarkus (searchByName):', response);
+
+        console.log('📊 Total de resultados:', response.length);
+
+      })
+
+    );
+
+  }  
+
   searchByName(name: string, page?: number, pageSize?: number): Observable<Acessorio[]> {
 
     let params = new HttpParams().set('query', name);
@@ -37,6 +62,9 @@ export class AcessorioService {
 
     }
 
+
+
+  
    
 
     console.log('🔍 Requisição HTTP - searchByName:', {

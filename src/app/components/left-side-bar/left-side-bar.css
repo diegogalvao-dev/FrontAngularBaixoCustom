@@ -1,28 +1,28 @@
 .sidenav {
-  background: linear-gradient(to top, #013a96ee, #012a5b);
+  background: linear-gradient(to top, var(--surface-container), var(--surface-container-lowest));
   transition: all 0.5s ease;
-  position: fixed;
-  z-index: 100; /* Aumentei um pouco para garantir que fique sobre tudo */
-  top: 0;
-  width: 16.5625rem; /* Largura aberta */
-  height: 100vh;
-  box-shadow: 0.063rem 0 1.25rem 0 #8690a3;
-  overflow: hidden; /* Evita que o texto apareça antes da hora na expansão */
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  box-shadow: 0.063rem 0 1.25rem 0 rgba(0, 0, 0, 0.5);
 }
 
 .sidenav-collapsed {
   width: 5rem;
 }
+
 .sidenav .logo-container {
   display: flex;
   align-items: center;
   padding: 0.938rem 0.938rem 0 0.938rem;
   width: 100%;
 }
+
 .sidenav .logo-container .logo {
-  background: #fff;
+  background: var(--primary-container);
+  color: var(--on-primary-container);
   text-align: center;
-  
+
   width: 3rem;
   min-width: 3rem;
   border-radius: 0.313rem;
@@ -32,12 +32,14 @@
   cursor: pointer;
   border: none;
 }
+
 .sidenav .logo-container .logo-text {
   margin-left: 1.5rem;
   font-size: 24px;
   font-weight: 700;
   color: #fff;
 }
+
 .sidenav .logo-container .btn-close {
   margin-left: auto;
   cursor: pointer;
@@ -47,6 +49,7 @@
   background-color: transparent;
   border: none;
 }
+
 .sidenav .logo-container .btn-close .fa-times {
   color: #fff;
   font-size: 24px;
@@ -62,10 +65,12 @@
   height: calc(100% - 3.65rem);
   cursor: pointer;
 }
+
 .sidenav-nav .sidenav-nav-item {
   width: 100%;
   margin-bottom: 0.625rem;
 }
+
 .sidenav-nav .sidenav-nav-item .sidenav-nav-link {
   display: flex;
   align-items: center;
@@ -75,6 +80,7 @@
   border-radius: 0.625rem;
   transition: all 0.3s ease;
 }
+
 .sidenav-nav .sidenav-nav-item .sidenav-nav-link .sidenav-link-icon {
   font-size: 22px;
   width: 2rem;
@@ -82,19 +88,21 @@
   text-align: center;
   padding: 12px;
 }
+
 .sidenav-nav .sidenav-nav-item .sidenav-nav-link .sidenav-link-text {
   margin-left: 1.5rem;
 }
+
 .sidenav-nav .sidenav-nav-item:hover .sidenav-nav-link {
-  background-color: #fff;
-  color:   #012a5b;
+  background-color: var(--surface-bright);
+  color: var(--primary);
 }
 
 .active {
-  background-color: #fff;
-}
-.active .sidenav-link-icon,
-.active .sidenav-link-text {
-  color:   #012a5b;
+  background-color: var(--primary-container);
 }
 
+.active .sidenav-link-icon,
+.active .sidenav-link-text {
+  color: var(--on-primary-container);
+}

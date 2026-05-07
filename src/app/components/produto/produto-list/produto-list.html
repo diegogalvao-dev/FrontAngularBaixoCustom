@@ -1,0 +1,63 @@
+<div class="page-header">
+  <div class="page-title-section">
+    <h1>Catálogo de Produtos - Vista em Tabela</h1>
+    <p>Curadoria de instrumentos de alta precisão e componentes premium.</p>
+  </div>
+</div>
+
+<mat-tab-group [(selectedIndex)]="selectedTab" animationDuration="0ms" class="custom-tabs">
+  <mat-tab label="TODOS">
+    <div class="table-container">
+      <table mat-table [dataSource]="dataSource" class="glass-table">
+        
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> NO. </th>
+          <td mat-cell *matCellDef="let obj"> {{obj.id}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> NOME </th>
+          <td mat-cell *matCellDef="let obj"> {{obj.name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef> PREÇO </th>
+          <td mat-cell *matCellDef="let obj"> {{obj.price}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="quantidadeEstoque">
+          <th mat-header-cell *matHeaderCellDef> QUANTIDADE EM ESTOQUE </th>
+          <td mat-cell *matCellDef="let obj"> {{obj.quantidadeEstoque}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fornecedor">
+          <th mat-header-cell *matHeaderCellDef> FORNECEDOR </th>
+          <td mat-cell *matCellDef="let obj"> {{obj.fornecedor}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acao">
+          <th mat-header-cell *matHeaderCellDef class="action-header"> AÇÕES </th>
+          <td mat-cell *matCellDef="let obj">
+            <!-- <div class="action-buttons">
+              <button class="icon-btn-outline" routerLink="/baixo-custom/edit/{{obj.id}}">
+                <i class="fa-regular fa-pen-to-square"></i>
+              </button>
+              <button class="icon-btn-outline danger" (click)="excluir(obj.id)">
+                <i class="fa-regular fa-trash-can"></i>
+              </button>
+            </div> -->
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="glass-row"></tr>
+      </table>
+  </div>
+  </mat-tab>
+  <mat-tab label="BAIXOS">
+    <baixo-list></baixo-list>
+  </mat-tab>
+  <mat-tab label="ACESSÓRIOS">
+    <acessorio-list></acessorio-list>
+  </mat-tab>
+</mat-tab-group>

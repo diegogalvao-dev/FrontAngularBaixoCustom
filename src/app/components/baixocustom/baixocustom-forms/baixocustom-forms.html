@@ -58,7 +58,7 @@
                 <!-- configuracaoEletronica -->
         <mat-form-field appearance="outline">
           <mat-label>Configuração Eletrônica</mat-label>
-          <input matInput formControlName="configuracaoEletronica" placeholder="Ex.: 1" />
+          <input type="number" matInput formControlName="configuracaoEletronica" placeholder="Ex.: 1" />
           @if (form.get('configuracaoEletronica')?.hasError('backendError') && form.get('configuracaoEletronica')?.touched) {
             <mat-error>{{ form.get('configuracaoEletronica')?.getError('backendError') }}</mat-error>
           }
@@ -67,7 +67,7 @@
                 <!-- captadorList -->
         <mat-form-field appearance="outline">
           <mat-label>Captadores</mat-label>
-          <input matInput formControlName="captadorList" placeholder="Ex.: 4" />
+          <input type="number" matInput formControlName="captadorList" placeholder="Ex.: 4" />
           @if (form.get('captadorList')?.hasError('backendError') && form.get('captadorList')?.touched) {
             <mat-error>{{ form.get('captadorList')?.getError('backendError') }}</mat-error>
           }
@@ -78,7 +78,7 @@
                 <!-- estimatedPrice -->
         <mat-form-field appearance="outline">
           <mat-label>Preço Estimado</mat-label>
-          <input matInput formControlName="estimatedPrice" placeholder="Ex.: 100.00" />
+          <input type="number" matInput formControlName="estimatedPrice" placeholder="Ex.: 100.00" />
           @if (form.get('estimatedPrice')?.hasError('backendError') && form.get('estimatedPrice')?.touched) {
             <mat-error>{{ form.get('estimatedPrice')?.getError('backendError') }}</mat-error>
           }
@@ -102,7 +102,7 @@
         <!-- pessoaCliente -->
         <mat-form-field appearance="outline">
           <mat-label>Pessoa Cliente</mat-label>
-          <input matInput formControlName="pessoaCliente" placeholder="Ex.: João da Silva" />
+          <input type="number" matInput formControlName="pessoaCliente" placeholder="Ex.: 1" />
           @if (form.get('pessoaCliente')?.hasError('backendError') && form.get('pessoaCliente')?.touched) {
             <mat-error>{{ form.get('pessoaCliente')?.getError('backendError') }}</mat-error>
           }
@@ -111,7 +111,7 @@
         <!-- pessoaLuthier -->
         <mat-form-field appearance="outline">
           <mat-label>Pessoa Luthier</mat-label>
-          <input matInput formControlName="pessoaLuthier" placeholder="Ex.: Maria Oliveira" />
+          <input type="number" matInput formControlName="pessoaLuthier" placeholder="Ex.: 1" />
           @if (form.get('pessoaLuthier')?.hasError('backendError') && form.get('pessoaLuthier')?.touched) {
             <mat-error>{{ form.get('pessoaLuthier')?.getError('backendError') }}</mat-error>
           }

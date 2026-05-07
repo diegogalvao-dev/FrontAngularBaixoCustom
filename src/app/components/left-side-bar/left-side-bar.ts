@@ -14,15 +14,10 @@ export class LeftSidebar {
   changeIsLeftSidebarCollapsed = output<boolean>();
   items = [
     {
-      routeLink: '/acessorios',
-      icon: 'fas fa-puzzle-piece',
-      label: 'Acessórios',
+      routeLink: '/produto',
+      icon: 'fas fa-box',
+      label: 'Produto',
       
-    },
-    {
-      routeLink: '/baixo',
-      icon: 'fas fa-guitar',
-      label: 'Baixo',
     },
     {
       routeLink: '/baixo-custom',

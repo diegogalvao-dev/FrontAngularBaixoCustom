@@ -1,4 +1,5 @@
-import {Component, computed, input, OnInit} from '@angular/core';
+import { Component, computed, input, OnInit } from '@angular/core';
+import { NgFor, NgIf, NgClass } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,6 +10,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { PageEvent } from '@angular/material/paginator';
 import { forkJoin } from 'rxjs';
 import { RouterLink } from '@angular/router';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ConfirmationDialog } from '../../confirmation-dialog/confirmation-dialog';
 import { Baixo } from '../../../models/baixo.model';
 import { BaixoService } from '../../../services/baixo.service';
 
@@ -23,7 +26,11 @@ import { BaixoService } from '../../../services/baixo.service';
     MatInputModule,
     MatPaginatorModule,
     RouterLink,
-],
+    NgFor,
+    NgIf,
+    NgClass,
+    MatDialogModule
+  ],
 
   styleUrls: ['baixo-list.css'],
   templateUrl: 'baixo-list.html',
@@ -35,11 +42,11 @@ export class BaixoList implements OnInit {
   page = 0;
   pageSize = 12;
 
-  displayedColumns: string[] = ['id', 'name', 'baixoModeloBase', 'numeroCordas', 'baixoCor', 'price', 'quantidadeEstoque', 'fornecedor', 'acao'];
+  displayedColumns: string[] = ['imagem', 'name', 'baixoModeloBase', 'price', 'status', 'acao'];
   dataSource = new MatTableDataSource<Baixo>([]);
   searchTerm = '';
 
-  constructor(private baixoService: BaixoService) { }
+  constructor(private baixoService: BaixoService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.loadData();
@@ -99,11 +106,39 @@ export class BaixoList implements OnInit {
   }
 
   excluir(id: number) {
-    this.baixoService.delete(id).subscribe({
-      next: () => {
-        this.loadData();
+    const dialogRef = this.dialog.open(ConfirmationDialog, {
+      data: {
+        title: 'Confirmar Exclusão',
+        message: 'Tem certeza que deseja excluir este baixo?'
       }
     });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.baixoService.delete(id).subscribe({
+          next: () => {
+            this.loadData();
+          }
+        });
+      }
+    });
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.totalRecords / this.pageSize);
+  }
+
+  get pages(): number[] {
+    const total = this.totalPages;
+    if (total <= 1) return [0];
+    return Array.from({ length: total }, (_, i) => i);
+  }
+
+  goToPage(page: number): void {
+    if (page >= 0 && page < this.totalPages) {
+      this.page = page;
+      this.loadData();
+    }
   }
 
 

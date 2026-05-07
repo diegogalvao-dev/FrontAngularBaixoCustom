@@ -10,6 +10,15 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AcessorioService } from '../../../services/acessorio.service';
 import { Acessorio } from '../../../models/acessorio.model';
+import { Fornecedor } from '../../../models/fornecedor.model';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ConfirmationDialog } from '../../confirmation-dialog/confirmation-dialog';
+import { FormControl } from '@angular/forms';
+import { Observable, of } from 'rxjs';
+import { map, startWith, debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
+import { AsyncPipe } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 
 @Component({
@@ -24,23 +33,28 @@ import { Acessorio } from '../../../models/acessorio.model';
     ReactiveFormsModule,
     MatInputModule,
     MatSelectModule,
-    RouterLink],
+    MatAutocompleteModule,
+    AsyncPipe,
+    RouterLink,
+    MatDialogModule],
   templateUrl: './acessorio-forms.html',
   styleUrl: './acessorio-forms.css',
 })
 export class AcessorioForms implements OnInit {
 
    readonly form: FormGroup;
+   filteredOptions!: Observable<Fornecedor[]>;
 
   constructor(
     private fb: FormBuilder,
     private AcessorioService: AcessorioService,
     private activatedRoute: ActivatedRoute,
     private snack: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {
     this.form = this.fb.group({
-      id: [null, [Validators.required]],
+      id: [null],
       name: ['', [Validators.required]],
       acessorioTipo: [null, [Validators.required]],
       material: ['', [Validators.required]],
@@ -68,7 +82,27 @@ export class AcessorioForms implements OnInit {
           });
         }
       
+        this.filteredOptions = this.form.get('fornecedor')!.valueChanges.pipe(
+          startWith(''),
+          debounceTime(300), // Aguarda 300ms aps o usurio parar de digitar
+          distinctUntilChanged(), // S dispara se o valor mudar
+          switchMap(value => {
+            const name = typeof value === 'string' ? value : value?.name;
+            if (name && name.trim() !== '') {
+              // Chama a API do Quarkus
+              return this.AcessorioService.searchByFornecedor(name).pipe(
+                catchError(() => of([])) // Em caso de erro retorna lista vazia
+              );
+            } else {
+              return of([]); // Se estiver vazio retorna nada
+            }
+          })
+        );
+  }
 
+  // Funo usada para exibir o nome do fornecedor no campo aps selecionado
+  displayFn(fornecedor: Fornecedor): string {
+    return fornecedor && fornecedor.name ? fornecedor.name : '';
   }
 
   salvar() {
@@ -98,19 +132,27 @@ export class AcessorioForms implements OnInit {
   }
 
   excluir() {
-    if (this.form.valid) {
-      const acessorio = this.form.value;
-      if (acessorio.id != null) {
-        this.AcessorioService.delete(acessorio.id).subscribe({
-          next: () => {
-            this.router.navigateByUrl('/acessorios');
-            this.exibirMensagem('Acessório excluído com sucesso!');
-          },
-          error: (erro) => {
-            this.exibirMensagem('Problema ao excluir o acessório, entre em contato com o suporte!');
-          }
-        })
-      }
+    if (this.form.value.id) {
+      const dialogRef = this.dialog.open(ConfirmationDialog, {
+        data: {
+          title: 'Confirmar Exclusão',
+          message: 'Tem certeza que deseja excluir este acessório?'
+        }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.AcessorioService.delete(this.form.value.id).subscribe({
+            next: () => {
+              this.router.navigate(['/produto'], { queryParams: { tab: 1 } });
+              this.exibirMensagem('Acessório excluído com sucesso!');
+            },
+            error: (erro) => {
+              this.exibirMensagem('Problema ao excluir o acessório, entre em contato com o suporte!');
+            }
+          });
+        }
+      });
     }
   }
 
