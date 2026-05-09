@@ -45,22 +45,28 @@
    - primeira coluna flexível (1fr)
    - segunda coluna fixa em 160px
    - espaçamento entre colunas de 16px */
-.grid {
+/* .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
   padding-left: 8px;
   padding-right: 8px;
+} */
+
+.items{
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
 }
 
+.gridInLeftSide{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;  
+}
 
-/* Responsividade: 
-   - quando a tela for menor que 640px, a grid passa a ter apenas 1 coluna */
-@media (max-width: 800px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
-
+section{
+  margin-bottom: 20px;
 }
 
 /* Faz com que os campos de formulário Material ocupem 100% da largura */
@@ -101,4 +107,58 @@ button[mat-stroked-button] {
 mat-card-title {
   font-weight: 700;
   letter-spacing: 0.2px;
+}
+
+@media (max-width: 1024px) {
+  .items {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Estilo Premium para Seletores Dropdown */
+.custom-select {
+  appearance: none;
+  background-color: rgba(0, 0, 0, 0.4);
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.2em;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1px;
+  padding: 12px 40px 12px 16px;
+  color: #e4e4e7;
+  font-size: 0.875rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  outline: none;
+  backdrop-filter: blur(8px);
+}
+
+.custom-select:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.custom-select:focus {
+  border-color: rgba(220, 38, 38, 0.5);
+  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2);
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23dc2626' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+/* Estilização básica das opções (suporte limitado por navegador) */
+.custom-select option {
+  background-color: #121212;
+  color: #a1a1aa;
+  padding: 12px;
+}
+
+.custom-select option:checked {
+  background-color: #260108;
+  color: #ef4444;
+}
+
+@media (max-width: 800px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }

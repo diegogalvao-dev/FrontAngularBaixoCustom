@@ -1,0 +1,45 @@
+<div class="dialog-container">
+  <div class="dialog-header">
+    <span class="material-symbols-outlined icon">settings_input_component</span>
+    <h2 class="dialog-title">Configuração Eletrônica</h2>
+  </div>
+
+  <div class="dialog-content">
+    <!-- Selection Grid -->
+    <div class="options-grid">
+      @for (opt of data.options; track opt.id) {
+        <div 
+          (click)="selectedId = opt.id"
+          [class.active]="selectedId === opt.id"
+          class="option-card"
+        >
+          <div class="option-info">
+            <p class="option-name">{{ opt.name }}</p>
+            <p class="option-desc">{{ opt.description }}</p>
+          </div>
+          @if (selectedId === opt.id) {
+            <span class="material-symbols-outlined check-icon">settings</span>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Text Fields -->
+    <div class="extra-fields">
+      <div class="field-group">
+        <label>Especificação do Circuito</label>
+        <input type="text" [(ngModel)]="especificacao" placeholder="Ex: 18V Active, Push-Pull, Seri/Paralelo...">
+      </div>
+      
+      <div class="field-group">
+        <label>Diagrama / Notas de Montagem</label>
+        <textarea rows="3" [(ngModel)]="observacoes" placeholder="Detalhes da blindagem, knobs, chaves..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="dialog-actions">
+    <button (click)="onCancel()" class="btn-cancel">Cancelar</button>
+    <button (click)="onSave()" class="btn-save">Confirmar</button>
+  </div>
+</div>

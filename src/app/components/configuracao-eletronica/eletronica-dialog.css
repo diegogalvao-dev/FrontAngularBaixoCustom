@@ -1,0 +1,155 @@
+.dialog-container {
+  padding: 2rem;
+  background-color: #121212;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  color: #f4f4f5;
+  min-width: 500px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(20px);
+}
+
+.dialog-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.icon {
+  color: #a60321;
+  font-size: 1.875rem;
+}
+
+.dialog-title {
+  font-size: 1.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.025em;
+}
+
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.option-card {
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.option-card:hover {
+  border-color: rgba(220, 38, 38, 0.5);
+}
+
+.option-card.active {
+  border-color: #dc2626;
+  background-color: rgba(127, 29, 29, 0.1);
+}
+
+.option-name {
+  color: #e4e4e7;
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.option-desc {
+  color: #71717a;
+  font-size: 0.75rem;
+}
+
+.check-icon {
+  color: #ef4444;
+}
+
+.extra-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.field-group label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #a1a1aa;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+
+.field-group input,
+.field-group textarea {
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.25rem;
+  padding: 0.75rem 1rem;
+  color: #e4e4e7;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.field-group input:focus,
+.field-group textarea:focus {
+  border-color: rgba(220, 38, 38, 0.5);
+  box-shadow: 0 0 0 1px rgba(220, 38, 38, 0.2);
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.btn-cancel {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.25rem;
+  color: #71717a;
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.2s;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-cancel:hover {
+  color: #e4e4e7;
+}
+
+.btn-save {
+  padding: 0.75rem 2rem;
+  border-radius: 0.25rem;
+  background-color: #a60321;
+  color: white;
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.2s;
+  box-shadow: 0 20px 25px -5px rgba(127, 29, 29, 0.4);
+  border: none;
+  cursor: pointer;
+}
+
+.btn-save:hover {
+  background-color: #86021a;
+}

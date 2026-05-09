@@ -1,150 +1,318 @@
-<mat-toolbar class="toolbar-title" color="primary" >
-    Controle de BaixoCustomizado
-</mat-toolbar>
+<form [formGroup]="form" class="max-w-[1200px] mx-auto p-6 animate-in fade-in duration-700 text-on-surface">
 
-<mat-card class="card">
-  <mat-card-content>
-    <form class="form" [formGroup]="form">
-      <div class="grid">
-        <!-- baixoModeloBase -->
-        <mat-form-field appearance="fill">
-          <mat-label>Selecione o Modelo</mat-label>
-          <mat-select formControlName="baixoModeloBase" disableRipple>
-            <mat-option value="JAZZ_BASS">Jazz Bass</mat-option>
-            <mat-option value="PRECISION">Precision</mat-option>
-            <mat-option value="STINGRAY">Stingray</mat-option>
-            <mat-option value="THUNDERBIRD">Thunderbird</mat-option>
-          </mat-select>
-          
-          @if (form.get('baixoModeloBase')?.hasError('backendError') && form.get('baixoModeloBase')?.touched) {
-            <mat-error>{{ form.get('baixoModeloBase')?.getError('backendError') }}</mat-error>
-          }
-        </mat-form-field>
+  <!-- Page Header -->
+  <div class="flex justify-between items-end mb-10">
+    <div>
+      <nav class="flex gap-2 text-xs text-zinc-500 uppercase tracking-widest font-bold mb-2">
+        <a routerLink="/baixo-custom" class="hover:text-red-500 cursor-pointer transition-colors">Custom Shop</a>
+        <span>/</span>
+        <span class="text-zinc-300">{{ form.get('id')?.value ? 'Editar Customizado' : 'Novo Customizado' }}</span>
+      </nav>
+      <h1 class="font-headline-xl text-4xl font-extrabold text-zinc-100">
+        {{ form.get('id')?.value ? 'Editar Customizado' : 'Novo Customizado' }}
+      </h1>
+    </div>
+    <div class="flex gap-4">
+      <button type="button" routerLink="/baixo-custom"
+        class="px-6 py-3 rounded text-zinc-400 font-bold text-sm uppercase tracking-widest border border-white/10 bg-white/5 hover:bg-white/10 transition-all active:scale-95 cursor-pointer">
+        Cancelar
+      </button>
+      <button type="button" (click)="salvar()" [disabled]="form.invalid"
+        class="px-8 py-3 rounded bg-[#a60321] text-white font-bold text-sm uppercase tracking-widest hover:bg-[#86021a] transition-all active:scale-95 shadow-xl shadow-red-950/40 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
+        Salvar Projeto
+      </button>
+    </div>
+  </div>
 
-        <!-- <mat-form-field appearance="outline">
-        <mat-label>Modelo</mat-label>
-          <input matInput formControlName="baixoModeloBase" placeholder="Ex.: Fender" />
-          @if (form.get('baixoModeloBase')?.hasError('backendError') && form.get('baixoModeloBase')?.touched) {
-            <mat-error>{{ form.get('baixoModeloBase')?.getError('backendError') }}</mat-error>
-          }
-        </mat-form-field> -->
+  <!-- Bento Grid Layout -->
+  <div class="items">
 
-                <!-- description -->
-        <mat-form-field appearance="outline">
-          <mat-label>Descrição</mat-label>
-          <input matInput formControlName="description" placeholder="Ex.: Baixo elétrico" />
-          @if (form.get('description')?.hasError('backendError') && form.get('description')?.touched) {
-            <mat-error>{{ form.get('description')?.getError('backendError') }}</mat-error>
-          }
-        </mat-form-field>
+    <!-- Left Column: Main Forms -->
+    <div class="leftSide">
 
+      <!-- Basic Info Card -->
+      <section
+        class="bg-gradient-to-br from-[#121212] to-[#260108]/20 border border-white/10 rounded-lg p-6 shadow-2xl backdrop-blur-md">
+        <h3 class="text-zinc-500 font-bold text-sm uppercase tracking-widest mb-6">Informações Básicas</h3>
 
-                <!-- baixoCor -->
-        <mat-form-field appearance="fill">
-          <mat-label>Selecione a cor</mat-label>
-          <mat-select formControlName="baixoCor" disableRipple>
-            <mat-option value="PRETO">Preto</mat-option>
-            <mat-option value="BRANCO">Branco</mat-option>
-            <mat-option value="VERMELHO">Vermelho</mat-option>
-            <mat-option value="AZUL">Azul</mat-option>
-            <mat-option value="VERDE">Verde</mat-option>
-            <mat-option value="SUNBURST">Sunburst</mat-option>
-        </mat-select>
-          @if (form.get('baixoCor')?.hasError('backendError') && form.get('baixoCor')?.touched) {
-            <mat-error>{{ form.get('baixoCor')?.getError('backendError') }}</mat-error>
-          }
-        </mat-form-field>
+        <div class="grid grid-cols-2 gap-6">
+          <div class="col-span-2">
+            <label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Descrição do
+              Projeto</label>
+            <input type="text" formControlName="description" placeholder="Ex: Baixo Vintage Custom 60s"
+              class="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-zinc-200 focus:border-red-600/50 focus:ring-1 focus:ring-red-600/30 transition-all outline-none" />
+            @if (form.get('description')?.hasError('backendError') && form.get('description')?.touched) {
+            <p class="text-red-500 text-xs mt-1">{{ form.get('description')?.getError('backendError') }}</p>
+            }
+          </div>
 
-                <!-- configuracaoEletronica -->
-        <mat-form-field appearance="outline">
-          <mat-label>Configuração Eletrônica</mat-label>
-          <input type="number" matInput formControlName="configuracaoEletronica" placeholder="Ex.: 1" />
-          @if (form.get('configuracaoEletronica')?.hasError('backendError') && form.get('configuracaoEletronica')?.touched) {
-            <mat-error>{{ form.get('configuracaoEletronica')?.getError('backendError') }}</mat-error>
-          }
-        </mat-form-field>
+          <div class="col-span-2">
+            <label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-4">Modelo Base</label>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+              @for (mod of optionsModelos; track mod.value) {
+                <div 
+                  (click)="form.get('baixoModeloBase')?.setValue(mod.value)"
+                  [class.border-red-600]="form.get('baixoModeloBase')?.value === mod.value"
+                  [class.bg-red-950\/10]="form.get('baixoModeloBase')?.value === mod.value"
+                  class="cursor-pointer border border-white/10 bg-black/40 rounded-lg p-4 transition-all hover:border-red-600/50 flex flex-col items-center justify-center gap-2 group text-center"
+                >
+                  <span class="material-symbols-outlined text-2xl text-zinc-500 group-hover:text-red-500 transition-colors"
+                    [class.text-red-500]="form.get('baixoModeloBase')?.value === mod.value">
+                    {{ mod.icon }}
+                  </span>
+                  <p class="text-[10px] font-bold text-zinc-300 uppercase tracking-widest">{{ mod.label }}</p>
+                </div>
+              }
+            </div>
+            @if (form.get('baixoModeloBase')?.hasError('backendError') && form.get('baixoModeloBase')?.touched) {
+            <p class="text-red-500 text-xs mt-2">{{ form.get('baixoModeloBase')?.getError('backendError') }}</p>
+            }
+          </div>
 
-                <!-- captadorList -->
-        <mat-form-field appearance="outline">
-          <mat-label>Captadores</mat-label>
-          <input type="number" matInput formControlName="captadorList" placeholder="Ex.: 4" />
-          @if (form.get('captadorList')?.hasError('backendError') && form.get('captadorList')?.touched) {
-            <mat-error>{{ form.get('captadorList')?.getError('backendError') }}</mat-error>
-          }
-        </mat-form-field>
+          <div class="col-span-1">
+            <label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Cor</label>
+            <select formControlName="baixoCor" class="w-full custom-select">
+              <option value="" disabled selected>Selecione uma cor</option>
+              <option value="PRETO">Preto</option>
+              <option value="BRANCO">Branco</option>
+              <option value="VERMELHO">Vermelho</option>
+              <option value="AZUL">Azul</option>
+              <option value="VERDE">Verde</option>
+              <option value="SUNBURST">Sunburst</option>
+            </select>
+            @if (form.get('baixoCor')?.hasError('backendError') && form.get('baixoCor')?.touched) {
+            <p class="text-red-500 text-xs mt-1">{{ form.get('baixoCor')?.getError('backendError') }}</p>
+            }
+          </div>
+        </div>
+      </section>
 
+      <!-- Electronic Specs Card -->
+      <section
+        class="bg-gradient-to-br from-[#121212] to-[#260108]/20 border border-white/10 rounded-lg p-6 shadow-2xl backdrop-blur-md">
+        <h3 class="text-zinc-500 font-bold text-sm uppercase tracking-widest mb-6">Circuito Eletrônico</h3>
 
+        <div class="flex flex-col gap-4">
+          <!-- Botão Inicial (Exibido apenas quando não há ID) -->
+          <button *ngIf="!configEletronica.id" type="button" (click)="openDialog()"
+            class="w-full py-8 border-2 border-dashed border-white/10 rounded-lg flex flex-col items-center justify-center gap-3 group hover:border-red-600/50 hover:bg-red-950/5 transition-all cursor-pointer">
+            <span
+              class="material-symbols-outlined text-3xl text-zinc-600 group-hover:text-red-500 transition-colors">settings_input_component</span>
+            <div class="text-center">
+              <p class="text-zinc-500 text-xs mt-1">Clique para definir o circuito eletrônico</p>
+            </div>
+          </button>
 
-                <!-- estimatedPrice -->
-        <mat-form-field appearance="outline">
-          <mat-label>Preço Estimado</mat-label>
-          <input type="number" matInput formControlName="estimatedPrice" placeholder="Ex.: 100.00" />
-          @if (form.get('estimatedPrice')?.hasError('backendError') && form.get('estimatedPrice')?.touched) {
-            <mat-error>{{ form.get('estimatedPrice')?.getError('backendError') }}</mat-error>
-          }
-        </mat-form-field>
+          <!-- Card de Detalhes (Exibido após configuração) -->
+          <div *ngIf="configEletronica.id"
+            class="w-full p-6 bg-black/40 border border-red-600/30 rounded-lg relative group animate-in fade-in slide-in-from-top-2 duration-500">
 
-        <!-- baixoStatus -->
-        <mat-form-field appearance="fill">
-          <mat-label>Selecione o status</mat-label>
-          <mat-select formControlName="baixoStatus" disableRipple>
-            <mat-option value="PROJETANDO">Projetando</mat-option>
-            <mat-option value="EM_CONSTRUCAO">Em construção</mat-option>
-            <mat-option value="EM_TESTE">Em teste</mat-option>
-            <mat-option value="FINALIZADO">Finalizado</mat-option>
-            <mat-option value="ENTREGUE">Entregue</mat-option>
-        </mat-select>
-          @if (form.get('baixoStatus')?.hasError('backendError') && form.get('baixoStatus')?.touched) {
-            <mat-error>{{ form.get('baixoStatus')?.getError('backendError') }}</mat-error>
-          }
-        </mat-form-field>
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <p class="text-xs font-bold text-red-500 uppercase tracking-widest mb-1">Circuito Ativo</p>
+                <h4 class="text-xl font-black text-zinc-100 uppercase tracking-tight">{{ getSelectedEletronicaLabel() }}
+                </h4>
+              </div>
+              <button type="button" (click)="openDialog()"
+                class="flex items-center gap-2 px-3 py-1.5 rounded bg-white/5 border border-white/10 text-zinc-400 hover:text-white hover:bg-white/10 transition-all text-[10px] font-bold uppercase tracking-widest cursor-pointer">
+                <span class="material-symbols-outlined text-sm">edit</span>
+                Editar
+              </button>
+            </div>
 
-        <!-- pessoaCliente -->
-        <mat-form-field appearance="outline">
-          <mat-label>Pessoa Cliente</mat-label>
-          <input type="number" matInput formControlName="pessoaCliente" placeholder="Ex.: 1" />
-          @if (form.get('pessoaCliente')?.hasError('backendError') && form.get('pessoaCliente')?.touched) {
-            <mat-error>{{ form.get('pessoaCliente')?.getError('backendError') }}</mat-error>
-          }
-        </mat-form-field>
+            <div class="space-y-4">
+              <div *ngIf="configEletronica.especificacao">
+                <label class="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">Especificação
+                  Técnica</label>
+                <p class="text-sm text-zinc-300 leading-relaxed">{{ configEletronica.especificacao }}</p>
+              </div>
 
-        <!-- pessoaLuthier -->
-        <mat-form-field appearance="outline">
-          <mat-label>Pessoa Luthier</mat-label>
-          <input type="number" matInput formControlName="pessoaLuthier" placeholder="Ex.: 1" />
-          @if (form.get('pessoaLuthier')?.hasError('backendError') && form.get('pessoaLuthier')?.touched) {
-            <mat-error>{{ form.get('pessoaLuthier')?.getError('backendError') }}</mat-error>
-          }
-        </mat-form-field>
+              <div *ngIf="configEletronica.observacoes">
+                <label class="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">Notas de
+                  Montagem</label>
+                <p class="text-sm text-zinc-400 italic leading-relaxed">"{{ configEletronica.observacoes }}"</p>
+              </div>
+            </div>
+          </div>
+        </div>
 
+        @if (form.get('configuracaoEletronica')?.hasError('backendError') &&
+        form.get('configuracaoEletronica')?.touched) {
+        <p class="text-red-500 text-xs mt-1">{{ form.get('configuracaoEletronica')?.getError('backendError') }}</p>
+        }
+      </section>
+
+      <!-- Pickups Card -->
+      <section
+        class="bg-gradient-to-br from-[#121212] to-[#260108]/20 border border-white/10 rounded-lg p-6 shadow-2xl backdrop-blur-md">
+        <h3 class="text-zinc-500 font-bold text-sm uppercase tracking-widest mb-6">Captadores</h3>
+
+        <div class="flex flex-col gap-4">
+          <!-- Lista de Captadores Adicionados -->
+          <div *ngFor="let cap of captadoresData; let i = index"
+            class="w-full p-6 bg-black/40 border border-zinc-700/50 rounded-lg relative group animate-in fade-in slide-in-from-top-2 duration-500 mb-2">
+
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <p class="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-1">Posição {{ i + 1 }}</p>
+                <h4 class="text-xl font-black text-zinc-100 uppercase tracking-tight">{{ getCaptadorLabel(cap.id) }}
+                </h4>
+              </div>
+              <div class="flex gap-2">
+                <button type="button" (click)="openCaptadorDialog(i)"
+                  class="flex items-center gap-2 px-3 py-1.5 rounded bg-white/5 border border-white/10 text-zinc-400 hover:text-white hover:bg-white/10 transition-all text-[10px] font-bold uppercase tracking-widest cursor-pointer">
+                  <span class="material-symbols-outlined text-sm">edit</span>
+                  Editar
+                </button>
+                <button type="button" (click)="removeCaptador(i)"
+                  class="flex items-center gap-2 px-3 py-1.5 rounded bg-red-950/20 border border-red-900/30 text-red-500 hover:bg-red-900/40 transition-all text-[10px] font-bold uppercase tracking-widest cursor-pointer">
+                  <span class="material-symbols-outlined text-sm">delete</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="space-y-3">
+              <div *ngIf="cap.especificacao">
+                <label
+                  class="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">Especificação</label>
+                <p class="text-sm text-zinc-300 leading-relaxed">{{ cap.especificacao }}</p>
+              </div>
+              <div *ngIf="cap.observacoes">
+                <label class="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">Notas</label>
+                <p class="text-sm text-zinc-400 italic leading-relaxed">"{{ cap.observacoes }}"</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Botão para Adicionar Novo (Máximo 2) -->
+          <button *ngIf="captadoresData.length < 2" type="button" (click)="openCaptadorDialog()"
+            class="w-full py-6 border-2 border-dashed border-white/10 rounded-lg flex flex-col items-center justify-center gap-2 group hover:border-red-600/50 hover:bg-red-950/5 transition-all cursor-pointer mt-2">
+            <span
+              class="material-symbols-outlined text-3xl text-zinc-600 group-hover:text-red-500 transition-colors">add_circle</span>
+            <div class="text-center">
+              <p class="text-zinc-300 font-bold uppercase tracking-widest text-xs">Adicionar Captador</p>
+              <p class="text-zinc-500 text-[10px] mt-1">{{ 2 - captadoresData.length }} vaga(s) disponível(is)</p>
+            </div>
+          </button>
+        </div>
+      </section>
+
+      <!-- gridInLeftSide -->
+      <div class="gridInLeftSide">
+
+        <!-- Participants Card -->
+        <section
+          class="bg-gradient-to-br from-[#121212] to-[#260108]/20 border border-white/10 rounded-lg p-6 shadow-2xl backdrop-blur-md">
+          <h3 class="text-zinc-500 font-bold text-sm uppercase tracking-widest mb-6">Participantes</h3>
+
+          <div class="grid grid-cols-1 gap-6">
+            <div class="col-span-1">
+              <label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">ID do Cliente</label>
+              <input type="number" formControlName="pessoaCliente" placeholder="Ex: 101"
+                class="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-zinc-200 focus:border-red-600/50 focus:ring-1 focus:ring-red-600/30 transition-all outline-none" />
+              @if (form.get('pessoaCliente')?.hasError('backendError') && form.get('pessoaCliente')?.touched) {
+              <p class="text-red-500 text-xs mt-1">{{ form.get('pessoaCliente')?.getError('backendError') }}</p>
+              }
+            </div>
+
+            <div class="col-span-1">
+              <label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">ID do Luthier</label>
+              <input type="number" formControlName="pessoaLuthier" placeholder="Ex: 5"
+                class="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-zinc-200 focus:border-red-600/50 focus:ring-1 focus:ring-red-600/30 transition-all outline-none" />
+              @if (form.get('pessoaLuthier')?.hasError('backendError') && form.get('pessoaLuthier')?.touched) {
+              <p class="text-red-500 text-xs mt-1">{{ form.get('pessoaLuthier')?.getError('backendError') }}</p>
+              }
+            </div>
+          </div>
+        </section>
+
+        <!-- Pricing & Status Card -->
+        <section
+          class="bg-gradient-to-br from-[#121212] to-[#260108]/20 border border-white/10 rounded-lg p-6 shadow-2xl backdrop-blur-md">
+          <h3 class="text-zinc-500 font-bold text-sm uppercase tracking-widest mb-6">Preço & Status</h3>
+
+          <div class="space-y-4">
+            <div>
+              <label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Preço Estimado
+                (R$)</label>
+              <div class="relative">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 text-sm font-bold">R$</span>
+                <input type="number" formControlName="estimatedPrice" placeholder="0.00"
+                  class="w-full bg-black/40 border border-white/10 rounded pl-12 pr-4 py-3 text-zinc-200 focus:border-red-600/50 focus:ring-1 focus:ring-red-600/30 transition-all font-bold outline-none" />
+              </div>
+              @if (form.get('estimatedPrice')?.hasError('backendError') && form.get('estimatedPrice')?.touched) {
+              <p class="text-red-500 text-xs mt-1">{{ form.get('estimatedPrice')?.getError('backendError') }}</p>
+              }
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Status do
+                Projeto</label>
+              <select formControlName="baixoStatus"
+                class="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-zinc-200 focus:border-red-600/50 focus:ring-1 focus:ring-red-600/30 transition-all outline-none [&>option]:bg-[#121212]">
+                <option value="" disabled selected>Selecione o status</option>
+                <option value="PROJETANDO">Projetando</option>
+                <option value="EM_CONSTRUCAO">Em construção</option>
+                <option value="EM_TESTE">Em teste</option>
+                <option value="FINALIZADO">Finalizado</option>
+                <option value="ENTREGUE">Entregue</option>
+              </select>
+              @if (form.get('baixoStatus')?.hasError('backendError') && form.get('baixoStatus')?.touched) {
+              <p class="text-red-500 text-xs mt-1">{{ form.get('baixoStatus')?.getError('backendError') }}</p>
+              }
+            </div>
+          </div>
+        </section>
 
       </div>
 
-      <div class="actions">
-        <button 
-          type="button"
-          mat-raised-button
-          routerLink="/baixo-custom">
-          Cancelar
-        </button>
 
-        <button 
-          mat-raised-button 
-          color="warn" 
-          (click)="excluir()"
-          [disabled]="!form.value.id">
-          Excluir
-        </button>
 
-        <button 
-          mat-raised-button 
-          color="primary" 
-          (click)="salvar()"
-          [disabled]="form.invalid">
-          Salvar
-        </button>
+      <!-- Actions Card -->
+      <section
+        class="bg-gradient-to-br from-[#121212] to-[#260108]/20 border border-white/10 rounded-lg p-6 shadow-2xl backdrop-blur-md">
+        <h3 class="text-zinc-500 font-bold text-sm uppercase tracking-widest mb-6">Ações</h3>
 
-      </div>
-    </form>
-  </mat-card-content>
-</mat-card>
+        <div class="space-y-4">
+          <button type="button" (click)="excluir()" [disabled]="!form.value.id"
+            class="w-full py-3 rounded border border-red-900/50 text-red-500 hover:bg-red-900/20 font-bold text-sm uppercase tracking-widest transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
+            <i class="fa-solid fa-trash mr-2"></i> Excluir Projeto
+          </button>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Right Column: Sidebar Actions -->
+    <div class="rightSide">
+
+      <!-- Media Upload Card -->
+      <section
+        class="bg-gradient-to-br from-[#121212] to-[#260108]/20 border border-white/10 rounded-lg p-6 shadow-2xl backdrop-blur-md">
+        <h3 class="text-zinc-500 font-bold text-sm uppercase tracking-widest mb-6">Mídia do Projeto</h3>
+        <div
+          class="border-2 border-dashed border-white/10 rounded-lg p-8 flex flex-col items-center justify-center text-center group hover:border-red-600/50 transition-all cursor-pointer">
+          <span
+            class="material-symbols-outlined text-4xl text-zinc-600 group-hover:text-red-500 transition-colors mb-4">upload_file</span>
+          <p class="text-sm text-zinc-400 mb-1">Arraste e solte fotos do projeto</p>
+          <p class="text-xs text-zinc-600 uppercase font-bold tracking-wider">ou clique para selecionar</p>
+        </div>
+        <div class="grid grid-cols-3 gap-2 mt-4">
+          <div class="aspect-square rounded border border-white/10 overflow-hidden relative group">
+            <img alt="Project Detail"
+              class="object-cover w-full h-full opacity-60 group-hover:opacity-100 transition-opacity"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDItz1waN0Qp4AqMsw7NSH0iasEanEEVo7_ISVPd2SmZkpjMY1oF3g3i1yBO4KvYn-GG1lYdLRH_UVlS270RGbVAjLN2w0l2RVlG6KJ9z40knbvTDPh4BrrRjqCzPHdXZzPoWsp_9fkwWYIvYrspjCvNNGm03dDVgARn-OnMnaPPdB5svGPUHyLVwRz_325dpbofjPqwgTSiO1v2HKLSHsQC1qEesApE-bsZfgXSEkrqLLuGfc3rd8-7n1lPbBsQHCYZc-KdszBQi8l" />
+            <button type="button"
+              class="absolute top-1 right-1 material-symbols-outlined text-xs bg-black/80 rounded-full p-1 text-red-500 hover:bg-red-500 hover:text-white transition-all cursor-pointer">close</button>
+          </div>
+          <div
+            class="aspect-square rounded border border-white/10 flex items-center justify-center bg-white/5 text-zinc-600 text-xs font-bold">
+            +0
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+</form>
