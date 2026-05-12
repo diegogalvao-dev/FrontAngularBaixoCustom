@@ -22,4 +22,8 @@ export class ConfiguracaoEletronicaService {
     return this.httpClient.put<ConfiguracaoEletronica>(`${this.api}/${configuracaoEletronica.id}`, configuracaoEletronica);
   }
 
+  findById(id: number): Observable<ConfiguracaoEletronica> {
+    return this.httpClient.get<ConfiguracaoEletronica>(`${this.api}/${id}`);
+  }
+
 }

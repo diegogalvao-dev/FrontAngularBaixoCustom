@@ -1,32 +1,51 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ConfiguracaoEletronicaService } from '../../services/configuracao-eletronica.service';
+import { ConfiguracaoEletronica } from '../../models/configuracao-eletronica.model';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-eletronica-dialog',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatDialogModule],
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    MatDialogModule,
+    ReactiveFormsModule,
+    RouterLink,
+    MatDialogModule],
   templateUrl: './eletronica-dialog.html',
   styleUrl: './eletronica-dialog.css'
 })
-export class EletronicaDialogComponent {
-  selectedId: number | null;
-  especificacao: string = '';
-  observacoes: string = '';
+export class EletronicaDialogComponent implements OnInit {
+
+  readonly form: FormGroup;
 
   constructor(
+    private fb: FormBuilder,
+    private ConfiguracaoEletronicaService: ConfiguracaoEletronicaService,
     public dialogRef: MatDialogRef<EletronicaDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { 
-      options: any[], 
-      initialValue: number | null,
-      especificacao?: string,
-      observacoes?: string
-    }
+    @Inject(MAT_DIALOG_DATA) public data: ConfiguracaoEletronica
   ) {
-    this.selectedId = data.initialValue;
-    this.especificacao = data.especificacao || '';
-    this.observacoes = data.observacoes || '';
+    this.form = this.fb.group({
+      id: [null],
+      circuitoAtivo: [false],
+      volumeKnobs: [null],
+      toneKnobs: [null]
+    });
+  }
+
+  ngOnInit(): void {
+    if (this.data) {
+      this.form.patchValue({
+        id: this.data.id,
+        circuitoAtivo: this.data.circuitoAtivo,
+        volumeKnobs: this.data.volumeKnobs,
+        toneKnobs: this.data.toneKnobs
+      });
+    }
   }
 
   onCancel() {
@@ -34,10 +53,22 @@ export class EletronicaDialogComponent {
   }
 
   onSave() {
-    this.dialogRef.close({
-      id: this.selectedId,
-      especificacao: this.especificacao,
-      observacoes: this.observacoes
+    if (this.form.invalid) {
+      return;
+    }
+
+    const configuracao = this.form.value;
+    const operacao = configuracao.id 
+      ? this.ConfiguracaoEletronicaService.update(configuracao)
+      : this.ConfiguracaoEletronicaService.create(configuracao);
+
+    operacao.subscribe({
+      next: (resultado) => {
+        this.dialogRef.close(resultado);
+      },
+      error: (err) => {
+        console.error('Erro ao salvar configuração eletrônica:', err);
+      }
     });
   }
 }

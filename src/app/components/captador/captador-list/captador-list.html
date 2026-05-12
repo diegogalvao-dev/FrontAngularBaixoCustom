@@ -1,55 +1,46 @@
 <div class="header-actions">
   <div class="search-container">
     <i class="fa-solid fa-magnifying-glass search-icon"></i>
-    <input class="input-text" type="text" (keyup.enter)="searchByName(input.value)" placeholder="Buscar produtos..." #input class="search-input" />
+    <input type="text" (keyup.enter)="searchByName(input.value)" placeholder="Buscar captadores..." #input class="input-text search-input" />
   </div>
   
-  <button class="custom-btn" routerLink="/admin/acessorios/new">
+  <button class="custom-btn" routerLink="/captadores/new">
     <i class="fa-solid fa-plus"></i>
-    NOVO PRODUTO
+    NOVO CAPTADOR
   </button>
 </div>
 
 <table mat-table [dataSource]="dataSource" class="glass-table">
 
+  <ng-container matColumnDef="marca">
+    <th mat-header-cell *matHeaderCellDef> MARCA </th>
+    <td mat-cell *matCellDef="let obj" class="product-name"> {{obj.marca}} </td>
+  </ng-container>
 
-  <ng-container matColumnDef="imagem">
-    <th mat-header-cell *matHeaderCellDef> IMAGEM </th>
-    <td mat-cell *matCellDef="let obj">
-      <div class="product-image-placeholder"></div>
+  <ng-container matColumnDef="type">
+    <th mat-header-cell *matHeaderCellDef> TIPO </th>
+    <td mat-cell *matCellDef="let obj"> 
+      <span class="status-badge" [class.in-stock]="obj.type === 'ativo'" [class.out-of-stock]="obj.type === 'passivo'">
+        {{obj.type | titlecase}} 
+      </span>
     </td>
   </ng-container>
 
-  <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef> NOME DO PRODUTO </th>
-    <td mat-cell *matCellDef="let obj" class="product-name"> {{obj.name}} </td>
-  </ng-container>
-
-  <ng-container matColumnDef="acessorioTipo">
-    <th mat-header-cell *matHeaderCellDef> CATEGORIA </th>
-    <td mat-cell *matCellDef="let obj"> {{obj.acessorioTipo}} </td>
+  <ng-container matColumnDef="posicao">
+    <th mat-header-cell *matHeaderCellDef> POSIÇÃO </th>
+    <td mat-cell *matCellDef="let obj"> {{obj.captadorPosicao}} </td>
   </ng-container>
 
   <ng-container matColumnDef="price">
     <th mat-header-cell *matHeaderCellDef> PREÇO </th>
-    <td mat-cell *matCellDef="let obj"> R$ {{obj.price}} </td>
-  </ng-container>
-
-  <ng-container matColumnDef="status">
-    <th mat-header-cell *matHeaderCellDef> STATUS ESTOQUE </th>
-    <td mat-cell *matCellDef="let obj">
-      <span class="status-badge" [class.in-stock]="obj.quantidadeEstoque > 0"
-        [class.out-of-stock]="obj.quantidadeEstoque <= 0">
-        {{ obj.quantidadeEstoque > 0 ? 'Em Estoque' : 'Sem Estoque' }}
-      </span>
-    </td>
+    <td mat-cell *matCellDef="let obj"> R$ {{obj.price | number:'1.2-2'}} </td>
   </ng-container>
 
   <ng-container matColumnDef="acao">
     <th mat-header-cell *matHeaderCellDef class="action-header"> AÇÕES </th>
     <td mat-cell *matCellDef="let obj">
       <div class="action-buttons">
-        <button class="icon-btn-outline" routerLink="/admin/acessorios/edit/{{obj.id}}">
+        <button class="icon-btn-outline" routerLink="/captadores/edit/{{obj.id}}">
           <i class="fa-regular fa-pen-to-square"></i>
         </button>
         <button class="icon-btn-outline danger" (click)="excluir(obj.id)">

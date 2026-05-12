@@ -5,7 +5,7 @@ export class Baixocustom {
     description!: string;
     baixoCor!: string;
     configuracaoEletronica!: number;
-    captadorList!: number;
+    captadorList!: number[];
     estimatedPrice!: number;
     baixoStatus!: string;
     pessoaCliente!: number;

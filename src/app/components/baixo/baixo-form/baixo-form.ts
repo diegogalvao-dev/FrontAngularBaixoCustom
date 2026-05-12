@@ -30,18 +30,18 @@ export class BaixoForm implements OnInit {
     private router: Router,
     private dialog: MatDialog
   ) {
-    this.form = this.fb.group({
-      id: [null],
-      name: ['', [Validators.required]],
-      price: [null, [Validators.required]],
-      quantidadeEstoque: [null, [Validators.required]],
-      fornecedor: [null, [Validators.required]],
-      baixoModeloBase: ['', [Validators.required]],
-      numeroCordas: [null, [Validators.required]],
-      baixoCor: ['', [Validators.required]]
-    });
+      this.form = this.fb.group({
+        id: [null],
+        name: ['', [Validators.required]],
+        price: [null, [Validators.required]],
+        quantidadeEstoque: [null, [Validators.required]],
+        fornecedor: [null, [Validators.required]],
+        baixoModeloBase: ['', [Validators.required]],
+        numeroCordas: [null, [Validators.required]],
+        baixoCor: ['', [Validators.required]]
+      });
 
-  }
+    }
 
   ngOnInit(): void {
     const baixo: Baixo = this.activatedRoute.snapshot.data['baixo'];

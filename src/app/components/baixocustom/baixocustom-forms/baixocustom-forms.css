@@ -162,3 +162,55 @@ mat-card-title {
     grid-template-columns: 1fr;
   }
 }
+
+/* Custom styles for MatSelect in Noir theme */
+.noir-select {
+  --mat-select-trigger-text-color: #d4d4d8;
+  --mat-select-placeholder-text-color: #71717a;
+}
+
+.noir-select ::ng-deep .mdc-notched-outline__leading,
+.noir-select ::ng-deep .mdc-notched-outline__notch,
+.noir-select ::ng-deep .mdc-notched-outline__trailing {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.noir-select.mat-form-field-focused ::ng-deep .mdc-notched-outline__leading,
+.noir-select.mat-form-field-focused ::ng-deep .mdc-notched-outline__notch,
+.noir-select.mat-form-field-focused ::ng-deep .mdc-notched-outline__trailing {
+  border-color: rgba(220, 38, 38, 0.5) !important;
+}
+
+.noir-select ::ng-deep .mat-mdc-text-field-wrapper {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+}
+
+.noir-select ::ng-deep .mat-mdc-form-field-flex {
+  padding-top: 0 !important;
+}
+
+.noir-select ::ng-deep .mat-mdc-select-value {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+::ng-deep .mat-mdc-select-panel {
+  background-color: #121212 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+::ng-deep .mat-mdc-option {
+  color: #d4d4d8 !important;
+}
+
+::ng-deep .mat-mdc-option:hover {
+  background-color: rgba(220, 38, 38, 0.1) !important;
+}
+
+::ng-deep .mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) {
+  background-color: rgba(220, 38, 38, 0.2) !important;
+}
+
+::ng-deep .mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mdc-list-item__primary-text {
+  color: #ef4444 !important;
+}

@@ -1,45 +1,143 @@
-<div class="dialog-container">
+<div class="dialog-container" [class.wide]="mode === 'selection'">
   <div class="dialog-header">
-    <span class="material-symbols-outlined icon">vibration</span>
-    <h2 class="dialog-title">Seleção de Captadores</h2>
+    <span class="material-symbols-outlined icon">{{ mode === 'selection' ? 'list_alt' : 'vibration' }}</span>
+    <h2 class="dialog-title">
+      {{ mode === 'selection' ? 'Catálogo de Captadores' : (form.get('id')?.value ? 'Editar Captador' : 'Novo Captador') }}
+    </h2>
+    <div class="header-actions" *ngIf="mode === 'selection'">
+      <button (click)="switchToForm()" class="btn-create-new">
+        <span class="material-symbols-outlined">add</span>
+        CRIAR NOVO
+      </button>
+    </div>
   </div>
 
-  <div class="dialog-content">
-    <!-- Selection Grid -->
-    <div class="options-grid">
-      @for (opt of data.options; track opt.id) {
-        <div 
-          (click)="selectedId = opt.id"
-          [class.active]="selectedId === opt.id"
-          class="option-card"
-        >
-          <div class="option-info">
-            <p class="option-name">{{ opt.name }}</p>
-            <p class="option-desc">{{ opt.description }}</p>
-          </div>
-          @if (selectedId === opt.id) {
-            <span class="material-symbols-outlined check-icon">check_circle</span>
-          }
+  <!-- MODO SELEÇÃO (AGREGAÇÃO) -->
+  <div *ngIf="mode === 'selection'" class="selection-view animate-fade">
+    
+    <!-- Search Bar -->
+    <div class="search-box">
+      <span class="material-symbols-outlined search-icon">search</span>
+      <input 
+        type="text" 
+        [ngModel]="searchTerm()" 
+        (ngModelChange)="searchTerm.set($event)"
+        placeholder="Buscar por marca, tipo ou posição..."
+        class="search-input"
+      >
+      <button *ngIf="searchTerm()" (click)="searchTerm.set('')" class="clear-btn">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+
+    <div class="pickup-list">
+      @if (filteredCaptadores().length === 0) {
+        <div class="empty-state">
+          <p>{{ searchTerm() ? 'Nenhum captador encontrado para esta busca.' : 'Nenhum captador cadastrado no sistema.' }}</p>
         </div>
       }
-    </div>
-
-    <!-- Text Fields -->
-    <div class="extra-fields">
-      <div class="field-group">
-        <label>Especificação Técnica</label>
-        <input type="text" [(ngModel)]="especificacao" placeholder="Ex: Alnico V, 8.5k Ohms...">
-      </div>
       
-      <div class="field-group">
-        <label>Observações Adicionais</label>
-        <textarea rows="3" [(ngModel)]="observacoes" placeholder="Detalhes de instalação, fiação..."></textarea>
+      <div class="grid-container">
+        @for (cap of filteredCaptadores(); track cap.id) {
+          <div 
+            class="pickup-card" 
+            [class.active]="selectedFromList?.id === cap.id"
+            (click)="selectPickup(cap)"
+          >
+            <div class="card-header">
+              <span class="pos-badge">{{ cap.captadorPosicao }}</span>
+              <span class="type-badge">{{ cap.type }}</span>
+            </div>
+            <h4 class="card-marca">{{ cap.marca }}</h4>
+            <p class="card-price">R$ {{ cap.price | number:'1.2-2' }}</p>
+            
+            @if (selectedFromList?.id === cap.id) {
+              <span class="material-symbols-outlined check-mark">check_circle</span>
+            }
+          </div>
+        }
       </div>
+    </div>
+
+    <div class="dialog-actions">
+      <button (click)="onCancel()" class="btn-cancel">Cancelar</button>
+      <button (click)="confirmSelection()" [disabled]="!selectedFromList" class="btn-save">Confirmar Seleção</button>
     </div>
   </div>
 
-  <div class="dialog-actions">
-    <button (click)="onCancel()" class="btn-cancel">Cancelar</button>
-    <button (click)="onSave()" class="btn-save">Confirmar</button>
-  </div>
+  <!-- MODO FORMULÁRIO (COMPOSIÇÃO/EDIÇÃO) -->
+  <form *ngIf="mode === 'form'" [formGroup]="form" (ngSubmit)="onSave()" class="animate-fade">
+    <div class="dialog-content">
+      <div class="fields-grid">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Marca / Modelo</mat-label>
+          <input matInput formControlName="marca" placeholder="Ex: Seymour Duncan JB">
+        </mat-form-field>
+
+        <div class="row">
+          <mat-form-field appearance="outline">
+            <mat-label>Preço</mat-label>
+            <input matInput type="number" formControlName="price" placeholder="0.00">
+            <span matPrefix>R$&nbsp;</span>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Posição</mat-label>
+            <mat-select formControlName="captadorPosicao">
+              @for (pos of posicaoOptions; track pos.value) {
+                <mat-option [value]="pos.value">{{ pos.label }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="type-selection">
+          <label class="section-label">Tipo de Captador</label>
+          <div class="type-toggle-group">
+            <button type="button" 
+                    [class.active]="form.get('type')?.value === 'passivo'"
+                    (click)="form.get('type')?.setValue('passivo')"
+                    class="type-btn">
+              Passivo
+            </button>
+            <button type="button" 
+                    [class.active]="form.get('type')?.value === 'ativo'"
+                    (click)="form.get('type')?.setValue('ativo')"
+                    class="type-btn">
+              Ativo
+            </button>
+          </div>
+        </div>
+
+        @if (form.get('type')?.value === 'ativo') {
+          <div class="extra-fields">
+            <div class="toggle-row">
+              <mat-slide-toggle formControlName="possuiBateria">Bateria</mat-slide-toggle>
+              <mat-slide-toggle formControlName="possuiAmplificador">Amplificador</mat-slide-toggle>
+            </div>
+          </div>
+        }
+
+        @if (form.get('type')?.value === 'passivo') {
+          <div class="extra-fields">
+            <div class="row">
+              <mat-form-field appearance="outline">
+                <mat-label>Resistência</mat-label>
+                <input matInput type="number" formControlName="resistencia">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Bobinas</mat-label>
+                <input matInput type="number" formControlName="numeroBobinas">
+              </mat-form-field>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="dialog-actions">
+      <button type="button" (click)="backToSelection()" class="btn-cancel">Voltar para Lista</button>
+      <button type="submit" class="btn-save">Salvar e Selecionar</button>
+    </div>
+  </form>
 </div>

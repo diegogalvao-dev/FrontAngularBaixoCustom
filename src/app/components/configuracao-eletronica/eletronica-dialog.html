@@ -4,37 +4,37 @@
     <h2 class="dialog-title">Configuração Eletrônica</h2>
   </div>
 
-  <div class="dialog-content">
-    <!-- Selection Grid -->
-    <div class="options-grid">
-      @for (opt of data.options; track opt.id) {
-        <div 
-          (click)="selectedId = opt.id"
-          [class.active]="selectedId === opt.id"
-          class="option-card"
-        >
-          <div class="option-info">
-            <p class="option-name">{{ opt.name }}</p>
-            <p class="option-desc">{{ opt.description }}</p>
-          </div>
-          @if (selectedId === opt.id) {
-            <span class="material-symbols-outlined check-icon">settings</span>
-          }
-        </div>
-      }
-    </div>
-
+  <div class="dialog-content" [formGroup]="form">
+    
     <!-- Text Fields -->
     <div class="extra-fields">
-      <div class="field-group">
-        <label>Especificação do Circuito</label>
-        <input type="text" [(ngModel)]="especificacao" placeholder="Ex: 18V Active, Push-Pull, Seri/Paralelo...">
+
+      <div class="grid grid-cols-2 gap-4">
+        <div class="field-group">
+          <label>Knobs de Volume</label>
+          <input type="number" formControlName="volumeKnobs" placeholder="Ex: 1">
+        </div>
+  
+        <div class="field-group">
+          <label>Knobs de Tone</label>
+          <input type="number" formControlName="toneKnobs" placeholder="Ex: 1">
+        </div>
       </div>
-      
-      <div class="field-group">
-        <label>Diagrama / Notas de Montagem</label>
-        <textarea rows="3" [(ngModel)]="observacoes" placeholder="Detalhes da blindagem, knobs, chaves..."></textarea>
+
+      <div class="status-card">
+        <h4 class="status-header">Status da Eletrônica</h4>
+        <div class="toggle-group-premium">
+          <div class="label-box">
+            <p class="main-label">Circuito Ativo</p>
+            <p class="sub-label">Define se o instrumento requer alimentação</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" formControlName="circuitoAtivo">
+            <span class="slider"></span>
+          </label>
+        </div>
       </div>
+
     </div>
   </div>
 

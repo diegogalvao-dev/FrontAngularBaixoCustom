@@ -14,20 +14,29 @@ export class LeftSidebar {
   changeIsLeftSidebarCollapsed = output<boolean>();
   items = [
     {
-      routeLink: '/produto',
+      routeLink: '/admin/produto',
       icon: 'fas fa-box',
-      label: 'Produto',
-      
+      label: 'Produtos',
     },
     {
-      routeLink: '/baixo-custom',
+      routeLink: '/admin/baixo',
+      icon: 'fas fa-guitar',
+      label: 'Modelos Baixo',
+    },
+    {
+      routeLink: '/admin/baixo-custom',
       icon: 'fas fa-tools',
       label: 'Baixo Custom',
     },
     {
-      routeLink: 'settings',
-      icon: 'fal fa-cog',
-      label: 'Settings',
+      routeLink: '/admin/captadores',
+      icon: 'fas fa-wave-square',
+      label: 'Captadores',
+    },
+    {
+      routeLink: '/catalogo',
+      icon: 'fas fa-shopping-cart',
+      label: 'Ver Loja',
     },
   ];
 

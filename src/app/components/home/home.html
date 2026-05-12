@@ -1,0 +1,302 @@
+<!-- Home Landing Page -->
+<main class="bg-background text-on-background selection:bg-primary-container selection:text-white">
+
+  <!-- Custom Navigation for Landing Page (Overlays the global one if needed, but better if we hide global) -->
+  <!-- Note: We keep the user's nav but integrate it with the page -->
+  <nav
+    class="fixed top-0 w-full z-50 border-b border-white/10 bg-black/80 backdrop-blur-xl shadow-[0_4px_30px_rgba(38,1,8,0.4)] flex justify-between items-center px-8 h-20 max-w-full mx-auto">
+    <div class="text-2xl font-black tracking-tighter text-white uppercase italic">DeepTone Luthier</div>
+    <div class="hidden md:flex gap-8 font-sans uppercase tracking-widest font-bold text-xs items-center">
+      <a class="text-primary-container border-b-2 border-primary-container pb-1 transition-all duration-300"
+        href="/">Home</a>
+      <a class="text-gray-400 hover:text-white transition-colors transition-all duration-300" href="/catalogo">Shop</a>
+      <a class="text-gray-400 hover:text-white transition-colors transition-all duration-300"
+        href="/admin/baixo-custom">Custom Shop</a>
+      <a class="text-gray-400 hover:text-white transition-colors transition-all duration-300" href="#">Services</a>
+      <a class="text-gray-400 hover:text-white transition-colors transition-all duration-300" href="#">About</a>
+    </div>
+    <div class="flex items-center gap-6">
+      <div class="relative hidden lg:block">
+        <input
+          class="bg-white/5 border border-white/10 rounded-full px-4 py-1.5 text-xs focus:outline-none focus:border-primary-container transition-all w-48"
+          placeholder="Search precision..." type="text" />
+        <span
+          class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 scale-75">search</span>
+      </div>
+      <div class="flex gap-4 items-center">
+        <button class="text-gray-400 hover:text-white transition-all scale-95 active:opacity-80">
+          <span class="material-symbols-outlined">shopping_cart</span>
+        </button>
+        <button
+          class="font-sans uppercase tracking-widest font-bold text-xs bg-primary-container text-white px-4 py-2 rounded-sm hover:bg-[#A60321] transition-all">
+          Account
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="relative h-[870px] flex items-center overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <img alt="Craft your Sound" class="w-full h-full object-cover brightness-[0.3]"
+        src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-djQU2vqojZM896lsVn2gex8p_2pj7cHN33Ycz3f8NUHYCdK7mFDxw6MA9l3jv_xDMI9wdkbXh7i94bPD6OCQDtmQ-1wmitApIVdrAoouTzSxGy_Kbr0cLfru5Mhoso836AKbePzJX8aKWHm9fibVlpN9ItMjRVDQo_TYHmJEbg1U6zm-tTOrah25GyvS-daK3_9oF2JXsauT5yzqO4SckcY_4A7e-liG7Tc64S1hp_bthbKFts7YCxlaDHiaT03iyKCqb-GlW3KW" />
+      <div class="absolute inset-0 bg-gradient-to-r from-background via-background/40 to-transparent"></div>
+      <div class="absolute inset-0 carbon-texture"></div>
+    </div>
+    <div class="container mx-auto px-margin-desktop relative z-10">
+      <div class="max-w-2xl">
+        <span class="text-primary-container font-label-bold uppercase tracking-[0.3em] block mb-4">Precision
+          Lutherie</span>
+        <h1 class="font-headline-xl text-headline-xl text-white mb-6 uppercase">Craft your <span
+            class="text-transparent bg-clip-text bg-gradient-to-r from-white to-primary-container">Sound</span></h1>
+        <p class="font-body-lg text-body-lg text-on-surface-variant mb-10 max-w-lg">
+          Elevate your performance with instruments built for the low-end elite. From custom masterpieces to meticulous
+          technical restoration.
+        </p>
+        <div class="flex gap-4">
+          <button
+            class="bg-primary-container text-white px-8 py-4 font-label-bold uppercase tracking-widest hover:bg-[#A60321] transition-all duration-300 shadow-[0_0_20px_rgba(166,3,33,0.3)]">
+            Explore Shop
+          </button>
+          <button
+            class="bg-white/5 backdrop-blur-md border border-white/20 text-white px-8 py-4 font-label-bold uppercase tracking-widest hover:bg-white/10 transition-all duration-300">
+            Custom Build
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories Bento Grid - Changed background to dark red from project -->
+  <section class="py-24 bg-surface-container relative overflow-hidden">
+    <div class="container mx-auto px-margin-desktop relative z-10">
+      <div class="flex justify-between items-end mb-12">
+        <div>
+          <h2 class="font-headline-lg text-headline-lg text-white mb-2 uppercase italic">Curated Collections</h2>
+          <div class="h-1 w-24 bg-primary-container"></div>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 h-[600px]">
+        <!-- Large Category -->
+        <div class="md:col-span-2 relative group overflow-hidden glass-card rounded-lg border-white/5">
+          <img alt="Basses"
+            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 brightness-50"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAH-7k85vtJtn9HmBEx7zc7D6kGxqJ-RFJazWnGiTw63fCRRsn-9jRTUBXlf8TdHv1YMGCIDqraBDCKjMMM5c7Hx10VNB7wtJVVK_XZ9zY6FVBoRgj07ACfHeN0UgrgGCU_xZqcqS5f77Xs3d9btzUj93txrp90rF1gNHH1fG6ORJSWc1qcx6prlv6QG8DCD3nolI21uSM_nZqRgJK0kMsGiH-4uOx_myLcn4Eul1CZaHzJRB0NxmUsndW7IpzzcZ2ggDHHpqBct9_3" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+          <div class="absolute bottom-0 left-0 p-8">
+            <h3 class="font-headline-lg text-headline-lg text-white uppercase italic mb-2">Basses</h3>
+            <p class="text-gray-400 font-body-md mb-4 max-w-xs">Premium selection of 4, 5, and 6 string boutique
+              instruments.</p>
+            <span
+              class="text-primary-container font-label-bold uppercase tracking-widest group-hover:translate-x-2 transition-transform inline-block">Shop
+              All Basses →</span>
+          </div>
+        </div>
+        <div class="flex flex-col gap-6">
+          <!-- Small Category 1 -->
+          <div class="flex-1 relative group overflow-hidden glass-card rounded-lg border-white/5">
+            <img alt="Accessories"
+              class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 brightness-[0.4]"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCq3vPnhDWpDV-Nzx5uvl8Xa_BXAuK4Y_YCwiB5Q7d0Yw4OqgcwyAuZOfuvQWwrKD92fOTfxvuz5gTZ9KWEUbKRL5VwwssXiOnmhDn2aPgWM_uQvPnTHTBd5jy45TxUcw0NLJknn5znkK7XhLgbY2nzUfxRqvoHImx6Aj29QjxhZCqFGQ3fVjMiH_BwLiAU_y0w-siCW9NkHTqfAO26cGrVebS1x5CpyCMwYLT3z4myK_m-xizYOHUBh2IYkKGUXSwgHFyNsIQeNWXF" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+            <div class="absolute bottom-0 left-0 p-6">
+              <h3 class="font-headline-md text-headline-md text-white uppercase">Accessories</h3>
+              <span class="text-primary-container font-label-bold uppercase tracking-widest text-xs">Essential Gear
+                →</span>
+            </div>
+          </div>
+          <!-- Small Category 2 -->
+          <div class="flex-1 relative group overflow-hidden glass-card rounded-lg border-white/5">
+            <img alt="Luthier Services"
+              class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 brightness-[0.4]"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1FmunNCiLj9ScJPXN1hw0UW0h96IOUCp8mK4_05foChyZ3BLMjqmtzOe5MuMaNZp5IcHMS6Cy_Ia3wWZCUv8LZNnKPh_KEdiDWjEz0Bjid0MmRPq3ZmFzK8BLeCEokmrzyf19R0oDnkDGvGpdnBAC7Nr2CI1akWwViYeHCcTD0Sqz4bwSUNc3GnxbAUEAUupPkbZcXdhHNc_QpIBB0GB9gOpRfwNjsiMw7RXEPFwiR8r5zU0Li6sbDu6yoVi76irbDcRPqHn2cNhi" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+            <div class="absolute bottom-0 left-0 p-6">
+              <h3 class="font-headline-md text-headline-md text-white uppercase">Luthier Services</h3>
+              <span class="text-primary-container font-label-bold uppercase tracking-widest text-xs">Expert Repairs
+                →</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- New Arrivals Grid - Background changed to wine red -->
+  <section class="py-24 bg-[#260108] relative overflow-hidden">
+    <div class="absolute inset-0 carbon-texture opacity-10"></div>
+    <div class="container mx-auto px-margin-desktop relative z-10">
+      <div class="flex justify-between items-center mb-16">
+        <h2 class="font-headline-lg text-headline-lg text-white uppercase">New <span
+            class="text-primary-container">Arrivals</span></h2>
+        <a class="text-gray-400 hover:text-white transition-colors uppercase tracking-widest text-xs font-bold"
+          href="/produto">View All Products</a>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- Product Card 1 -->
+        <div
+          class="glass-card rounded-sm overflow-hidden group hover:border-primary-container/30 transition-all duration-500 border-white/5">
+          <div class="h-80 overflow-hidden relative">
+            <img alt="Signature 4-String"
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNoHu8ewUTiKusqlsesj7Smn737lzhjdE18cA_S0pue4ZEYFFVGWtx0LTI5bOZPqx3imLr7iJ6v3FBUj_zuHgoJ6v7iGPY4FX_5gYQiz9hyCqd3q-8zB2aFlugQBBVI-8B2D2ZvyLjmq1iXVeAdqt7CNDzpTPhaDmAkXtqzxhAHWYis56jEE622hEG1SHgYbbn7FYT45kAyaIvNRol__I0w5oFSyGpLtlixrdlLQ_vjrsvdBq1xOPkJeRq5Gats-h56kRL85tXiu8a" />
+            <div
+              class="absolute top-4 left-4 bg-primary-container text-white text-[10px] font-bold uppercase px-2 py-1 tracking-widest">
+              New In
+            </div>
+          </div>
+          <div class="p-6">
+            <p class="text-xs text-primary-container font-label-bold uppercase mb-2">Signature Series</p>
+            <h4 class="font-headline-md text-white mb-2 group-hover:text-primary-container transition-colors">DT-Raven 4
+              Passive</h4>
+            <div class="flex justify-between items-center">
+              <span class="text-white font-bold">$2,850</span>
+              <button class="bg-white/5 p-2 rounded-full hover:bg-primary-container hover:text-white transition-all">
+                <span class="material-symbols-outlined scale-75">add_shopping_cart</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Product Card 2 -->
+        <div
+          class="glass-card rounded-sm overflow-hidden group hover:border-primary-container/30 transition-all duration-500 border-white/5">
+          <div class="h-80 overflow-hidden relative">
+            <img alt="Custom Shop V"
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-6z1-ZhMnCzL6laOt0WVNNDMxfPl37Y7bCHU0Afnm8amOu_Z8OCLmV0PYYRr4EPVWGOLctMVGu30fbSmbXEjZXmwWhGby9dfDnQH79lPqushkb--uCR83LO3Hjx-5JA6m15ExrD834U68sNzTwJiloHfyeLEe4kiAyb0ww-0zLepSNxFUCejYDIRoLcZ9iMbzkcljzADNoaFwwlnzS3r2FPQiMCL1LQu3Njv6jcu4M_wdcWFJ2gkQTF8vDjqosq5rF8qj5_zDYHWE" />
+            <div
+              class="absolute top-4 left-4 bg-primary-container text-white text-[10px] font-bold uppercase px-2 py-1 tracking-widest">
+              Masterpiece
+            </div>
+          </div>
+          <div class="p-6">
+            <p class="text-xs text-primary-container font-label-bold uppercase mb-2">Custom Shop</p>
+            <h4 class="font-headline-md text-white mb-2 group-hover:text-primary-container transition-colors">Burl Maple
+              V Spec</h4>
+            <div class="flex justify-between items-center">
+              <span class="text-white font-bold">$4,200</span>
+              <button class="bg-white/5 p-2 rounded-full hover:bg-primary-container hover:text-white transition-all">
+                <span class="material-symbols-outlined scale-75">add_shopping_cart</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Product Card 3 -->
+        <div
+          class="glass-card rounded-sm overflow-hidden group hover:border-primary-container/30 transition-all duration-500 border-white/5">
+          <div class="h-80 overflow-hidden relative">
+            <img alt="Service Package"
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlxQyLSNnfJF1N3dx3oz_oJoLrnRdjjoLHBAalmZrvNIJ_9qAFNaHKfqBna9vPQ4gs1A961hjLCm8DRVIE3uWtZijbm5bUE-ZiDpHZbl8SWykfz1KHpTzcXMkm8NTiUy0Zi93dXwM_I7kzgvWk4_1OGdhADtRMS7ycWYcC0EdI4Od8yoakoC45eUIwCzThEudqHeI1B2NCgnD9G-H_AMHplQL5NwW5e94ixyzbqRNRr-sJP3pAL0foWzO2UhHFSeuo1WRxKVAHcwZq" />
+          </div>
+          <div class="p-6">
+            <p class="text-xs text-primary-container font-label-bold uppercase mb-2">Technical Services</p>
+            <h4 class="font-headline-md text-white mb-2 group-hover:text-primary-container transition-colors">Precision
+              Fret Level</h4>
+            <div class="flex justify-between items-center">
+              <span class="text-white font-bold">From $120</span>
+              <button class="bg-white/5 p-2 rounded-full hover:bg-primary-container hover:text-white transition-all">
+                <span class="material-symbols-outlined scale-75">calendar_today</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Product Card 4 -->
+        <div
+          class="glass-card rounded-sm overflow-hidden group hover:border-primary-container/30 transition-all duration-500 border-white/5">
+          <div class="h-80 overflow-hidden relative">
+            <img alt="Limited Edition"
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPoPuSCzmETYzcvI8bOgVBn1G07eTzZp_Hqr1lgYwLJbeKhMpSp8WBMveSRUrU0W4IdwRQBN6qekhxdVmB3qrN0I1Hop1BBzIh5cFFEZfE42o5BmkvA3dHz7sgRu29XRYnFoG_hOpNYAbMf_uW_IdjA9IoaMx2J8ewwefHudjQX5Pe3PL7VK3VeywOYoB0UxR4hvFp5y1sldFery1SjYR7sQJ8AFmOqsYMgNI-Te0BWJnDq2nv5NE709kve_ZorVvmL-L6XjTIVjfO" />
+            <div
+              class="absolute top-4 left-4 bg-[#640b19] text-white text-[10px] font-bold uppercase px-2 py-1 tracking-widest">
+              Sold Out
+            </div>
+          </div>
+          <div class="p-6">
+            <p class="text-xs text-primary-container font-label-bold uppercase mb-2">Limited Edition</p>
+            <h4 class="font-headline-md text-white mb-2 group-hover:text-primary-container transition-colors">Wine-Core
+              IV Proto</h4>
+            <div class="flex justify-between items-center">
+              <span class="text-gray-500 font-bold">$3,100</span>
+              <button class="bg-white/5 p-2 rounded-full opacity-50 cursor-not-allowed">
+                <span class="material-symbols-outlined scale-75">notifications</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Luthier Section - Dark Background -->
+  <section class="py-24 bg-background container mx-auto px-margin-desktop">
+    <div class="flex flex-col lg:flex-row items-center gap-16">
+      <div class="lg:w-1/2 relative">
+        <div class="absolute -top-4 -left-4 w-24 h-24 border-t-2 border-l-2 border-primary-container"></div>
+        <img alt="Studio Workshop" class="rounded-lg shadow-2xl grayscale hover:grayscale-0 transition-all duration-700"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqOwAXaqO5pZO1wVjhIFDvchE_uP1r-9E5xPtMKjmos985E0MqAxYyKhxgF_bdx79VGww54UI8Fx0Y09aUIuWnxnqX_k9tH_gFL1x123sbeSwc-y8cvD8HfL6yweKVEpNGdQGfArc7PUXJxxxy9bEWPFJogFi53ADypIya-XQ3j4hjApa-3VfJMBGE_QLRyWBS6RNk_f9heQ3QRHrJbIGii4NvzKYvAflxXWtA4eqzGUZXbefOho8y_1tT89jnL7SWZwIpE9_R9W1O" />
+        <div class="absolute -bottom-4 -right-4 w-24 h-24 border-b-2 border-r-2 border-primary-container"></div>
+      </div>
+      <div class="lg:w-1/2">
+        <h2 class="font-headline-lg text-headline-lg text-white mb-6 uppercase italic">The Studio Philosophy</h2>
+        <p class="font-body-lg text-body-lg text-on-surface-variant mb-8 leading-relaxed">
+          At DeepTone Luthier Studio, we don't just fix instruments; we unlock their resonance. Every millimeter of
+          wood, every solder joint, and every fret polish is executed with the surgical precision required for low-end
+          clarity.
+        </p>
+        <ul class="space-y-4 mb-10">
+          <li class="flex items-center gap-4 text-white font-label-bold uppercase tracking-wide">
+            <span class="material-symbols-outlined text-primary-container">check_circle</span>
+            Custom Tone Shaping & Wiring
+          </li>
+          <li class="flex items-center gap-4 text-white font-label-bold uppercase tracking-wide">
+            <span class="material-symbols-outlined text-primary-container">check_circle</span>
+            Master-Level Fretwork & Plek Analysis
+          </li>
+          <li class="flex items-center gap-4 text-white font-label-bold uppercase tracking-wide">
+            <span class="material-symbols-outlined text-primary-container">check_circle</span>
+            Premium Wood Selection & Drying
+          </li>
+        </ul>
+        <button
+          class="bg-white/5 border border-primary-container text-white px-8 py-4 font-label-bold uppercase tracking-widest hover:bg-primary-container transition-all">
+          Book a Consultation
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-black/95 w-full border-t border-white/5 py-12">
+    <div class="flex flex-col md:flex-row justify-between items-center px-12 gap-8">
+      <div class="flex flex-col items-center md:items-start">
+        <div class="text-lg font-bold text-white mb-2">DeepTone Luthier Studio</div>
+        <div class="font-sans text-sm tracking-tight text-gray-500">Crafted for Low-End Precision.</div>
+      </div>
+      <div class="flex flex-wrap justify-center gap-8">
+        <a class="text-gray-500 hover:text-primary-container transition-colors font-sans text-sm tracking-tight"
+          href="#">Privacy</a>
+        <a class="text-gray-500 hover:text-primary-container transition-colors font-sans text-sm tracking-tight"
+          href="#">Terms</a>
+        <a class="text-gray-500 hover:text-primary-container transition-colors font-sans text-sm tracking-tight"
+          href="#">Shipping</a>
+        <a class="text-gray-500 hover:text-primary-container transition-colors font-sans text-sm tracking-tight"
+          href="#">Returns</a>
+        <a class="text-gray-500 hover:text-primary-container transition-colors font-sans text-sm tracking-tight"
+          href="#">Newsletter</a>
+      </div>
+      <div class="flex gap-6">
+        <a class="text-gray-500 hover:text-white transition-colors" href="#"><span
+            class="material-symbols-outlined">share</span></a>
+        <a class="text-gray-500 hover:text-white transition-colors" href="#"><span
+            class="material-symbols-outlined">alternate_email</span></a>
+        <a class="text-gray-500 hover:text-white transition-colors" href="#"><span
+            class="material-symbols-outlined">room</span></a>
+      </div>
+    </div>
+    <div class="text-center mt-12 font-sans text-xs tracking-tight text-gray-700">
+      © 2024 DeepTone Luthier Studio. Crafted for Low-End Precision.
+    </div>
+  </footer>
+</main>

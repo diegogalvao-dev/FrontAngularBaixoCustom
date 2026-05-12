@@ -1,0 +1,16 @@
+.carbon-texture {
+  background-image: radial-gradient(#260108 1px, transparent 1px);
+  background-size: 4px 4px;
+  opacity: 0.1;
+}
+
+.glass-card {
+  background: rgba(18, 18, 18, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 32px 0 rgba(38, 1, 8, 0.3);
+}
+
+main {
+    min-height: 100vh;
+}

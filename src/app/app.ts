@@ -1,6 +1,7 @@
 import { Component, HostListener, OnInit, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import {  LeftSidebar } from "./components/left-side-bar/left-side-bar";
+import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
+import { filter } from 'rxjs';
+import { LeftSidebar } from "./components/left-side-bar/left-side-bar";
 
 @Component({
   selector: 'app-root',
@@ -8,11 +9,24 @@ import {  LeftSidebar } from "./components/left-side-bar/left-side-bar";
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
+export class App implements OnInit {
   protected readonly title = signal('FrontAngularBaixoCustom');
 
   isLeftSidebarCollapsed = signal<boolean>(true);
   screenWidth = signal<number>(window.innerWidth);
+  isAdmin = signal<boolean>(false);
+
+  constructor(private router: Router) {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: any) => {
+      this.isAdmin.set(event.urlAfterRedirects.includes('/admin'));
+    });
+  }
+
+  ngOnInit() {
+    this.isAdmin.set(this.router.url.includes('/admin'));
+  }
 
   @HostListener('window:resize')
   onResize() {

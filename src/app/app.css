@@ -24,17 +24,26 @@ app-left-side-bar {
 
 .router-outlet {
   padding: 2rem 2.5rem;
+  flex: 1;
 }
 
 .content-area {
   margin-left: 260px;
   padding-top: 64px;
-  /* Espaço para o header fixo */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   transition: margin-left 0.3s ease;
+  box-sizing: border-box;
 }
 
 .collapsed .content-area {
   margin-left: 80px;
+}
+
+.main-wrapper:not(.is-admin) .content-area {
+  margin-left: 0 !important;
+  padding-top: 0 !important;
 }
 
 /* Top Bar Styling */
@@ -49,7 +58,7 @@ app-left-side-bar {
   justify-content: space-between;
   align-items: center;
   padding: 0 40px 0 1rem;
-  background-color: #400606;
+  background-color: #000000;
   z-index: 1001; /* Lower than sidebar */
   box-sizing: border-box;
   transition: all 0.3s ease;

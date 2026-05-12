@@ -46,46 +46,42 @@
             }
           </div>
 
-          <div class="col-span-2">
-            <label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-4">Modelo Base</label>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-              @for (mod of optionsModelos; track mod.value) {
-                <div 
-                  (click)="form.get('baixoModeloBase')?.setValue(mod.value)"
-                  [class.border-red-600]="form.get('baixoModeloBase')?.value === mod.value"
-                  [class.bg-red-950\/10]="form.get('baixoModeloBase')?.value === mod.value"
-                  class="cursor-pointer border border-white/10 bg-black/40 rounded-lg p-4 transition-all hover:border-red-600/50 flex flex-col items-center justify-center gap-2 group text-center"
-                >
-                  <span class="material-symbols-outlined text-2xl text-zinc-500 group-hover:text-red-500 transition-colors"
-                    [class.text-red-500]="form.get('baixoModeloBase')?.value === mod.value">
-                    {{ mod.icon }}
-                  </span>
-                  <p class="text-[10px] font-bold text-zinc-300 uppercase tracking-widest">{{ mod.label }}</p>
-                </div>
+          <div class="col-span-1">
+            <label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Modelo Base</label>
+            <mat-form-field appearance="outline" class="w-full noir-select">
+              <mat-select formControlName="baixoModeloBase" placeholder="Selecione um modelo">
+                <mat-option *ngFor="let mod of optionsModelos" [value]="mod.value">
+                  <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-sm text-zinc-500">{{mod.icon}}</span>
+                    <span>{{mod.label}}</span>
+                  </div>
+                </mat-option>
+              </mat-select>
+              @if (form.get('baixoModeloBase')?.hasError('backendError') && form.get('baixoModeloBase')?.touched) {
+              <mat-error class="text-red-500 text-xs">{{ form.get('baixoModeloBase')?.getError('backendError') }}</mat-error>
               }
-            </div>
-            @if (form.get('baixoModeloBase')?.hasError('backendError') && form.get('baixoModeloBase')?.touched) {
-            <p class="text-red-500 text-xs mt-2">{{ form.get('baixoModeloBase')?.getError('backendError') }}</p>
-            }
+            </mat-form-field>
           </div>
 
           <div class="col-span-1">
             <label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Cor</label>
-            <select formControlName="baixoCor" class="w-full custom-select">
-              <option value="" disabled selected>Selecione uma cor</option>
-              <option value="PRETO">Preto</option>
-              <option value="BRANCO">Branco</option>
-              <option value="VERMELHO">Vermelho</option>
-              <option value="AZUL">Azul</option>
-              <option value="VERDE">Verde</option>
-              <option value="SUNBURST">Sunburst</option>
-            </select>
-            @if (form.get('baixoCor')?.hasError('backendError') && form.get('baixoCor')?.touched) {
-            <p class="text-red-500 text-xs mt-1">{{ form.get('baixoCor')?.getError('backendError') }}</p>
-            }
+            <mat-form-field appearance="outline" class="w-full noir-select">
+              <mat-select formControlName="baixoCor" placeholder="Selecione uma cor">
+                <mat-option *ngFor="let cor of optionsCores" [value]="cor.value">
+                  <div class="flex items-center gap-3">
+                    <div class="w-3 h-3 rounded-full border border-white/20" [style.background]="cor.color"></div>
+                    <span>{{cor.label}}</span>
+                  </div>
+                </mat-option>
+              </mat-select>
+              @if (form.get('baixoCor')?.hasError('backendError') && form.get('baixoCor')?.touched) {
+              <mat-error class="text-red-500 text-xs">{{ form.get('baixoCor')?.getError('backendError') }}</mat-error>
+              }
+            </mat-form-field>
           </div>
         </div>
       </section>
+
 
       <!-- Electronic Specs Card -->
       <section
@@ -94,7 +90,7 @@
 
         <div class="flex flex-col gap-4">
           <!-- Botão Inicial (Exibido apenas quando não há ID) -->
-          <button *ngIf="!configEletronica.id" type="button" (click)="openDialog()"
+          <button *ngIf="!configEletronica().id" type="button" (click)="openDialog()"
             class="w-full py-8 border-2 border-dashed border-white/10 rounded-lg flex flex-col items-center justify-center gap-3 group hover:border-red-600/50 hover:bg-red-950/5 transition-all cursor-pointer">
             <span
               class="material-symbols-outlined text-3xl text-zinc-600 group-hover:text-red-500 transition-colors">settings_input_component</span>
@@ -104,13 +100,14 @@
           </button>
 
           <!-- Card de Detalhes (Exibido após configuração) -->
-          <div *ngIf="configEletronica.id"
+          <div *ngIf="configEletronica().id"
             class="w-full p-6 bg-black/40 border border-red-600/30 rounded-lg relative group animate-in fade-in slide-in-from-top-2 duration-500">
 
             <div class="flex justify-between items-start mb-4">
               <div>
-                <p class="text-xs font-bold text-red-500 uppercase tracking-widest mb-1">Circuito Ativo</p>
-                <h4 class="text-xl font-black text-zinc-100 uppercase tracking-tight">{{ getSelectedEletronicaLabel() }}
+                <p class="text-xs font-bold text-red-500 uppercase tracking-widest mb-1">Configuração Salva</p>
+                <h4 class="text-xl font-black text-zinc-100 uppercase tracking-tight">
+                  {{ configEletronica().ativo ? 'Circuito Ativo' : 'Circuito Passivo' }}
                 </h4>
               </div>
               <button type="button" (click)="openDialog()"
@@ -120,17 +117,21 @@
               </button>
             </div>
 
-            <div class="space-y-4">
-              <div *ngIf="configEletronica.especificacao">
-                <label class="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">Especificação
-                  Técnica</label>
-                <p class="text-sm text-zinc-300 leading-relaxed">{{ configEletronica.especificacao }}</p>
+            <div class="grid grid-cols-2 gap-4 border-t border-white/5 pt-4">
+              <div>
+                <label class="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">Knobs de Volume</label>
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-sm text-red-500">radio_button_checked</span>
+                  <p class="text-lg font-bold text-zinc-200">{{ configEletronica().volumeKnobs || 0 }}</p>
+                </div>
               </div>
 
-              <div *ngIf="configEletronica.observacoes">
-                <label class="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">Notas de
-                  Montagem</label>
-                <p class="text-sm text-zinc-400 italic leading-relaxed">"{{ configEletronica.observacoes }}"</p>
+              <div>
+                <label class="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">Knobs de Tone</label>
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-sm text-red-500">tune</span>
+                  <p class="text-lg font-bold text-zinc-200">{{ configEletronica().toneKnobs || 0 }}</p>
+                </div>
               </div>
             </div>
           </div>
@@ -148,15 +149,14 @@
         <h3 class="text-zinc-500 font-bold text-sm uppercase tracking-widest mb-6">Captadores</h3>
 
         <div class="flex flex-col gap-4">
-          <!-- Lista de Captadores Adicionados -->
-          <div *ngFor="let cap of captadoresData; let i = index"
+          <!-- Selected Pickups -->
+          <div *ngFor="let cap of captadoresData(); let i = index"
             class="w-full p-6 bg-black/40 border border-zinc-700/50 rounded-lg relative group animate-in fade-in slide-in-from-top-2 duration-500 mb-2">
 
             <div class="flex justify-between items-start mb-4">
               <div>
                 <p class="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-1">Posição {{ i + 1 }}</p>
-                <h4 class="text-xl font-black text-zinc-100 uppercase tracking-tight">{{ getCaptadorLabel(cap.id) }}
-                </h4>
+                <h4 class="text-xl font-black text-zinc-100 uppercase tracking-tight">{{ cap.marca }}</h4>
               </div>
               <div class="flex gap-2">
                 <button type="button" (click)="openCaptadorDialog(i)"
@@ -172,101 +172,55 @@
             </div>
 
             <div class="space-y-3">
-              <div *ngIf="cap.especificacao">
-                <label
-                  class="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">Especificação</label>
-                <p class="text-sm text-zinc-300 leading-relaxed">{{ cap.especificacao }}</p>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">Preço</label>
+                  <p class="text-sm text-zinc-300">R$ {{ cap.price | number:'1.2-2' }}</p>
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">Tipo</label>
+                  <p class="text-sm text-zinc-300 uppercase font-bold text-[10px] tracking-widest">{{ cap.type }}</p>
+                </div>
               </div>
-              <div *ngIf="cap.observacoes">
-                <label class="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">Notas</label>
-                <p class="text-sm text-zinc-400 italic leading-relaxed">"{{ cap.observacoes }}"</p>
+
+              <div class="border-t border-white/5 pt-3">
+                <div *ngIf="cap.type === 'ativo'" class="flex gap-4">
+                  <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[12px] text-red-500">{{ cap.possuiBateria ? 'battery_full' : 'battery_alert' }}</span>
+                    <span class="text-[10px] text-zinc-400 uppercase tracking-widest">{{ cap.possuiBateria ? 'Com Bateria' : 'Sem Bateria' }}</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[12px] text-red-500">{{ cap.possuiAmplificador ? 'volume_up' : 'volume_off' }}</span>
+                    <span class="text-[10px] text-zinc-400 uppercase tracking-widest">{{ cap.possuiAmplificador ? 'Com Amp' : 'Sem Amp' }}</span>
+                  </div>
+                </div>
+
+                <div *ngIf="cap.type === 'passivo'" class="flex gap-4">
+                  <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[12px] text-red-500">bolt</span>
+                    <span class="text-[10px] text-zinc-400 uppercase tracking-widest">{{ cap.resistencia }} kΩ</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[12px] text-red-500">reorder</span>
+                    <span class="text-[10px] text-zinc-400 uppercase tracking-widest">{{ cap.numeroBobinas }} Bobinas</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
           <!-- Botão para Adicionar Novo (Máximo 2) -->
-          <button *ngIf="captadoresData.length < 2" type="button" (click)="openCaptadorDialog()"
+          <button *ngIf="captadoresData().length < 2" type="button" (click)="openCaptadorDialog()"
             class="w-full py-6 border-2 border-dashed border-white/10 rounded-lg flex flex-col items-center justify-center gap-2 group hover:border-red-600/50 hover:bg-red-950/5 transition-all cursor-pointer mt-2">
             <span
               class="material-symbols-outlined text-3xl text-zinc-600 group-hover:text-red-500 transition-colors">add_circle</span>
             <div class="text-center">
               <p class="text-zinc-300 font-bold uppercase tracking-widest text-xs">Adicionar Captador</p>
-              <p class="text-zinc-500 text-[10px] mt-1">{{ 2 - captadoresData.length }} vaga(s) disponível(is)</p>
+              <p class="text-zinc-500 text-[10px] mt-1">{{ 2 - captadoresData().length }} vaga(s) disponível(is)</p>
             </div>
           </button>
         </div>
       </section>
-
-      <!-- gridInLeftSide -->
-      <div class="gridInLeftSide">
-
-        <!-- Participants Card -->
-        <section
-          class="bg-gradient-to-br from-[#121212] to-[#260108]/20 border border-white/10 rounded-lg p-6 shadow-2xl backdrop-blur-md">
-          <h3 class="text-zinc-500 font-bold text-sm uppercase tracking-widest mb-6">Participantes</h3>
-
-          <div class="grid grid-cols-1 gap-6">
-            <div class="col-span-1">
-              <label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">ID do Cliente</label>
-              <input type="number" formControlName="pessoaCliente" placeholder="Ex: 101"
-                class="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-zinc-200 focus:border-red-600/50 focus:ring-1 focus:ring-red-600/30 transition-all outline-none" />
-              @if (form.get('pessoaCliente')?.hasError('backendError') && form.get('pessoaCliente')?.touched) {
-              <p class="text-red-500 text-xs mt-1">{{ form.get('pessoaCliente')?.getError('backendError') }}</p>
-              }
-            </div>
-
-            <div class="col-span-1">
-              <label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">ID do Luthier</label>
-              <input type="number" formControlName="pessoaLuthier" placeholder="Ex: 5"
-                class="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-zinc-200 focus:border-red-600/50 focus:ring-1 focus:ring-red-600/30 transition-all outline-none" />
-              @if (form.get('pessoaLuthier')?.hasError('backendError') && form.get('pessoaLuthier')?.touched) {
-              <p class="text-red-500 text-xs mt-1">{{ form.get('pessoaLuthier')?.getError('backendError') }}</p>
-              }
-            </div>
-          </div>
-        </section>
-
-        <!-- Pricing & Status Card -->
-        <section
-          class="bg-gradient-to-br from-[#121212] to-[#260108]/20 border border-white/10 rounded-lg p-6 shadow-2xl backdrop-blur-md">
-          <h3 class="text-zinc-500 font-bold text-sm uppercase tracking-widest mb-6">Preço & Status</h3>
-
-          <div class="space-y-4">
-            <div>
-              <label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Preço Estimado
-                (R$)</label>
-              <div class="relative">
-                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 text-sm font-bold">R$</span>
-                <input type="number" formControlName="estimatedPrice" placeholder="0.00"
-                  class="w-full bg-black/40 border border-white/10 rounded pl-12 pr-4 py-3 text-zinc-200 focus:border-red-600/50 focus:ring-1 focus:ring-red-600/30 transition-all font-bold outline-none" />
-              </div>
-              @if (form.get('estimatedPrice')?.hasError('backendError') && form.get('estimatedPrice')?.touched) {
-              <p class="text-red-500 text-xs mt-1">{{ form.get('estimatedPrice')?.getError('backendError') }}</p>
-              }
-            </div>
-
-            <div>
-              <label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Status do
-                Projeto</label>
-              <select formControlName="baixoStatus"
-                class="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-zinc-200 focus:border-red-600/50 focus:ring-1 focus:ring-red-600/30 transition-all outline-none [&>option]:bg-[#121212]">
-                <option value="" disabled selected>Selecione o status</option>
-                <option value="PROJETANDO">Projetando</option>
-                <option value="EM_CONSTRUCAO">Em construção</option>
-                <option value="EM_TESTE">Em teste</option>
-                <option value="FINALIZADO">Finalizado</option>
-                <option value="ENTREGUE">Entregue</option>
-              </select>
-              @if (form.get('baixoStatus')?.hasError('backendError') && form.get('baixoStatus')?.touched) {
-              <p class="text-red-500 text-xs mt-1">{{ form.get('baixoStatus')?.getError('backendError') }}</p>
-              }
-            </div>
-          </div>
-        </section>
-
-      </div>
-
-
 
       <!-- Actions Card -->
       <section
@@ -308,6 +262,70 @@
           <div
             class="aspect-square rounded border border-white/10 flex items-center justify-center bg-white/5 text-zinc-600 text-xs font-bold">
             +0
+          </div>
+        </div>
+      </section>
+
+      <!-- Participants Card -->
+      <section
+        class="bg-gradient-to-br from-[#121212] to-[#260108]/20 border border-white/10 rounded-lg p-6 shadow-2xl backdrop-blur-md mt-6">
+        <h3 class="text-zinc-500 font-bold text-sm uppercase tracking-widest mb-6">Participantes</h3>
+
+        <div class="grid grid-cols-1 gap-6">
+          <div class="col-span-1">
+            <label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">ID do Cliente</label>
+            <input type="number" formControlName="pessoaCliente" placeholder="Ex: 101"
+              class="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-zinc-200 focus:border-red-600/50 focus:ring-1 focus:ring-red-600/30 transition-all outline-none" />
+            @if (form.get('pessoaCliente')?.hasError('backendError') && form.get('pessoaCliente')?.touched) {
+            <p class="text-red-500 text-xs mt-1">{{ form.get('pessoaCliente')?.getError('backendError') }}</p>
+            }
+          </div>
+
+          <div class="col-span-1">
+            <label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">ID do Luthier</label>
+            <input type="number" formControlName="pessoaLuthier" placeholder="Ex: 5"
+              class="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-zinc-200 focus:border-red-600/50 focus:ring-1 focus:ring-red-600/30 transition-all outline-none" />
+            @if (form.get('pessoaLuthier')?.hasError('backendError') && form.get('pessoaLuthier')?.touched) {
+            <p class="text-red-500 text-xs mt-1">{{ form.get('pessoaLuthier')?.getError('backendError') }}</p>
+            }
+          </div>
+        </div>
+      </section>
+
+      <!-- Pricing & Status Card -->
+      <section
+        class="bg-gradient-to-br from-[#121212] to-[#260108]/20 border border-white/10 rounded-lg p-6 shadow-2xl backdrop-blur-md mt-6">
+        <h3 class="text-zinc-500 font-bold text-sm uppercase tracking-widest mb-6">Preço & Status</h3>
+
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Preço Estimado
+              (R$)</label>
+            <div class="relative">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 text-sm font-bold">R$</span>
+              <input type="number" formControlName="estimatedPrice" placeholder="0.00"
+                class="w-full bg-black/40 border border-white/10 rounded pl-12 pr-4 py-3 text-zinc-200 focus:border-red-600/50 focus:ring-1 focus:ring-red-600/30 transition-all font-bold outline-none" />
+            </div>
+            @if (form.get('estimatedPrice')?.hasError('backendError') && form.get('estimatedPrice')?.touched) {
+            <p class="text-red-500 text-xs mt-1">{{ form.get('estimatedPrice')?.getError('backendError') }}</p>
+            }
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-zinc-400 uppercase tracking-widest mb-2">Status do
+              Projeto</label>
+            <select formControlName="baixoStatus"
+              class="w-full bg-black/40 border border-white/10 rounded px-4 py-3 text-zinc-200 focus:border-red-600/50 focus:ring-1 focus:ring-red-600/30 transition-all outline-none [&>option]:bg-[#121212]">
+              <option value="" disabled selected>Selecione o status</option>
+              <option value="PROJETANDO">Projetando</option>
+              <option value="EM_CONSTRUCAO">Em construção</option>
+              <option value="EM_TESTE">Em teste</option>
+              <option value="FINALIZADO">Finalizado</option>
+              <option value="ENTREGUE">Entregue</option>
+            </select>
+            @if (form.get('baixoStatus')?.hasError('backendError') && form.get('baixoStatus')?.touched) {
+            <p class="text-red-500 text-xs mt-1">{{ form.get('baixoStatus')?.getError('backendError') }}</p>
+            }
           </div>
         </div>
       </section>

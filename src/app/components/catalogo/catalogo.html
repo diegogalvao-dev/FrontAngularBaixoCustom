@@ -1,0 +1,196 @@
+<!-- Catalogo de Produtos -->
+<div class="min-h-screen flex flex-col font-sans antialiased bg-surface-dim carbon-texture text-on-background">
+  <!-- NavigationBar - Match Home Header exactly -->
+  <nav class="fixed top-0 w-full z-50 border-b border-white/10 bg-black/80 backdrop-blur-xl shadow-[0_4px_30px_rgba(38,1,8,0.4)] flex justify-between items-center px-8 h-20 max-w-full mx-auto">
+    <div class="text-2xl font-black tracking-tighter text-white uppercase italic">DeepTone Luthier</div>
+    <div class="hidden md:flex gap-8 font-sans uppercase tracking-widest font-bold text-xs items-center">
+      <a class="text-gray-400 hover:text-white transition-colors transition-all duration-300" href="/">Home</a>
+      <a class="text-primary-container border-b-2 border-primary-container pb-1 transition-all duration-300" href="/catalogo">Shop</a>
+      <a class="text-gray-400 hover:text-white transition-colors transition-all duration-300" href="/baixo-custom">Custom Shop</a>
+      <a class="text-gray-400 hover:text-white transition-colors transition-all duration-300" href="#">Services</a>
+      <a class="text-gray-400 hover:text-white transition-colors transition-all duration-300" href="#">About</a>
+    </div>
+    <div class="flex items-center gap-6">
+      <div class="relative hidden lg:block">
+        <input class="bg-white/5 border border-white/10 rounded-full px-4 py-1.5 text-xs focus:outline-none focus:border-primary-container transition-all w-48" placeholder="Search precision..." type="text"/>
+        <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 scale-75">search</span>
+      </div>
+      <div class="flex gap-4 items-center">
+        <button class="text-gray-400 hover:text-white transition-all scale-95 active:opacity-80">
+          <span class="material-symbols-outlined">shopping_cart</span>
+        </button>
+        <button class="font-sans uppercase tracking-widest font-bold text-xs bg-primary-container text-white px-4 py-2 rounded-sm hover:bg-[#A60321] transition-all">
+          Account
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MainContent -->
+  <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 w-full">
+    <!-- Page Header & Breadcrumbs -->
+    <div class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div>
+        <h1 class="text-3xl font-light text-white mb-2">ContraBaixo</h1>
+        <nav aria-label="Breadcrumb" class="flex text-sm text-white/60">
+          <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li class="inline-flex items-center">
+              <a class="hover:text-primary transition-colors" href="/">Início</a>
+            </li>
+            <li>
+              <div class="flex items-center">
+                <svg aria-hidden="true" class="w-3 h-3 mx-1 text-outline" fill="none" viewBox="0 0 6 10" xmlns="http://www.w3.org/2000/svg">
+                  <path d="m1 9 4-4-4-4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                </svg>
+                <span class="ml-1 md:ml-2 text-white">ContraBaixo</span>
+              </div>
+            </li>
+          </ol>
+        </nav>
+      </div>
+      <div class="flex flex-col sm:flex-row items-center gap-4 text-sm">
+        <span class="text-white/60">Exibindo 1-24 de 31 produtos</span>
+        <div class="flex items-center gap-2">
+          <label class="text-white font-medium" for="sort">Ordenar por</label>
+          <select class="bg-black border border-zinc-700 text-white rounded-md focus:ring-primary focus:border-primary block p-2 text-sm" id="sort">
+            <option>Mais vendidos</option>
+            <option>Menor Preço</option>
+            <option>Maior Preço</option>
+            <option>Lançamentos</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col lg:flex-row gap-8">
+      <!-- Sidebar Filters - Changed to Black -->
+      <aside class="w-full lg:w-64 flex-shrink-0">
+        <div class="bg-black rounded-xl border border-zinc-700 p-6 space-y-8 sticky top-32">
+          <!-- Filter: Marca -->
+          <div>
+            <h3 class="font-semibold text-lg text-white mb-4">Marca</h3>
+            <ul class="space-y-3">
+              <li>
+                <div class="flex items-center">
+                  <input class="w-4 h-4 text-primary bg-black border-outline rounded focus:ring-primary focus:ring-2" id="brand-seven" type="checkbox" value=""/>
+                  <label class="ml-2 text-sm text-white/80 hover:text-white cursor-pointer flex-grow flex justify-between" for="brand-seven">
+                    <span>Seven</span>
+                    <span class="text-white/50">(1)</span>
+                  </label>
+                </div>
+              </li>
+              <li>
+                <div class="flex items-center">
+                  <input checked="" class="w-4 h-4 text-primary bg-black border-outline rounded focus:ring-primary focus:ring-2" id="brand-seven-guitars" type="checkbox" value=""/>
+                  <label class="ml-2 text-sm text-white/80 hover:text-white cursor-pointer flex-grow flex justify-between" for="brand-seven-guitars">
+                    <span>Seven Guitars</span>
+                    <span class="text-white/50">(30)</span>
+                  </label>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <!-- Filter: Preço -->
+          <div>
+            <h3 class="font-semibold text-lg text-white mb-4">Preço</h3>
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                <label class="sr-only" for="price-min">De</label>
+                <div class="relative">
+                  <span class="absolute inset-y-0 left-0 flex items-center pl-2 text-white/50 text-xs">R$</span>
+                  <input class="w-full bg-black border border-zinc-700 text-white text-sm rounded-md focus:ring-primary focus:border-primary block pl-7 p-2" id="price-min" placeholder="947" type="number"/>
+                </div>
+              </div>
+              <span class="text-outline">-</span>
+              <div class="flex-1">
+                <label class="sr-only" for="price-max">Até</label>
+                <div class="relative">
+                  <span class="absolute inset-y-0 left-0 flex items-center pl-2 text-white/50 text-xs">R$</span>
+                  <input class="w-full bg-black border border-zinc-700 text-white text-sm rounded-md focus:ring-primary focus:border-primary block pl-7 p-2" id="price-max" placeholder="1487" type="number"/>
+                </div>
+              </div>
+            </div>
+            <button class="mt-4 w-full bg-black hover:bg-black text-white font-medium py-2 px-4 rounded-md transition-colors border border-zinc-700">
+              Aplicar Filtro
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Product Grid -->
+      <div class="flex-1">
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+          <!-- Product Card 1 - Changed to Black -->
+          <article class="bg-black rounded-xl border border-zinc-700 overflow-hidden flex flex-col group hover:border-primary/50 transition-colors duration-300">
+            <div class="relative aspect-[3/4] bg-[#f8f8f8] p-4 flex items-center justify-center overflow-hidden">
+              <img alt="Contrabaixo J.bass Seven Sjb-47 NT Natural" class="object-contain w-full h-full group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7sn2naDcETFl6j3sFcFJ3d6-8i9T83cAh4wfT8Yl5LCxFagM9D-ShmWLYPZk0jlfdSA07MgJmGWc6_AVinOGoLvvMVgEQPf5Spsja2oB5ze4pUhCL5r4JOOoy9TQ0zO5QEresgEszyTsO_nIM-yLEHsEJ6_sM2LWytYTO_IYMrUtR6WDN7fn8ly2D_xx1FkQCuMXt5-SSMVBurqGP0fiQ5-sYG5W8WuSBeynwLG2v16ixA6uZDWTKGmKqwILDSgBQJHmrQmIufn1o"/>
+              <div class="absolute top-2 left-2 bg-primary text-on-primary text-xs font-bold px-2 py-1 rounded">Destaque</div>
+            </div>
+            <div class="p-4 flex flex-col flex-grow">
+              <h2 class="text-sm font-medium text-white/90 line-clamp-2 mb-2 group-hover:text-primary transition-colors">Contrabaixo J.bass Seven Sjb-47 NT Natural 4c Co...</h2>
+              <div class="mt-auto flex flex-col items-center">
+                <span class="text-lg font-bold text-white">R$997,00</span>
+                <span class="text-xs text-white/60 flex items-center gap-1 mt-1">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                  6 x de R$166,17 sem juros
+                </span>
+                <button class="mt-4 w-full bg-black hover:bg-primary hover:text-on-primary border border-zinc-700 text-white font-medium py-2 px-4 rounded transition-all duration-300">
+                  COMPRAR
+                </button>
+              </div>
+            </div>
+          </article>
+          <!-- Product Card 2 - Changed to Black -->
+          <article class="bg-black rounded-xl border border-zinc-700 overflow-hidden flex flex-col group hover:border-primary/50 transition-colors duration-300">
+            <div class="relative aspect-[3/4] bg-[#f8f8f8] p-4 flex items-center justify-center overflow-hidden">
+              <img alt="Contrabaixo J.bass Seven 5 Cordas Sjb-57 WH" class="object-contain w-full h-full group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiUoc91xXoEq9sxCTwliPBi6QhDo13qCrSIyraC03XUi2dXIJnChNCQaOi5cs2r_oKOvQHwhzzRIPxIavnoBz23amJapi0DHiOZ23m6hpZnyq9J8p_NNwip3Vpf8838UmpeRrzouXkHT3hzzjaF4EiWYXr1XbWEIcTqUSzmjZ4I_BNP4-u0xr1RHeZmVxDbIhWIYSb5MDIMc_Ap3zOaVThwbpMjCA1N0SPoilpthvgH8wj2Cw5oTyK5WQk9O5PIwboxrmS8ilPTfUn"/>
+            </div>
+            <div class="p-4 flex flex-col flex-grow">
+              <h2 class="text-sm font-medium text-white/90 line-clamp-2 mb-2 group-hover:text-primary transition-colors">Contrabaixo J.bass Seven 5 Cordas Sjb-57 WH Com...</h2>
+              <div class="mt-auto flex flex-col items-center">
+                <span class="text-lg font-bold text-white">R$1.197,00</span>
+                <span class="text-xs text-white/60 flex items-center gap-1 mt-1">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                  6 x de R$199,50 sem juros
+                </span>
+                <button class="mt-4 w-full bg-black hover:bg-primary hover:text-on-primary border border-zinc-700 text-white font-medium py-2 px-4 rounded transition-all duration-300">
+                  COMPRAR
+                </button>
+              </div>
+            </div>
+          </article>
+        </div>
+        <!-- Pagination -->
+        <div class="mt-12 flex justify-center">
+          <nav aria-label="Pagination" class="inline-flex rounded-md shadow-sm -space-x-px">
+            <a class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-zinc-700 bg-black text-sm font-medium text-white/70 hover:bg-black" href="#">
+              <span class="sr-only">Anterior</span>
+              <svg aria-hidden="true" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+            </a>
+            <a aria-current="page" class="z-10 bg-primary-container border-primary-container text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium" href="#">1</a>
+            <a class="bg-black border-zinc-700 text-white hover:bg-black relative inline-flex items-center px-4 py-2 border text-sm font-medium" href="#">2</a>
+            <a class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-zinc-700 bg-black text-sm font-medium text-white/70 hover:bg-black" href="#">
+              <span class="sr-only">Próxima</span>
+              <svg aria-hidden="true" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" fill-rule="evenodd"></path></svg>
+            </a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Cookie Banner -->
+  <div class="fixed bottom-0 left-0 right-0 md:left-auto md:right-4 md:bottom-4 md:max-w-sm bg-black border border-zinc-700 p-4 md:rounded-xl shadow-lg z-50 flex flex-col gap-3">
+    <p class="text-sm text-white/80">Ao navegar por este site <strong>você aceita o uso de cookies</strong> para agilizar a sua experiência de compra.</p>
+    <button class="bg-primary hover:bg-primary/90 text-on-primary font-medium py-2 px-4 rounded transition-colors text-sm self-end">
+      Aceitar e fechar
+    </button>
+  </div>
+
+  <!-- WhatsApp Floating Button -->
+  <a aria-label="Chat on WhatsApp" class="fixed bottom-4 right-4 md:bottom-6 md:right-6 bg-[#25D366] text-white p-3 rounded-full shadow-lg hover:scale-110 transition-transform z-40" href="#">
+    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.418-.099.824zm-3.423-14.416c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm.029 18.88c-1.161 0-2.305-.292-3.318-.844l-3.677.964.984-3.595c-.607-1.052-.927-2.246-.926-3.468.001-5.824 4.74-10.563 10.564-10.563 5.826 0 10.564 4.74 10.564 10.564 0 5.825-4.738 10.563-10.564 10.563z"></path>
+    </svg>
+  </a>
+</div>

@@ -1,0 +1,93 @@
+.form-container {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+  min-height: calc(100vh - 100px);
+}
+
+.glass-card {
+  width: 100%;
+  max-width: 800px;
+  background: rgba(10, 10, 10, 0.8) !important;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  border-radius: 1.5rem !important;
+  padding: 2rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.noir-title {
+  font-size: 1.5rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.1rem;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.noir-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.secondary-fields {
+  background: rgba(255, 255, 255, 0.02);
+  padding: 1.5rem;
+  border-radius: 1rem;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  margin-top: 1rem;
+  align-items: center;
+}
+
+/* Material Field Customization */
+::ng-deep .glass-input .mat-mdc-form-field-flex {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+  border-radius: 0.75rem !important;
+}
+
+::ng-deep .glass-input .mdc-notched-outline__leading,
+::ng-deep .glass-input .mdc-notched-outline__notch,
+::ng-deep .glass-input .mdc-notched-outline__trailing {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+::ng-deep .glass-input.mat-focused .mdc-notched-outline__leading,
+::ng-deep .glass-input.mat-focused .mdc-notched-outline__notch,
+::ng-deep .glass-input.mat-focused .mdc-notched-outline__trailing {
+  border-color: #c40a2d !important;
+}
+
+::ng-deep .glass-input .mat-mdc-form-field-label {
+  color: #71717a !important;
+}
+
+::ng-deep .glass-input .mat-mdc-input-element,
+::ng-deep .glass-input .mat-mdc-select-value {
+  color: #f4f4f5 !important;
+}
+
+.glass-toggle {
+  color: #a1a1aa;
+  font-weight: 600;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding: 0 !important;
+}
+
+@media (max-width: 600px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
