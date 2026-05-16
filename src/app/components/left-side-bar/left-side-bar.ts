@@ -19,11 +19,6 @@ export class LeftSidebar {
       label: 'Produtos',
     },
     {
-      routeLink: '/admin/baixo',
-      icon: 'fas fa-guitar',
-      label: 'Modelos Baixo',
-    },
-    {
       routeLink: '/admin/baixo-custom',
       icon: 'fas fa-tools',
       label: 'Baixo Custom',

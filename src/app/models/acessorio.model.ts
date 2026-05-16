@@ -7,5 +7,7 @@ export class Acessorio {
     price!: number;
     quantidadeEstoque!: number;
     fornecedor!: string;
+    nomeImagens?: string[];
+    imagemPrincipal?: string;
 }
 

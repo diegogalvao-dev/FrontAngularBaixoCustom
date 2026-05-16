@@ -1,4 +1,4 @@
-import { Component, computed, input, OnInit } from '@angular/core';
+import { Component, computed, input, OnInit, signal, effect, untracked } from '@angular/core';
 import { NgFor, NgIf, NgClass } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -38,26 +38,36 @@ import { BaixoService } from '../../../services/baixo.service';
 export class BaixoList implements OnInit {
 
   // variaveis de controle de paginacao
-  totalRecords = 0;
-  page = 0;
-  pageSize = 12;
+  totalRecords = signal(0);
+  page = signal(0);
+  pageSize = signal(12);
 
   displayedColumns: string[] = ['imagem', 'name', 'baixoModeloBase', 'price', 'status', 'acao'];
   dataSource = new MatTableDataSource<Baixo>([]);
-  searchTerm = '';
+  searchTerm = signal('');
 
-  constructor(private baixoService: BaixoService, private dialog: MatDialog) { }
+  constructor(private baixoService: BaixoService, private dialog: MatDialog) {
+    effect(() => {
+      const term = this.searchTerm();
+      const p = this.page();
+      const s = this.pageSize();
+      const trigger = this.baixoService.refreshTrigger();
 
-  ngOnInit(): void {
-    this.loadData();
+      untracked(() => {
+        this.loadData(term, p, s);
+      });
+    });
   }
 
-  loadData(): void {
-    if (this.searchTerm) {
-      this.baixoService.searchByName(this.searchTerm, this.page, this.pageSize).subscribe({
+  ngOnInit(): void {
+  }
+
+  loadData(term: string, page: number, pageSize: number): void {
+    if (term) {
+      this.baixoService.searchByName(term, page, pageSize).subscribe({
         next: (items) => {
           this.dataSource.data = items;
-          this.totalRecords = items.length;
+          this.totalRecords.set(items.length);
         },
         error: (error) => {
           console.error('Erro ao buscar baixo', error);
@@ -67,14 +77,14 @@ export class BaixoList implements OnInit {
     }
 
     // Se for a primeira carga (page = 0), buscar total também
-    if (this.page === 0) {
+    if (page === 0) {
       forkJoin({
-        items: this.baixoService.findAll(this.page, this.pageSize),
+        items: this.baixoService.findAll(page, pageSize),
         total: this.baixoService.count()
       }).subscribe({
         next: ({ items, total }) => {
           this.dataSource.data = items;
-          this.totalRecords = total;
+          this.totalRecords.set(total);
         },
         error: (error) => {
           console.error('Erro ao carregar baixo', error);
@@ -82,7 +92,7 @@ export class BaixoList implements OnInit {
       });
     } else {
       // Próximas páginas, só buscar items
-      this.baixoService.findAll(this.page, this.pageSize).subscribe({
+      this.baixoService.findAll(page, pageSize).subscribe({
         next: (items) => {
           this.dataSource.data = items;
         },
@@ -94,15 +104,13 @@ export class BaixoList implements OnInit {
   }
 
   searchByName(name: string): void {
-    this.searchTerm = name?.trim() ?? '';
-    this.page = 0;
-    this.loadData();
+    this.searchTerm.set(name?.trim() ?? '');
+    this.page.set(0);
   }
 
   paginar(event: PageEvent): void {
-    this.page = event.pageIndex;
-    this.pageSize = event.pageSize;
-    this.loadData();
+    this.pageSize.set(event.pageSize);
+    this.page.set(event.pageIndex);
   }
 
   excluir(id: number) {
@@ -115,17 +123,13 @@ export class BaixoList implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.baixoService.delete(id).subscribe({
-          next: () => {
-            this.loadData();
-          }
-        });
+        this.baixoService.delete(id).subscribe();
       }
     });
   }
 
   get totalPages(): number {
-    return Math.ceil(this.totalRecords / this.pageSize);
+    return Math.ceil(this.totalRecords() / this.pageSize());
   }
 
   get pages(): number[] {
@@ -134,10 +138,9 @@ export class BaixoList implements OnInit {
     return Array.from({ length: total }, (_, i) => i);
   }
 
-  goToPage(page: number): void {
-    if (page >= 0 && page < this.totalPages) {
-      this.page = page;
-      this.loadData();
+  goToPage(p: number): void {
+    if (p >= 0 && p < this.totalPages) {
+      this.page.set(p);
     }
   }
 

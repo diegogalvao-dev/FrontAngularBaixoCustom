@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Captador } from '../models/captador.model';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable({
@@ -12,12 +12,22 @@ export class CaptadorService {
 
   constructor(private httpClient: HttpClient) { }
 
+  public refreshTrigger = signal(0);
+
+  private notifyUpdate() {
+    this.refreshTrigger.update(v => v + 1);
+  }
+
   create(captador: Captador): Observable<Captador> {
-    return this.httpClient.post<Captador>(this.api, captador);
+    return this.httpClient.post<Captador>(this.api, captador).pipe(
+      tap(() => this.notifyUpdate())
+    );
   }
 
   update(captador: Captador): Observable<Captador> {
-    return this.httpClient.put<Captador>(`${this.api}/${captador.id}`, captador);
+    return this.httpClient.put<Captador>(`${this.api}/${captador.id}`, captador).pipe(
+      tap(() => this.notifyUpdate())
+    );
   }
 
   // Buscar todos com paginação
@@ -46,7 +56,9 @@ export class CaptadorService {
   }
 
   delete(id: number): Observable<void> {
-    return this.httpClient.delete<void>(`${this.api}/${id}`);
+    return this.httpClient.delete<void>(`${this.api}/${id}`).pipe(
+      tap(() => this.notifyUpdate())
+    );
   }
 
 }

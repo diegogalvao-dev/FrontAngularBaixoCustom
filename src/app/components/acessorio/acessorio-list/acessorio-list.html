@@ -65,20 +65,20 @@
 
 <!-- Custom Numbered Paginator -->
 <div class="custom-pagination-container" *ngIf="totalPages > 0">
-  <button class="pagination-btn nav-btn" [disabled]="page === 0" (click)="goToPage(page - 1)">
+  <button class="pagination-btn nav-btn" [disabled]="page() === 0" (click)="goToPage(page() - 1)">
     Anterior
   </button>
   
   <div class="pagination-pages">
     <button *ngFor="let p of pages" 
             class="pagination-btn page-num" 
-            [class.active]="p === page"
+            [class.active]="p === page()"
             (click)="goToPage(p)">
       {{ p + 1 }}
     </button>
   </div>
 
-  <button class="pagination-btn nav-btn" [disabled]="page === totalPages - 1" (click)="goToPage(page + 1)">
+  <button class="pagination-btn nav-btn" [disabled]="page() === totalPages - 1" (click)="goToPage(page() + 1)">
     Próxima
   </button>
 </div>

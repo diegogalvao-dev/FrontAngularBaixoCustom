@@ -4,7 +4,7 @@
   <div class="flex justify-between items-end mb-10">
     <div>
       <nav class="flex gap-2 text-xs text-zinc-500 uppercase tracking-widest font-bold mb-2">
-        <a routerLink="/produto" [queryParams]="{tab: 1}"
+        <a routerLink="/admin/produto" [queryParams]="{tab: 2}"
           class="hover:text-red-500 cursor-pointer transition-colors">Inventory</a>
         <span>/</span>
         <span class="text-zinc-300">Novo Acessório</span>
@@ -12,7 +12,7 @@
       <h1 class="font-headline-xl text-4xl font-extrabold text-zinc-100">Novo Acessório</h1>
     </div>
     <div class="flex gap-4">
-      <button type="button" routerLink="/produto" [queryParams]="{tab: 1}"
+      <button type="button" routerLink="/admin/produto" [queryParams]="{tab: 2}"
         class="px-6 py-3 rounded text-zinc-400 font-bold text-sm uppercase tracking-widest border border-white/10 bg-white/5 hover:bg-white/10 transition-all active:scale-95 cursor-pointer">
         Cancelar
       </button>
@@ -148,7 +148,7 @@
             <i class="fa-solid fa-trash mr-2"></i> Excluir Acessório
           </button>
         </div>
-        
+
       </section>
     </div>
 
@@ -156,25 +156,58 @@
     <div class="rightSide">
 
       <!-- Media Upload Card -->
-      <section class="bg-gradient-to-br from-[#121212] to-[#260108]/20 border border-white/10 rounded-lg p-6 shadow-2xl backdrop-blur-md">
+      <section
+        class="bg-gradient-to-br from-[#121212] to-[#260108]/20 border border-white/10 rounded-lg p-6 shadow-2xl backdrop-blur-md">
         <h3 class="text-zinc-500 font-bold text-sm uppercase tracking-widest mb-6">Mídia do Produto</h3>
-        <div class="border-2 border-dashed border-white/10 rounded-lg p-8 flex flex-col items-center justify-center text-center group hover:border-red-600/50 transition-all cursor-pointer">
-          <span class="material-symbols-outlined text-4xl text-zinc-600 group-hover:text-red-500 transition-colors mb-4">upload_file</span>
+        
+        <input type="file" #fileInput (change)="onFileSelected($event)" multiple accept="image/*" class="hidden">
+        
+        <div (click)="fileInput.click()"
+          class="border-2 border-dashed border-white/10 rounded-lg p-8 flex flex-col items-center justify-center text-center group hover:border-red-600/50 transition-all cursor-pointer">
+          <span
+            class="material-symbols-outlined text-4xl text-zinc-600 group-hover:text-red-500 transition-colors mb-4">upload_file</span>
           <p class="text-sm text-zinc-400 mb-1">Arraste e solte fotos aqui</p>
-          <p class="text-xs text-zinc-600 uppercase font-bold tracking-wider">ou clique para selecionar</p>
+          <p class="text-xs text-zinc-600 uppercase font-bold tracking-wider">ou clique para selecionar (Máx 3)</p>
         </div>
+
         <div class="grid grid-cols-3 gap-2 mt-4">
+          <!-- Existing Images -->
+          @for (fid of existingImages(); track fid; let i = $index) {
           <div class="aspect-square rounded border border-white/10 overflow-hidden relative group">
-            <img alt="Wood Detail" class="object-cover w-full h-full opacity-60 group-hover:opacity-100 transition-opacity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDItz1waN0Qp4AqMsw7NSH0iasEanEEVo7_ISVPd2SmZkpjMY1oF3g3i1yBO4KvYn-GG1lYdLRH_UVlS270RGbVAjLN2w0l2RVlG6KJ9z40knbvTDPh4BrrRjqCzPHdXZzPoWsp_9fkwWYIvYrspjCvNNGm03dDVgARn-OnMnaPPdB5svGPUHyLVwRz_325dpbofjPqwgTSiO1v2HKLSHsQC1qEesApE-bsZfgXSEkrqLLuGfc3rd8-7n1lPbBsQHCYZc-KdszBQi8l"/>
-            <button type="button" class="absolute top-1 right-1 material-symbols-outlined text-xs bg-black/80 rounded-full p-1 text-red-500 hover:bg-red-500 hover:text-white transition-all cursor-pointer">close</button>
+            <img [src]="arquivoService.getUrlDownload(fid)" alt="Existing image"
+              class="object-cover w-full h-full opacity-60 group-hover:opacity-100 transition-opacity" />
+            
+            <!-- Star for main image -->
+            <button type="button" (click)="setMainImage(fid)"
+              class="absolute top-1 left-1 material-symbols-outlined text-xs bg-black/80 rounded-full p-1 transition-all cursor-pointer"
+              [class.text-yellow-500]="mainImage() === fid"
+              [class.text-zinc-500]="mainImage() !== fid">
+              {{ mainImage() === fid ? 'star' : 'star_outline' }}
+            </button>
+
+            <button type="button" (click)="removeExistingImage(fid)"
+              class="absolute top-1 right-1 material-symbols-outlined text-xs bg-black/80 rounded-full p-1 text-red-500 hover:bg-red-500 hover:text-white transition-all cursor-pointer">close</button>
           </div>
-          <div class="aspect-square rounded border border-white/10 overflow-hidden relative group">
-            <img alt="Headstock Detail" class="object-cover w-full h-full opacity-60 group-hover:opacity-100 transition-opacity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOLt4NA_YkLJ55KJnNWjk8r8_1qXgNqtqhQ4BEC83lztI4VFsAaUF3B5ocJjsu0zNu-dvbOFBwxCjMCG-BQHWjxnnOvOGr99ZXmRdQ64zyjGyFP9OxqVJhpws-YNIjUKjeGzVZd8SVLtNrkVJr9K7fU4boC1QHclbuy-02muopYnezzoGsOCuQQ89ymgCVAjEoqoiX6nmU4bGV_r5sry7lp4yS9fM8OfeYeZV7LKkZLfvzsw3fb4kCR7CtDUrQvAUo8UgUYNqQjLr7"/>
-            <button type="button" class="absolute top-1 right-1 material-symbols-outlined text-xs bg-black/80 rounded-full p-1 text-red-500 hover:bg-red-500 hover:text-white transition-all cursor-pointer">close</button>
+          }
+
+          <!-- New Previews -->
+          @for (preview of imagePreviews(); track preview; let i = $index) {
+          <div class="aspect-square rounded border border-white/20 overflow-hidden relative group">
+            <img [src]="preview" alt="New preview"
+              class="object-cover w-full h-full opacity-80 group-hover:opacity-100 transition-opacity" />
+            <button type="button" (click)="removeSelectedFile(i)"
+              class="absolute top-1 right-1 material-symbols-outlined text-xs bg-black/80 rounded-full p-1 text-red-500 hover:bg-red-500 hover:text-white transition-all cursor-pointer">close</button>
+            <div class="absolute bottom-0 left-0 right-0 bg-red-600 h-1"></div>
           </div>
-          <div class="aspect-square rounded border border-white/10 flex items-center justify-center bg-white/5 text-zinc-600 text-xs font-bold">
-            +3
+          }
+
+          <!-- Empty Slots -->
+          @if ((existingImages().length + imagePreviews().length) < 3) {
+          <div (click)="fileInput.click()"
+            class="aspect-square rounded border border-white/10 flex items-center justify-center bg-white/5 text-zinc-600 text-xs font-bold hover:bg-white/10 cursor-pointer transition-colors">
+            +{{ 3 - (existingImages().length + imagePreviews().length) }}
           </div>
+          }
         </div>
       </section>
 

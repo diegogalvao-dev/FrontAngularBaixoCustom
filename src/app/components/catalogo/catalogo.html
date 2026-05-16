@@ -120,19 +120,23 @@
       <!-- Product Grid -->
       <div class="flex-1">
         <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
-          <!-- Product Card 1 - Changed to Black -->
+          @for (produto of produtos(); track produto.id) {
           <article class="bg-black rounded-xl border border-zinc-700 overflow-hidden flex flex-col group hover:border-primary/50 transition-colors duration-300">
-            <div class="relative aspect-[3/4] bg-[#f8f8f8] p-4 flex items-center justify-center overflow-hidden">
-              <img alt="Contrabaixo J.bass Seven Sjb-47 NT Natural" class="object-contain w-full h-full group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7sn2naDcETFl6j3sFcFJ3d6-8i9T83cAh4wfT8Yl5LCxFagM9D-ShmWLYPZk0jlfdSA07MgJmGWc6_AVinOGoLvvMVgEQPf5Spsja2oB5ze4pUhCL5r4JOOoy9TQ0zO5QEresgEszyTsO_nIM-yLEHsEJ6_sM2LWytYTO_IYMrUtR6WDN7fn8ly2D_xx1FkQCuMXt5-SSMVBurqGP0fiQ5-sYG5W8WuSBeynwLG2v16ixA6uZDWTKGmKqwILDSgBQJHmrQmIufn1o"/>
-              <div class="absolute top-2 left-2 bg-primary text-on-primary text-xs font-bold px-2 py-1 rounded">Destaque</div>
+            <div class="relative aspect-[3/4] bg-zinc-900/50 p-4 flex items-center justify-center overflow-hidden">
+              @if (produto.imagemPrincipal) {
+                <img [alt]="produto.name" class="object-contain w-full h-full group-hover:scale-105 transition-transform duration-500" [src]="arquivoService.getUrlDownload(produto.imagemPrincipal)"/>
+              } @else {
+                <div class="product-image-placeholder w-full h-full opacity-20"></div>
+              }
+              <div class="absolute top-2 left-2 bg-primary text-on-primary text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Novo</div>
             </div>
             <div class="p-4 flex flex-col flex-grow">
-              <h2 class="text-sm font-medium text-white/90 line-clamp-2 mb-2 group-hover:text-primary transition-colors">Contrabaixo J.bass Seven Sjb-47 NT Natural 4c Co...</h2>
+              <h2 class="text-sm font-medium text-white/90 line-clamp-2 mb-2 group-hover:text-primary transition-colors">{{produto.name}}</h2>
               <div class="mt-auto flex flex-col items-center">
-                <span class="text-lg font-bold text-white">R$997,00</span>
+                <span class="text-lg font-bold text-white">R$ {{produto.price | number:'1.2-2'}}</span>
                 <span class="text-xs text-white/60 flex items-center gap-1 mt-1">
                   <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-                  6 x de R$166,17 sem juros
+                  Até 6x de R$ {{(produto.price / 6) | number:'1.2-2'}}
                 </span>
                 <button class="mt-4 w-full bg-black hover:bg-primary hover:text-on-primary border border-zinc-700 text-white font-medium py-2 px-4 rounded transition-all duration-300">
                   COMPRAR
@@ -140,36 +144,18 @@
               </div>
             </div>
           </article>
-          <!-- Product Card 2 - Changed to Black -->
-          <article class="bg-black rounded-xl border border-zinc-700 overflow-hidden flex flex-col group hover:border-primary/50 transition-colors duration-300">
-            <div class="relative aspect-[3/4] bg-[#f8f8f8] p-4 flex items-center justify-center overflow-hidden">
-              <img alt="Contrabaixo J.bass Seven 5 Cordas Sjb-57 WH" class="object-contain w-full h-full group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiUoc91xXoEq9sxCTwliPBi6QhDo13qCrSIyraC03XUi2dXIJnChNCQaOi5cs2r_oKOvQHwhzzRIPxIavnoBz23amJapi0DHiOZ23m6hpZnyq9J8p_NNwip3Vpf8838UmpeRrzouXkHT3hzzjaF4EiWYXr1XbWEIcTqUSzmjZ4I_BNP4-u0xr1RHeZmVxDbIhWIYSb5MDIMc_Ap3zOaVThwbpMjCA1N0SPoilpthvgH8wj2Cw5oTyK5WQk9O5PIwboxrmS8ilPTfUn"/>
-            </div>
-            <div class="p-4 flex flex-col flex-grow">
-              <h2 class="text-sm font-medium text-white/90 line-clamp-2 mb-2 group-hover:text-primary transition-colors">Contrabaixo J.bass Seven 5 Cordas Sjb-57 WH Com...</h2>
-              <div class="mt-auto flex flex-col items-center">
-                <span class="text-lg font-bold text-white">R$1.197,00</span>
-                <span class="text-xs text-white/60 flex items-center gap-1 mt-1">
-                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-                  6 x de R$199,50 sem juros
-                </span>
-                <button class="mt-4 w-full bg-black hover:bg-primary hover:text-on-primary border border-zinc-700 text-white font-medium py-2 px-4 rounded transition-all duration-300">
-                  COMPRAR
-                </button>
-              </div>
-            </div>
-          </article>
+          }
         </div>
         <!-- Pagination -->
         <div class="mt-12 flex justify-center">
           <nav aria-label="Pagination" class="inline-flex rounded-md shadow-sm -space-x-px">
-            <a class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-zinc-700 bg-black text-sm font-medium text-white/70 hover:bg-black" href="#">
+            <a class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-zinc-700 bg-black text-sm font-medium text-white/70 hover:bg-zinc-800 cursor-pointer" (click)="mudarPagina(paginaAtual() - 1, $event)" [class.opacity-50]="paginaAtual() === 0" [class.pointer-events-none]="paginaAtual() === 0">
               <span class="sr-only">Anterior</span>
               <svg aria-hidden="true" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
             </a>
-            <a aria-current="page" class="z-10 bg-primary-container border-primary-container text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium" href="#">1</a>
-            <a class="bg-black border-zinc-700 text-white hover:bg-black relative inline-flex items-center px-4 py-2 border text-sm font-medium" href="#">2</a>
-            <a class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-zinc-700 bg-black text-sm font-medium text-white/70 hover:bg-black" href="#">
+            <a (click)="mudarPagina(0, $event)" [class.bg-primary-container]="paginaAtual() === 0" [class.bg-black]="paginaAtual() !== 0" class="border-zinc-700 text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium cursor-pointer hover:bg-zinc-800 transition-colors">1</a>
+            <a (click)="mudarPagina(1, $event)" [class.bg-primary-container]="paginaAtual() === 1" [class.bg-black]="paginaAtual() !== 1" class="border-zinc-700 text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium cursor-pointer hover:bg-zinc-800 transition-colors">2</a>
+            <a class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-zinc-700 bg-black text-sm font-medium text-white/70 hover:bg-zinc-800 cursor-pointer" (click)="mudarPagina(paginaAtual() + 1, $event)" [class.opacity-50]="produtos().length < itensPorPagina" [class.pointer-events-none]="produtos().length < itensPorPagina">
               <span class="sr-only">Próxima</span>
               <svg aria-hidden="true" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" fill-rule="evenodd"></path></svg>
             </a>

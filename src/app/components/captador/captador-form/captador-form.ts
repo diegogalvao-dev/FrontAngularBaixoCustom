@@ -86,7 +86,7 @@ export class CaptadorForm implements OnInit {
       delete value.possuiAmplificador;
     }
 
-    const operacao = value.id 
+    const operacao = value.id
       ? this.captadorService.update(value)
       : this.captadorService.create(value);
 

@@ -14,6 +14,8 @@ import { CaptadorDialogComponent } from '../../captador/captador-dialog';
 import { ConfiguracaoEletronicaService } from '../../../services/configuracao-eletronica.service';
 import { CaptadorService } from '../../../services/captador.service';
 import { Captador } from '../../../models/captador.model';
+import { ArquivoService } from '../../../services/arquivo.service';
+import { forkJoin } from 'rxjs';
 
 
 
@@ -35,6 +37,11 @@ import { Captador } from '../../../models/captador.model';
 export class BaixocustomForm implements OnInit {
 
   readonly form: FormGroup;
+
+  // Media state
+  selectedFiles = signal<File[]>([]);
+  imagePreviews = signal<string[]>([]);
+  existingImages = signal<string[]>([]);
 
   // Estado da configuração eletrônica como Signal
   configEletronica = signal({
@@ -80,7 +87,8 @@ export class BaixocustomForm implements OnInit {
     private activatedRoute: ActivatedRoute,
     private snack: MatSnackBar,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    public arquivoService: ArquivoService
   ) {
     this.form = this.fb.group({
       id: [null],
@@ -113,6 +121,10 @@ export class BaixocustomForm implements OnInit {
         pessoaCliente: baixocustom.pessoaCliente,
         pessoaLuthier: baixocustom.pessoaLuthier
       });
+
+      if (baixocustom.nomeImagens) {
+        this.existingImages.set(baixocustom.nomeImagens);
+      }
 
       // Popular estado da configuração eletrônica
       if (baixocustom.configuracaoEletronica) {
@@ -196,8 +208,24 @@ export class BaixocustomForm implements OnInit {
 
     resultado.subscribe({
       next: (obj) => {
-        this.router.navigateByUrl('/baixo-custom');
-        this.exibirMensagem('Baixocustom salvo com sucesso!');
+        // Se houver novos arquivos, faz o upload após criar/atualizar
+        if (this.selectedFiles().length > 0) {
+          const uploads = this.arquivoService.uploadBaixoCustomizado(obj.id, this.selectedFiles());
+          forkJoin(uploads).subscribe({
+            next: () => {
+              this.router.navigateByUrl('/admin/baixo-custom');
+              this.exibirMensagem('Baixocustom e imagens salvos com sucesso!');
+            },
+            error: (err) => {
+              console.error('Erro no upload das imagens:', err);
+              this.router.navigateByUrl('/admin/baixo-custom');
+              this.exibirMensagem('Baixocustom salvo, mas houve erro no upload das imagens.');
+            }
+          });
+        } else {
+          this.router.navigateByUrl('/admin/baixo-custom');
+          this.exibirMensagem('Baixocustom salvo com sucesso!');
+        }
       },
       error: (erro) => {
         console.error('Erro detalhado do servidor:', erro);
@@ -333,5 +361,41 @@ export class BaixocustomForm implements OnInit {
 
   getCaptadorLabel(id: number | null) {
     return this.captadoresData().find(c => c.id === id)?.marca || 'Captador Selecionado';
+  }
+
+  // Media Handlers
+  onFileSelected(event: any) {
+    const files: FileList = event.target.files;
+    const remainingSlots = 3 - (this.existingImages().length + this.selectedFiles().length);
+
+    if (files.length > remainingSlots) {
+      this.exibirMensagem(`Você só pode adicionar mais ${remainingSlots} imagem(ns).`);
+      return;
+    }
+
+    Array.from(files).forEach(file => {
+      this.selectedFiles.update(current => [...current, file]);
+      const reader = new FileReader();
+      reader.onload = (e: any) => this.imagePreviews.update(current => [...current, e.target.result]);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  removeSelectedFile(index: number) {
+    this.selectedFiles.update(current => current.filter((_, i) => i !== index));
+    this.imagePreviews.update(current => current.filter((_, i) => i !== index));
+  }
+
+  removeExistingImage(fid: string) {
+    this.arquivoService.remove(fid).subscribe({
+      next: () => {
+        this.existingImages.update(current => current.filter(id => id !== fid));
+        this.exibirMensagem('Imagem removida com sucesso.');
+      },
+      error: (err) => {
+        console.error('Erro ao remover imagem:', err);
+        this.exibirMensagem('Erro ao remover imagem do servidor.');
+      }
+    });
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal, effect, untracked } from '@angular/core';
 import { NgFor, NgIf, NgClass } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -40,26 +40,36 @@ import { TitleCasePipe, DecimalPipe } from '@angular/common';
 })
 export class CaptadorList implements OnInit {
 
-  totalRecords = 0;
-  page = 0;
-  pageSize = 12;
+  totalRecords = signal(0);
+  page = signal(0);
+  pageSize = signal(12);
 
   displayedColumns: string[] = ['marca', 'type', 'posicao', 'price', 'acao'];
   dataSource = new MatTableDataSource<Captador>([]);
-  searchTerm = '';
+  searchTerm = signal('');
   
-  constructor(private captadorService: CaptadorService, private dialog: MatDialog) { }
+  constructor(private captadorService: CaptadorService, private dialog: MatDialog) {
+    effect(() => {
+      const term = this.searchTerm();
+      const p = this.page();
+      const s = this.pageSize();
+      const trigger = this.captadorService.refreshTrigger();
 
-  ngOnInit(): void {
-    this.loadData();
+      untracked(() => {
+        this.loadData(term, p, s);
+      });
+    });
   }
 
-  loadData(): void {
-    if (this.searchTerm) {
-      this.captadorService.searchByName(this.searchTerm, this.page, this.pageSize).subscribe({
+  ngOnInit(): void {
+  }
+
+  loadData(term: string, page: number, pageSize: number): void {
+    if (term) {
+      this.captadorService.searchByName(term, page, pageSize).subscribe({
         next: (items) => {
           this.dataSource.data = items;
-          this.totalRecords = items.length;
+          this.totalRecords.set(items.length);
         },
         error: (error) => {
           console.error('Erro ao buscar captadores', error);
@@ -68,21 +78,21 @@ export class CaptadorList implements OnInit {
       return;
     }
 
-    if (this.page === 0) {
+    if (page === 0) {
       forkJoin({
-        items: this.captadorService.findAll(this.page, this.pageSize),
+        items: this.captadorService.findAll(page, pageSize),
         total: this.captadorService.count()
       }).subscribe({
         next: ({ items, total }) => {
           this.dataSource.data = items;
-          this.totalRecords = total;
+          this.totalRecords.set(total);
         },
         error: (error) => {
           console.error('Erro ao carregar captadores', error);
         }
       });
     } else {
-      this.captadorService.findAll(this.page, this.pageSize).subscribe({
+      this.captadorService.findAll(page, pageSize).subscribe({
         next: (items) => {
           this.dataSource.data = items;
         },
@@ -94,9 +104,8 @@ export class CaptadorList implements OnInit {
   }
 
   searchByName(name: string): void {
-    this.searchTerm = name?.trim() ?? '';
-    this.page = 0;
-    this.loadData();
+    this.searchTerm.set(name?.trim() ?? '');
+    this.page.set(0);
   }
 
   excluir(id: number) {
@@ -109,17 +118,13 @@ export class CaptadorList implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.captadorService.delete(id).subscribe({
-          next: () => {
-            this.loadData();
-          }
-        });
+        this.captadorService.delete(id).subscribe();
       }
     });
   }
 
   get totalPages(): number {
-    return Math.ceil(this.totalRecords / this.pageSize);
+    return Math.ceil(this.totalRecords() / this.pageSize());
   }
 
   get pages(): number[] {
@@ -128,10 +133,9 @@ export class CaptadorList implements OnInit {
     return Array.from({ length: total }, (_, i) => i);
   }
 
-  goToPage(page: number): void {
-    if (page >= 0 && page < this.totalPages) {
-      this.page = page;
-      this.loadData();
+  goToPage(p: number): void {
+    if (p >= 0 && p < this.totalPages) {
+      this.page.set(p);
     }
   }
 }

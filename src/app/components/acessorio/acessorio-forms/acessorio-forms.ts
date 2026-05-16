@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { MatToolbar } from "@angular/material/toolbar";
 import { MatCardModule } from '@angular/material/card';
 import { MatFormField, MatLabel, MatError } from "@angular/material/form-field";
@@ -17,8 +17,10 @@ import { ConfirmationDialog } from '../../confirmation-dialog/confirmation-dialo
 import { FormControl } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { map, startWith, debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { ArquivoService } from '../../../services/arquivo.service';
+import { forkJoin } from 'rxjs';
 
 
 @Component({
@@ -36,14 +38,21 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatAutocompleteModule,
     AsyncPipe,
     RouterLink,
+    CommonModule,
     MatDialogModule],
   templateUrl: './acessorio-forms.html',
   styleUrl: './acessorio-forms.css',
 })
 export class AcessorioForms implements OnInit {
 
-   readonly form: FormGroup;
-   filteredOptions!: Observable<Fornecedor[]>;
+  readonly form: FormGroup;
+  filteredOptions!: Observable<Fornecedor[]>;
+
+  // Media state
+  selectedFiles = signal<File[]>([]);
+  imagePreviews = signal<string[]>([]);
+  existingImages = signal<string[]>([]);
+  mainImage = signal<string | null>(null);
 
   constructor(
     private fb: FormBuilder,
@@ -51,7 +60,8 @@ export class AcessorioForms implements OnInit {
     private activatedRoute: ActivatedRoute,
     private snack: MatSnackBar,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    public arquivoService: ArquivoService
   ) {
     this.form = this.fb.group({
       id: [null],
@@ -61,7 +71,8 @@ export class AcessorioForms implements OnInit {
       tamanho: [null, [Validators.required]],
       price: [null, [Validators.required]],
       quantidadeEstoque: [null, [Validators.required]],
-      fornecedor: [null, [Validators.required]]
+      fornecedor: [null, [Validators.required]],
+      imagemPrincipal: [null]
     });
 
   }
@@ -69,35 +80,42 @@ export class AcessorioForms implements OnInit {
   ngOnInit(): void {
     const acessorio: Acessorio = this.activatedRoute.snapshot.data['acessorio'];
 
-        if (acessorio) {
-          this.form.patchValue({
-            id: acessorio.id,
-            name: acessorio.name,
-            acessorioTipo: acessorio.acessorioTipo,
-            material: acessorio.material,
-            tamanho: acessorio.tamanho,
-            price: acessorio.price,
-            quantidadeEstoque: acessorio.quantidadeEstoque,
-            fornecedor: acessorio.fornecedor
-          });
+    if (acessorio) {
+      this.form.patchValue({
+        id: acessorio.id,
+        name: acessorio.name,
+        acessorioTipo: acessorio.acessorioTipo,
+        material: acessorio.material,
+        tamanho: acessorio.tamanho,
+        price: acessorio.price,
+        quantidadeEstoque: acessorio.quantidadeEstoque,
+        fornecedor: acessorio.fornecedor,
+        imagemPrincipal: acessorio.imagemPrincipal
+      });
+      if (acessorio.nomeImagens) {
+        this.existingImages.set(acessorio.nomeImagens);
+      }
+      if (acessorio.imagemPrincipal) {
+        this.mainImage.set(acessorio.imagemPrincipal);
+      }
+    }
+
+    this.filteredOptions = this.form.get('fornecedor')!.valueChanges.pipe(
+      startWith(''),
+      debounceTime(300), // Aguarda 300ms aps o usurio parar de digitar
+      distinctUntilChanged(), // S dispara se o valor mudar
+      switchMap(value => {
+        const name = typeof value === 'string' ? value : value?.name;
+        if (name && name.trim() !== '') {
+          // Chama a API do Quarkus
+          return this.AcessorioService.searchByFornecedor(name).pipe(
+            catchError(() => of([])) // Em caso de erro retorna lista vazia
+          );
+        } else {
+          return of([]); // Se estiver vazio retorna nada
         }
-      
-        this.filteredOptions = this.form.get('fornecedor')!.valueChanges.pipe(
-          startWith(''),
-          debounceTime(300), // Aguarda 300ms aps o usurio parar de digitar
-          distinctUntilChanged(), // S dispara se o valor mudar
-          switchMap(value => {
-            const name = typeof value === 'string' ? value : value?.name;
-            if (name && name.trim() !== '') {
-              // Chama a API do Quarkus
-              return this.AcessorioService.searchByFornecedor(name).pipe(
-                catchError(() => of([])) // Em caso de erro retorna lista vazia
-              );
-            } else {
-              return of([]); // Se estiver vazio retorna nada
-            }
-          })
-        );
+      })
+    );
   }
 
   // Funo usada para exibir o nome do fornecedor no campo aps selecionado
@@ -116,8 +134,23 @@ export class AcessorioForms implements OnInit {
 
     resultado.subscribe({
       next: (obj) => {
-        this.router.navigateByUrl('/acessorios');
-        this.exibirMensagem('Acessório salvo com sucesso!');
+        if (this.selectedFiles().length > 0) {
+          const uploads = this.arquivoService.uploadAcessorio(obj.id, this.selectedFiles());
+          forkJoin(uploads).subscribe({
+            next: () => {
+              this.router.navigate(['/admin/produto'], { queryParams: { tab: 2 } });
+              this.exibirMensagem('Acessório e imagens salvos com sucesso!');
+            },
+            error: (err) => {
+              console.error('Erro no upload das imagens:', err);
+              this.router.navigate(['/admin/produto'], { queryParams: { tab: 2 } });
+              this.exibirMensagem('Acessório salvo, mas houve erro no upload das imagens.');
+            }
+          });
+        } else {
+          this.router.navigate(['/admin/produto'], { queryParams: { tab: 2 } });
+          this.exibirMensagem('Acessório salvo com sucesso!');
+        }
       },
       error: (erro) => {
         // Tenta processar como erro de validação do backend
@@ -144,7 +177,7 @@ export class AcessorioForms implements OnInit {
         if (result) {
           this.AcessorioService.delete(this.form.value.id).subscribe({
             next: () => {
-              this.router.navigate(['/produto'], { queryParams: { tab: 1 } });
+              this.router.navigate(['/admin/produto'], { queryParams: { tab: 2 } });
               this.exibirMensagem('Acessório excluído com sucesso!');
             },
             error: (erro) => {
@@ -160,8 +193,59 @@ export class AcessorioForms implements OnInit {
     this.snack.open(mensagem, 'OK', {
       duration: 2500,
       horizontalPosition: 'center',
-      verticalPosition: 'top'
+      verticalPosition: 'top',
+      panelClass: ['black-snackbar']
     });
+  }
+
+  // Media Handlers
+  onFileSelected(event: any) {
+    const files: FileList = event.target.files;
+    const remainingSlots = 3 - (this.existingImages().length + this.selectedFiles().length);
+
+    if (files.length > remainingSlots) {
+      this.exibirMensagem(`Você só pode adicionar mais ${remainingSlots} imagem(ns).`);
+      return;
+    }
+
+    Array.from(files).forEach(file => {
+      this.selectedFiles.update(current => [...current, file]);
+      const reader = new FileReader();
+      reader.onload = (e: any) => this.imagePreviews.update(current => [...current, e.target.result]);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  removeSelectedFile(index: number) {
+    this.selectedFiles.update(current => current.filter((_, i) => i !== index));
+    this.imagePreviews.update(current => current.filter((_, i) => i !== index));
+  }
+
+  removeExistingImage(fid: string) {
+    this.arquivoService.remove(fid).subscribe({
+      next: () => {
+        this.existingImages.update(current => current.filter(id => id !== fid));
+        if (this.mainImage() === fid) {
+          this.mainImage.set(null);
+          this.form.get('imagemPrincipal')?.setValue(null);
+        }
+        this.exibirMensagem('Imagem removida com sucesso.');
+      },
+      error: (err) => {
+        console.error('Erro ao remover imagem:', err);
+        this.exibirMensagem('Erro ao remover imagem do servidor.');
+      }
+    });
+  }
+
+  setMainImage(fid: string) {
+    if (this.mainImage() === fid) {
+      this.mainImage.set(null);
+      this.form.get('imagemPrincipal')?.setValue(null);
+    } else {
+      this.mainImage.set(fid);
+      this.form.get('imagemPrincipal')?.setValue(fid);
+    }
   }
 
   // /**

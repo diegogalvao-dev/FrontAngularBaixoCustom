@@ -5,5 +5,7 @@ export class Produto {
     price!: number;
     quantidadeEstoque!: number;
     fornecedor!: string;
+    nomeImagens!: string[];
+    imagemPrincipal!: string;
 
 }

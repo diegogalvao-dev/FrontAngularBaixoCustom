@@ -6,11 +6,11 @@ export class Captador {
     price!: number;
     captadorPosicao!: CaptadorPosicao;
     type!: 'ativo' | 'passivo';
-    
+
     // Campos específicos para Ativo
     possuiBateria?: boolean;
     possuiAmplificador?: boolean;
-    
+
     // Campos específicos para Passivo
     resistencia?: number;
     numeroBobinas?: number;

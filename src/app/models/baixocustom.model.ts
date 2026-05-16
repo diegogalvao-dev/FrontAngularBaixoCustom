@@ -10,5 +10,6 @@ export class Baixocustom {
     baixoStatus!: string;
     pessoaCliente!: number;
     pessoaLuthier!: number;
+    nomeImagens?: string[];
 
 }

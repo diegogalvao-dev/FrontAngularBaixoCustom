@@ -4,7 +4,7 @@
   <div class="flex justify-between items-end mb-10">
     <div>
       <nav class="flex gap-2 text-xs text-zinc-500 uppercase tracking-widest font-bold mb-2">
-        <a routerLink="/baixo-custom" class="hover:text-red-500 cursor-pointer transition-colors">Custom Shop</a>
+        <a routerLink="/admin/baixo-custom" class="hover:text-red-500 cursor-pointer transition-colors">Custom Shop</a>
         <span>/</span>
         <span class="text-zinc-300">{{ form.get('id')?.value ? 'Editar Customizado' : 'Novo Customizado' }}</span>
       </nav>
@@ -13,11 +13,11 @@
       </h1>
     </div>
     <div class="flex gap-4">
-      <button type="button" routerLink="/baixo-custom"
+      <button type="button" routerLink="/admin/baixo-custom"
         class="px-6 py-3 rounded text-zinc-400 font-bold text-sm uppercase tracking-widest border border-white/10 bg-white/5 hover:bg-white/10 transition-all active:scale-95 cursor-pointer">
         Cancelar
       </button>
-      <button type="button" (click)="salvar()" [disabled]="form.invalid"
+      <button type="button" (click)="salvar()" routerLink="/admin/baixo-custom" [disabled]="form.invalid "
         class="px-8 py-3 rounded bg-[#a60321] text-white font-bold text-sm uppercase tracking-widest hover:bg-[#86021a] transition-all active:scale-95 shadow-xl shadow-red-950/40 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
         Salvar Projeto
       </button>
@@ -241,27 +241,46 @@
     <div class="rightSide">
 
       <!-- Media Upload Card -->
-      <section
-        class="bg-gradient-to-br from-[#121212] to-[#260108]/20 border border-white/10 rounded-lg p-6 shadow-2xl backdrop-blur-md">
-        <h3 class="text-zinc-500 font-bold text-sm uppercase tracking-widest mb-6">Mídia do Projeto</h3>
-        <div
-          class="border-2 border-dashed border-white/10 rounded-lg p-8 flex flex-col items-center justify-center text-center group hover:border-red-600/50 transition-all cursor-pointer">
-          <span
-            class="material-symbols-outlined text-4xl text-zinc-600 group-hover:text-red-500 transition-colors mb-4">upload_file</span>
-          <p class="text-sm text-zinc-400 mb-1">Arraste e solte fotos do projeto</p>
-          <p class="text-xs text-zinc-600 uppercase font-bold tracking-wider">ou clique para selecionar</p>
+      <section class="bg-gradient-to-br from-[#121212] to-[#260108]/20 border border-white/10 rounded-lg p-6 shadow-2xl backdrop-blur-md">
+        <h3 class="text-zinc-500 font-bold text-sm uppercase tracking-widest mb-6">Mídia do Projeto (Máx 3)</h3>
+        
+        <!-- Upload Area -->
+        <div *ngIf="(existingImages().length + selectedFiles().length) < 3"
+             (click)="fileInput.click()"
+             class="border-2 border-dashed border-white/10 rounded-lg p-8 flex flex-col items-center justify-center text-center group hover:border-red-600/50 transition-all cursor-pointer">
+          <span class="material-symbols-outlined text-4xl text-zinc-600 group-hover:text-red-500 transition-colors mb-4">upload_file</span>
+          <p class="text-sm text-zinc-400 mb-1">Clique para selecionar fotos</p>
+          <p class="text-xs text-zinc-600 uppercase font-bold tracking-wider">Limite: 3 imagens no total</p>
+          <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/*" multiple class="hidden">
         </div>
+
+        <!-- Limit Reached Message -->
+        <div *ngIf="(existingImages().length + selectedFiles().length) >= 3"
+             class="border border-red-900/30 bg-red-950/10 rounded-lg p-4 text-center">
+          <p class="text-xs text-red-500 uppercase font-bold tracking-widest">Limite de 3 imagens atingido</p>
+        </div>
+
+        <!-- Image Previews -->
         <div class="grid grid-cols-3 gap-2 mt-4">
-          <div class="aspect-square rounded border border-white/10 overflow-hidden relative group">
-            <img alt="Project Detail"
-              class="object-cover w-full h-full opacity-60 group-hover:opacity-100 transition-opacity"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDItz1waN0Qp4AqMsw7NSH0iasEanEEVo7_ISVPd2SmZkpjMY1oF3g3i1yBO4KvYn-GG1lYdLRH_UVlS270RGbVAjLN2w0l2RVlG6KJ9z40knbvTDPh4BrrRjqCzPHdXZzPoWsp_9fkwWYIvYrspjCvNNGm03dDVgARn-OnMnaPPdB5svGPUHyLVwRz_325dpbofjPqwgTSiO1v2HKLSHsQC1qEesApE-bsZfgXSEkrqLLuGfc3rd8-7n1lPbBsQHCYZc-KdszBQi8l" />
-            <button type="button"
-              class="absolute top-1 right-1 material-symbols-outlined text-xs bg-black/80 rounded-full p-1 text-red-500 hover:bg-red-500 hover:text-white transition-all cursor-pointer">close</button>
+          <!-- Existing Images -->
+          <div *ngFor="let fid of existingImages()" class="aspect-square rounded border border-white/10 overflow-hidden relative group">
+            <img [src]="arquivoService.getUrlDownload(fid)" alt="Existing Image" class="object-cover w-full h-full opacity-60 group-hover:opacity-100 transition-opacity">
+            <button type="button" (click)="removeExistingImage(fid)"
+                    class="absolute top-1 right-1 material-symbols-outlined text-xs bg-black/80 rounded-full p-1 text-red-500 hover:bg-red-500 hover:text-white transition-all cursor-pointer">close</button>
           </div>
-          <div
-            class="aspect-square rounded border border-white/10 flex items-center justify-center bg-white/5 text-zinc-600 text-xs font-bold">
-            +0
+
+          <!-- Newly Selected Images -->
+          <div *ngFor="let preview of imagePreviews(); let i = index" class="aspect-square rounded border border-red-500/30 overflow-hidden relative group">
+            <img [src]="preview" alt="New Preview" class="object-cover w-full h-full opacity-60 group-hover:opacity-100 transition-opacity">
+            <button type="button" (click)="removeSelectedFile(i)"
+                    class="absolute top-1 right-1 material-symbols-outlined text-xs bg-black/80 rounded-full p-1 text-red-500 hover:bg-red-500 hover:text-white transition-all cursor-pointer">close</button>
+            <div class="absolute bottom-0 left-0 right-0 bg-red-600 h-1"></div>
+          </div>
+
+          <!-- Empty Slots -->
+          <div *ngIf="(existingImages().length + selectedFiles().length) === 0" 
+               class="col-span-3 py-4 text-center text-zinc-600 text-xs italic">
+            Nenhuma imagem selecionada
           </div>
         </div>
       </section>

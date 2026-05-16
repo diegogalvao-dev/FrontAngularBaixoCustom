@@ -10,7 +10,7 @@
       <input type="text" (keyup.enter)="searchByName(input.value)" placeholder="Buscar produtos..." #input class="search-input" />
     </div>
     
-    <button class="custom-btn" routerLink="/baixo-custom/new">
+    <button class="custom-btn" routerLink="/admin/baixo-custom/new">
       <i class="fa-solid fa-plus"></i>
       NOVO PEDIDO
     </button>
@@ -76,7 +76,7 @@
       <th mat-header-cell *matHeaderCellDef class="action-header"> AÇÕES </th>
       <td mat-cell *matCellDef="let obj">
         <div class="action-buttons">
-          <button class="icon-btn-outline" routerLink="/baixo-custom/edit/{{obj.id}}">
+          <button class="icon-btn-outline" routerLink="/admin/baixo-custom/edit/{{obj.id}}">
             <i class="fa-regular fa-pen-to-square"></i>
           </button>
           <button class="icon-btn-outline danger" (click)="excluir(obj.id)">
@@ -93,20 +93,20 @@
 
 <!-- Custom Numbered Paginator -->
 <div class="custom-pagination-container" *ngIf="totalPages > 0">
-  <button class="pagination-btn nav-btn" [disabled]="page === 0" (click)="goToPage(page - 1)">
+  <button class="pagination-btn nav-btn" [disabled]="page() === 0" (click)="goToPage(page() - 1)">
     Anterior
   </button>
   
   <div class="pagination-pages">
     <button *ngFor="let p of pages" 
             class="pagination-btn page-num" 
-            [class.active]="p === page"
+            [class.active]="p === page()"
             (click)="goToPage(p)">
       {{ p + 1 }}
     </button>
   </div>
 
-  <button class="pagination-btn nav-btn" [disabled]="page === totalPages - 1" (click)="goToPage(page + 1)">
+  <button class="pagination-btn nav-btn" [disabled]="page() === totalPages - 1" (click)="goToPage(page() + 1)">
     Próxima
   </button>
 </div>

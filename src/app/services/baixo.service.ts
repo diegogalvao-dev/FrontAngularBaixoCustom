@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -13,6 +13,12 @@ export class BaixoService {
   private readonly api = 'http://localhost:8080/baixo';
 
   constructor(private httpClient: HttpClient) { }
+
+  public refreshTrigger = signal(0);
+
+  private notifyUpdate() {
+    this.refreshTrigger.update(v => v + 1);
+  }
 
   //  Buscar todos
   findAll(page?: number, pageSize?: number): Observable<Baixo[]> {
@@ -71,16 +77,22 @@ export class BaixoService {
   
   //  Criar
   create(baixo: Baixo): Observable<Baixo> {
-    return this.httpClient.post<Baixo>(this.api, baixo);
+    return this.httpClient.post<Baixo>(this.api, baixo).pipe(
+      tap(() => this.notifyUpdate())
+    );
   }
   
   //  Atualizar
   update(baixo: Baixo): Observable<Baixo> {
-    return this.httpClient.put<Baixo>(`${this.api}/${baixo.id}`, baixo);
+    return this.httpClient.put<Baixo>(`${this.api}/${baixo.id}`, baixo).pipe(
+      tap(() => this.notifyUpdate())
+    );
   }
   //  Deletar
   delete(id: number): Observable<void> {
-    return this.httpClient.delete<void>(`${this.api}/${id}`);
+    return this.httpClient.delete<void>(`${this.api}/${id}`).pipe(
+      tap(() => this.notifyUpdate())
+    );
   }
   
 

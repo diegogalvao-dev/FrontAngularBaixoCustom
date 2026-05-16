@@ -8,5 +8,6 @@ export class Baixo {
     baixoModeloBase!: string;
     numeroCordas!: number;
     baixoCor!: string;
-
+    nomeImagens?: string[];
+    imagemPrincipal?: string;
 }
