@@ -26,11 +26,7 @@ import { forkJoin } from 'rxjs';
 @Component({
   selector: 'app-acessorio-forms',
   imports: [
-    MatToolbar,
     MatCardModule,
-    MatFormField,
-    MatLabel,
-    MatError,
     MatButtonModule,
     ReactiveFormsModule,
     MatInputModule,

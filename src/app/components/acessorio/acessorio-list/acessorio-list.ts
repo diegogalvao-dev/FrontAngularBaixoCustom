@@ -28,7 +28,6 @@ import { ConfirmationDialog } from '../../confirmation-dialog/confirmation-dialo
     RouterLink,
     NgFor,
     NgIf,
-    NgClass,
     MatDialogModule
   ],
 

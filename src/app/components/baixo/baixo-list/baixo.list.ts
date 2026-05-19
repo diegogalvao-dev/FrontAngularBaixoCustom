@@ -28,7 +28,6 @@ import { BaixoService } from '../../../services/baixo.service';
     RouterLink,
     NgFor,
     NgIf,
-    NgClass,
     MatDialogModule
   ],
 

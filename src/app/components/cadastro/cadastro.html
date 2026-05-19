@@ -1,0 +1,218 @@
+<div class="bg-background text-on-background font-body-md selection:bg-primary-container selection:text-white carbon-texture min-h-screen flex items-stretch overflow-hidden w-full">
+  
+  <!-- Hero Visual Side Panel -->
+  <aside class="hidden lg:flex lg:w-1/2 relative overflow-hidden">
+    <img alt="Premium Bass Craftsmanship" class="absolute inset-0 w-full h-full object-cover" data-alt="A cinematic, high-detail macro shot of a bespoke mahogany bass guitar body, showcasing the intricate deep wood grain and the metallic sheen of polished strings. The lighting is moody and low-key, with a warm crimson ambient glow highlighting the artisanal textures. The atmosphere is luxurious and professional, reflecting the high-end Crimson and Noir aesthetic of a master luthier studio." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5I8e01lhgay2NeqUgYiIXcPtT_yBqkE0uZgnbmdTSngXg_aPzSe-lwarNZEmg4lpHWOttmLmneuSTKD5yKV76puFZIgWMwffFOBIQWzB2LPJdv7kujO61QzEDM2bV3t_zhXjIhJ62UB9MXRvUbcqH-E9Oti_lhz1AorZilAWf1WVTfS-m-jFBZyXkMMoavjgYd1NLDo9vt68tFNSi7RruU9C5540OCqb-Fc1GN-NKakPS6fNwS67RzaDXkwcBGbx9ANtWqdaF3qu9"/>
+    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-[#1e100f]/40 to-[#1e100f]"></div>
+    
+    <!-- Brand Identity Over Background -->
+    <div class="relative z-10 p-16 flex flex-col justify-between h-full">
+      <div>
+        <h1 class="font-headline-xl text-headline-xl uppercase italic tracking-tighter text-white">
+          DeepTone<br/>Luthier
+        </h1>
+        <div class="h-1 w-24 bg-primary-container mt-4"></div>
+      </div>
+      <div class="max-w-md">
+        <blockquote class="text-white/80 font-body-lg text-body-lg italic leading-relaxed">
+          "A precisão do luthier encontra a alma do grave profundo. Cada instrumento é uma obra única de engenharia tonal."
+        </blockquote>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Registration Form Section -->
+  <main class="w-full lg:w-1/2 flex items-center justify-center p-6 md:p-12 lg:p-24 relative overflow-y-auto max-h-screen">
+    <!-- Floating Red Glow -->
+    <div class="absolute top-1/4 right-0 w-64 h-64 bg-primary-container/20 rounded-full blur-[120px] -z-10"></div>
+    
+    <div class="w-full max-w-md space-y-10 py-8">
+      <!-- Header -->
+      <div class="text-left space-y-2">
+        <h2 class="font-headline-lg text-headline-lg text-on-surface">Criar Conta</h2>
+        <p class="text-on-surface-variant font-body-md text-body-md">Inicie sua jornada no universo da lutheria de elite.</p>
+      </div>
+      
+      <!-- Form -->
+      <form [formGroup]="cadastroForm" (ngSubmit)="onSubmit()" class="space-y-6">
+        <div class="space-y-4">
+          
+          <!-- Name Field -->
+          <div class="group">
+            <label class="block font-label-bold text-label-bold text-outline mb-2 group-focus-within:text-primary transition-colors" for="name">Nome Completo</label>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary">person</span>
+              <input 
+                formControlName="name"
+                class="w-full bg-surface-container-low border rounded-lg py-4 pl-12 pr-4 text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all glass-panel" 
+                [class.border-error]="cadastroForm.get('name')?.invalid && cadastroForm.get('name')?.touched"
+                [class.border-outline-variant]="!(cadastroForm.get('name')?.invalid && cadastroForm.get('name')?.touched)"
+                id="name" 
+                placeholder="Ex: Arthur Bassman" 
+                type="text"
+              />
+            </div>
+            @if (cadastroForm.get('name')?.invalid && (cadastroForm.get('name')?.dirty || cadastroForm.get('name')?.touched)) {
+              <p class="text-xs text-error mt-1 pl-1">
+                @if (cadastroForm.get('name')?.hasError('required')) { O nome completo é obrigatório. }
+                @if (cadastroForm.get('name')?.hasError('minlength')) { O nome deve ter no mínimo 3 caracteres. }
+              </p>
+            }
+          </div>
+          
+          <!-- Email Field -->
+          <div class="group">
+            <label class="block font-label-bold text-label-bold text-outline mb-2 group-focus-within:text-primary transition-colors" for="email">E-mail</label>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary">mail</span>
+              <input 
+                formControlName="email"
+                class="w-full bg-surface-container-low border rounded-lg py-4 pl-12 pr-4 text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all glass-panel" 
+                [class.border-error]="cadastroForm.get('email')?.invalid && cadastroForm.get('email')?.touched"
+                [class.border-outline-variant]="!(cadastroForm.get('email')?.invalid && cadastroForm.get('email')?.touched)"
+                id="email" 
+                placeholder="seu@email.com" 
+                type="email"
+              />
+            </div>
+            @if (cadastroForm.get('email')?.invalid && (cadastroForm.get('email')?.dirty || cadastroForm.get('email')?.touched)) {
+              <p class="text-xs text-error mt-1 pl-1">
+                @if (cadastroForm.get('email')?.hasError('required')) { O e-mail é obrigatório. }
+                @if (cadastroForm.get('email')?.hasError('email')) { Digite um endereço de e-mail válido. }
+              </p>
+            }
+          </div>
+          
+          <!-- Password Fields Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            <!-- Password Field -->
+            <div class="group">
+              <label class="block font-label-bold text-label-bold text-outline mb-2 group-focus-within:text-primary transition-colors" for="password">Senha</label>
+              <div class="relative">
+                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary">lock</span>
+                <input 
+                  formControlName="password"
+                  class="w-full bg-surface-container-low border rounded-lg py-4 pl-12 pr-4 text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all glass-panel" 
+                  [class.border-error]="cadastroForm.get('password')?.invalid && cadastroForm.get('password')?.touched"
+                  [class.border-outline-variant]="!(cadastroForm.get('password')?.invalid && cadastroForm.get('password')?.touched)"
+                  id="password" 
+                  placeholder="••••••••" 
+                  type="password"
+                />
+              </div>
+              @if (cadastroForm.get('password')?.invalid && (cadastroForm.get('password')?.dirty || cadastroForm.get('password')?.touched)) {
+                <p class="text-xs text-error mt-1 pl-1">
+                  @if (cadastroForm.get('password')?.hasError('required')) { Senha obrigatória. }
+                  @if (cadastroForm.get('password')?.hasError('minlength')) { No mínimo 6 caracteres. }
+                </p>
+              }
+            </div>
+            
+            <!-- Confirm Password Field -->
+            <div class="group">
+              <label class="block font-label-bold text-label-bold text-outline mb-2 group-focus-within:text-primary transition-colors" for="confirm-password">Confirmar Senha</label>
+              <div class="relative">
+                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary">verified_user</span>
+                <input 
+                  formControlName="confirmPassword"
+                  class="w-full bg-surface-container-low border rounded-lg py-4 pl-12 pr-4 text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all glass-panel" 
+                  [class.border-error]="cadastroForm.get('confirmPassword')?.invalid && cadastroForm.get('confirmPassword')?.touched"
+                  [class.border-outline-variant]="!(cadastroForm.get('confirmPassword')?.invalid && cadastroForm.get('confirmPassword')?.touched)"
+                  id="confirm-password" 
+                  placeholder="••••••••" 
+                  type="password"
+                />
+              </div>
+              @if (cadastroForm.get('confirmPassword')?.invalid && (cadastroForm.get('confirmPassword')?.dirty || cadastroForm.get('confirmPassword')?.touched)) {
+                <p class="text-xs text-error mt-1 pl-1">
+                  @if (cadastroForm.get('confirmPassword')?.hasError('required')) { Confirme a senha. }
+                  @if (cadastroForm.get('confirmPassword')?.hasError('passwordMismatch')) { Senhas não coincidem. }
+                </p>
+              }
+            </div>
+            
+          </div>
+        </div>
+        
+        <!-- Terms -->
+        <div class="flex flex-col gap-1">
+          <div class="flex items-center gap-3">
+            <input 
+              formControlName="terms"
+              class="w-5 h-5 rounded border-outline-variant bg-surface-container text-primary-container focus:ring-primary-container cursor-pointer transition-all" 
+              id="terms" 
+              type="checkbox"
+            />
+            <label class="text-sm text-on-surface-variant cursor-pointer select-none" for="terms">
+              Aceito os <a class="text-primary hover:underline transition-all" href="#">Termos de Uso</a> e <a class="text-primary hover:underline transition-all" href="#">Política de Privacidade</a>
+            </label>
+          </div>
+          @if (cadastroForm.get('terms')?.invalid && (cadastroForm.get('terms')?.dirty || cadastroForm.get('terms')?.touched)) {
+            <p class="text-xs text-error pl-8">
+              Você deve aceitar os termos para prosseguir.
+            </p>
+          }
+        </div>
+        
+        <!-- Main CTA -->
+        <button 
+          [disabled]="isLoading()"
+          class="w-full bg-primary-container hover:bg-[#A60321] disabled:bg-primary-container/50 disabled:cursor-not-allowed text-white font-label-bold text-label-bold py-4 rounded-xl shadow-[0_4px_20px_rgba(166,3,33,0.3)] hover:shadow-[0_8px_30px_rgba(166,3,33,0.5)] transform active:scale-95 transition-all duration-300 flex items-center justify-center gap-2" 
+          type="submit"
+        >
+          @if (isLoading()) {
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Processando...
+          } @else {
+            Cadastrar
+            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+          }
+        </button>
+      </form>
+      
+      <!-- Divider -->
+      <div class="relative flex items-center justify-center py-4">
+        <div class="w-full border-t border-outline-variant/30"></div>
+        <span class="absolute bg-background px-4 text-xs font-label-bold text-outline uppercase tracking-widest">Ou continue com</span>
+      </div>
+      
+      <!-- Social Login -->
+      <div class="grid grid-cols-2 gap-4">
+        <button type="button" class="flex items-center justify-center gap-3 py-3 border border-outline-variant rounded-lg glass-panel hover:bg-white/5 transition-colors font-label-bold text-on-surface">
+          <span class="material-symbols-outlined text-on-surface">brand_family</span>
+          Google
+        </button>
+        <button type="button" class="flex items-center justify-center gap-3 py-3 border border-outline-variant rounded-lg glass-panel hover:bg-white/5 transition-colors font-label-bold text-on-surface">
+          <span class="material-symbols-outlined text-on-surface">ios</span>
+          Apple
+        </button>
+      </div>
+      
+      <!-- Footer Login Link -->
+      <div class="text-center">
+        <p class="text-on-surface-variant font-body-md text-sm">
+          Já possui uma conta? 
+          <a class="text-primary font-label-bold hover:underline ml-1 cursor-pointer" routerLink="/login">Faça login</a>
+        </p>
+      </div>
+    </div>
+    
+    <!-- Artistic Touch: Floating Grain Pattern at Bottom -->
+    <div class="absolute bottom-10 right-10 opacity-10 pointer-events-none">
+      <span class="material-symbols-outlined text-[120px] text-primary-container select-none">album</span>
+    </div>
+  </main>
+  
+  <!-- Success Feedback Notification -->
+  @if (showSuccess()) {
+    <div class="fixed bottom-8 left-1/2 -translate-x-1/2 glass-panel border border-primary-container/30 px-6 py-4 rounded-full flex items-center gap-4 animate-bounce z-50">
+      <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+      <span class="font-label-bold text-white">Processando sua lutheria...</span>
+    </div>
+  }
+  
+</div>

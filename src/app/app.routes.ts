@@ -15,11 +15,13 @@ import { captadorResolver } from './resolvers/captador-resolver';
 import { Home } from './components/home/home';
 import { Catalogo } from './components/catalogo/catalogo';
 import { Login } from './components/login/login';
+import { Cadastro } from './components/cadastro/cadastro';
 
 export const routes: Routes = [
    {path: '', component: Home, title: 'DeepTone Luthier'},
    {path: 'catalogo', component: Catalogo, title: 'Catálogo de Produtos'},
    {path: 'login', component: Login, title: 'Login'},
+   {path: 'cadastro', component: Cadastro, title: 'Cadastro'},
 
    {path: 'admin', children: [
       {path: '', redirectTo: 'produto', pathMatch: 'full'},

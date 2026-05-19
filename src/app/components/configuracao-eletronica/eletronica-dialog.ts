@@ -14,7 +14,6 @@ import { RouterLink } from '@angular/router';
     FormsModule, 
     MatDialogModule,
     ReactiveFormsModule,
-    RouterLink,
     MatDialogModule],
   templateUrl: './eletronica-dialog.html',
   styleUrl: './eletronica-dialog.css'

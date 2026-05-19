@@ -30,7 +30,6 @@ import { TitleCasePipe, DecimalPipe } from '@angular/common';
     RouterLink,
     NgFor,
     NgIf,
-    NgClass,
     MatDialogModule,
     TitleCasePipe,
     DecimalPipe

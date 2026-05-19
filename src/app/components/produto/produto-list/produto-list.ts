@@ -27,7 +27,6 @@ import { forkJoin } from 'rxjs';
     MatTableModule,
     MatInputModule,
     MatPaginatorModule,
-    RouterLink,
     MatTabGroup,
     MatTab,
     AcessorioList,

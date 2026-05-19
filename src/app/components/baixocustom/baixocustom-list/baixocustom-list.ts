@@ -26,7 +26,6 @@ import { BaixocustomService } from '../../../services/baixocustom.service';
     RouterLink,
     NgFor,
     NgIf,
-    NgClass,
     CurrencyPipe
 ],
 
