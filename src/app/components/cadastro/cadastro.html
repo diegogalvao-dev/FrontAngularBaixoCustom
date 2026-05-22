@@ -13,7 +13,7 @@
         </h1>
         <div class="h-1 w-24 bg-primary-container mt-4"></div>
       </div>
-      <div class="max-w-md">
+      <div class="max-w-md"> 
         <blockquote class="text-white/80 font-body-lg text-body-lg italic leading-relaxed">
           "A precisão do luthier encontra a alma do grave profundo. Cada instrumento é uma obra única de engenharia tonal."
         </blockquote>
@@ -37,25 +37,25 @@
       <form [formGroup]="cadastroForm" (ngSubmit)="onSubmit()" class="space-y-6">
         <div class="space-y-4">
           
-          <!-- Name Field -->
+          <!-- Username Field -->
           <div class="group">
-            <label class="block font-label-bold text-label-bold text-outline mb-2 group-focus-within:text-primary transition-colors" for="name">Nome Completo</label>
+            <label class="block font-label-bold text-label-bold text-outline mb-2 group-focus-within:text-primary transition-colors" for="username">Nome de Usuário (Username)</label>
             <div class="relative">
               <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary">person</span>
               <input 
-                formControlName="name"
+                formControlName="username"
                 class="w-full bg-surface-container-low border rounded-lg py-4 pl-12 pr-4 text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all glass-panel" 
-                [class.border-error]="cadastroForm.get('name')?.invalid && cadastroForm.get('name')?.touched"
-                [class.border-outline-variant]="!(cadastroForm.get('name')?.invalid && cadastroForm.get('name')?.touched)"
-                id="name" 
-                placeholder="Ex: Arthur Bassman" 
+                [class.border-error]="cadastroForm.get('username')?.invalid && cadastroForm.get('username')?.touched"
+                [class.border-outline-variant]="!(cadastroForm.get('username')?.invalid && cadastroForm.get('username')?.touched)"
+                id="username" 
+                placeholder="Ex: arthur_bass" 
                 type="text"
               />
             </div>
-            @if (cadastroForm.get('name')?.invalid && (cadastroForm.get('name')?.dirty || cadastroForm.get('name')?.touched)) {
+            @if (cadastroForm.get('username')?.invalid && (cadastroForm.get('username')?.dirty || cadastroForm.get('username')?.touched)) {
               <p class="text-xs text-error mt-1 pl-1">
-                @if (cadastroForm.get('name')?.hasError('required')) { O nome completo é obrigatório. }
-                @if (cadastroForm.get('name')?.hasError('minlength')) { O nome deve ter no mínimo 3 caracteres. }
+                @if (cadastroForm.get('username')?.hasError('required')) { O nome de usuário é obrigatório. }
+                @if (cadastroForm.get('username')?.hasError('minlength')) { O nome de usuário deve ter no mínimo 3 caracteres. }
               </p>
             }
           </div>
@@ -155,6 +155,10 @@
           }
         </div>
         
+        @if (erro()) {
+          <p class="text-sm text-red-500 text-center font-bold">{{ erro() }}</p>
+        }
+
         <!-- Main CTA -->
         <button 
           [disabled]="isLoading()"

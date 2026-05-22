@@ -1,0 +1,349 @@
+<!-- Perfil Page -->
+<div class="min-h-screen text-on-surface">
+
+  <!-- Nav -->
+  <nav
+    class="fixed top-0 w-full z-50 border-b border-white/10 bg-black/80 backdrop-blur-xl shadow-[0_4px_30px_rgba(38,1,8,0.4)] flex justify-between items-center px-8 h-20 max-w-full mx-auto">
+    <div class="text-2xl font-black tracking-tighter text-white uppercase italic">DeepTone Luthier</div>
+    <div class="hidden md:flex gap-8 font-sans uppercase tracking-widest font-bold text-xs items-center">
+      <a class="text-primary-container border-b-2 border-primary-container pb-1 transition-all duration-300"
+        href="/">Home</a>
+      <a class="text-gray-400 hover:text-white transition-colors transition-all duration-300" href="/catalogo">Shop</a>
+      <a class="text-gray-400 hover:text-white transition-colors transition-all duration-300"
+        href="/admin/baixo-custom">Custom Shop</a>
+      <a class="text-gray-400 hover:text-white transition-colors transition-all duration-300" href="#">Services</a>
+      <a class="text-gray-400 hover:text-white transition-colors transition-all duration-300" href="#">About</a>
+    </div>
+    <div class="flex items-center gap-6">
+      <div class="relative hidden lg:block">
+        <input
+          class="bg-white/5 border border-white/10 rounded-full px-4 py-1.5 text-xs focus:outline-none focus:border-primary-container transition-all w-48"
+          placeholder="Search precision..." type="text" />
+        <span
+          class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 scale-75">search</span>
+      </div>
+      <div class="flex gap-4 items-center">
+        <button class="text-gray-400 hover:text-white transition-all scale-95 active:opacity-80">
+          <span class="material-symbols-outlined">shopping_cart</span>
+        </button>
+        @if (authService.logado()) {
+          <!-- Profile avatar when logged in -->
+          <button
+            routerLink="/perfil"
+            [title]="authService.nomeUsuario() ?? 'Meu Perfil'"
+            class="relative w-9 h-9 rounded-full bg-primary-container flex items-center justify-center hover:ring-2 hover:ring-primary-container hover:ring-offset-2 hover:ring-offset-black transition-all duration-300 overflow-hidden group">
+            <span class="material-symbols-outlined text-white text-[1.2rem]">account_circle</span>
+          </button>
+        } @else {
+          <!-- Login button when not logged in -->
+          <button
+            routerLink="/login"
+            class="font-sans uppercase tracking-widest font-bold text-xs bg-primary-container text-white px-4 py-2 rounded-sm hover:bg-[#A60321] transition-all">
+            Login
+          </button>
+        }
+
+      </div>
+    </div>
+  </nav>
+
+  <main class="pt-28 pb-20 px-4 md:px-16 max-w-[1280px] mx-auto">
+
+    <!-- Hero / Profile Card -->
+    <section class="mb-12">
+      <div class="glass-panel p-8 rounded-xl flex flex-col md:flex-row items-center gap-8 relative overflow-hidden">
+        <!-- Glow accent -->
+        <div class="absolute -right-20 -top-20 w-64 h-64 bg-primary-container/20 blur-[100px] rounded-full pointer-events-none"></div>
+
+        <!-- Avatar -->
+        <div class="relative flex-shrink-0">
+          <div class="w-28 h-28 rounded-full border-2 border-primary-container p-1 bg-surface-container-high flex items-center justify-center">
+            <span class="material-symbols-outlined text-primary-container" style="font-size: 64px; font-variation-settings: 'FILL' 1, 'wght' 300;">account_circle</span>
+          </div>
+        </div>
+
+        <!-- Info -->
+        <div class="flex flex-col items-center md:items-start gap-2">
+          <h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight">
+            {{ authService.nomeUsuario() ?? authService.username() ?? 'Usuário' }}
+          </h1>
+          <div class="flex items-center gap-3 flex-wrap">
+            <span class="px-3 py-1 bg-primary-container/30 text-primary border border-primary/20 rounded-full font-label-bold text-xs tracking-wider uppercase">
+              {{ authService.perfil() ?? 'Membro' }}
+            </span>
+            <span class="text-on-surface-variant font-label-bold text-xs">
+              &#64;{{ authService.username() }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Action -->
+        <div class="md:ml-auto">
+          <a routerLink="/admin/baixo-custom"
+            class="px-6 py-3 bg-primary-container hover:bg-[#92001b] text-white font-label-bold rounded-lg transition-all active:scale-95 shadow-lg shadow-primary-container/20 uppercase tracking-widest text-xs inline-block">
+            Custom Shop
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+      <!-- Sidebar -->
+      <aside class="lg:col-span-3">
+        <nav class="glass-panel p-4 rounded-xl sticky top-28">
+          <div class="flex flex-col gap-1">
+            <button
+              (click)="scrollTo('personal')"
+              [class.text-primary]="activeSection === 'personal'"
+              [class.bg-white]="activeSection === 'personal'"
+              [class.bg-opacity-5]="activeSection === 'personal'"
+              class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-white/5 hover:text-primary rounded-lg font-label-bold transition-all w-full text-left">
+              <span class="material-symbols-outlined">person</span>
+              Dados Pessoais
+            </button>
+            <button
+              (click)="scrollTo('orders')"
+              [class.text-primary]="activeSection === 'orders'"
+              class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-white/5 hover:text-primary rounded-lg font-label-bold transition-all w-full text-left">
+              <span class="material-symbols-outlined">shopping_bag</span>
+              Meus Pedidos
+            </button>
+            <button
+              (click)="scrollTo('tone')"
+              [class.text-primary]="activeSection === 'tone'"
+              class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-white/5 hover:text-primary rounded-lg font-label-bold transition-all w-full text-left">
+              <span class="material-symbols-outlined">equalizer</span>
+              Preferências
+            </button>
+            <button
+              (click)="scrollTo('security')"
+              [class.text-primary]="activeSection === 'security'"
+              class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-white/5 hover:text-primary rounded-lg font-label-bold transition-all w-full text-left">
+              <span class="material-symbols-outlined">security</span>
+              Segurança
+            </button>
+          </div>
+          <div class="mt-6 pt-4 border-t border-white/5">
+            <button
+              (click)="logout()"
+              class="flex items-center gap-4 px-4 py-3 text-error hover:bg-error/10 w-full rounded-lg font-label-bold transition-all text-left">
+              <span class="material-symbols-outlined">logout</span>
+              Encerrar Sessão
+            </button>
+          </div>
+        </nav>
+      </aside>
+
+      <!-- Content -->
+      <div class="lg:col-span-9 space-y-12">
+
+        <!-- Dados Pessoais -->
+        <section class="glass-panel p-8 rounded-xl" id="personal">
+          <h2 class="font-headline-md text-headline-md mb-8 flex items-center gap-3">
+            <span class="w-1 h-8 bg-primary-container block rounded-full"></span>
+            Dados Pessoais
+          </h2>
+          <form class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="flex flex-col gap-2">
+              <label class="font-label-bold text-on-surface-variant uppercase text-xs tracking-widest">Nome Completo</label>
+              <input
+                class="bg-surface-container-low border border-outline-variant/50 rounded-lg p-4 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                type="text"
+                [value]="authService.nomeUsuario() ?? ''"
+                placeholder="Seu nome" />
+            </div>
+            <div class="flex flex-col gap-2">
+              <label class="font-label-bold text-on-surface-variant uppercase text-xs tracking-widest">Usuário</label>
+              <input
+                class="bg-surface-container-low border border-outline-variant/50 rounded-lg p-4 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                type="text"
+                [value]="authService.username() ?? ''"
+                placeholder="Username" />
+            </div>
+            <div class="flex flex-col gap-2">
+              <label class="font-label-bold text-on-surface-variant uppercase text-xs tracking-widest">Perfil</label>
+              <input
+                class="bg-surface-container-low border border-outline-variant/50 rounded-lg p-4 text-on-surface-variant outline-none cursor-not-allowed opacity-60"
+                type="text"
+                [value]="authService.perfil() ?? ''"
+                readonly />
+            </div>
+            <div class="flex flex-col gap-2">
+              <label class="font-label-bold text-on-surface-variant uppercase text-xs tracking-widest">Telefone</label>
+              <input
+                class="bg-surface-container-low border border-outline-variant/50 rounded-lg p-4 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                type="tel"
+                placeholder="+55 (11) 00000-0000" />
+            </div>
+            <div class="md:col-span-2 pt-2">
+              <button
+                type="button"
+                class="bg-primary-container hover:bg-[#92001b] text-white px-8 py-4 rounded-lg font-label-bold uppercase tracking-widest text-xs transition-all active:scale-95 shadow-lg shadow-primary-container/20">
+                Atualizar Informações
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Pedidos -->
+        <section id="orders">
+          <div class="flex justify-between items-end mb-8">
+            <h2 class="font-headline-md text-headline-md flex items-center gap-3">
+              <span class="w-1 h-8 bg-primary-container block rounded-full"></span>
+              Pedidos Recentes
+            </h2>
+            <a class="text-primary font-label-bold text-sm hover:underline" href="#">Ver Histórico Completo</a>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Order Card 1 -->
+            <div class="glass-panel p-6 rounded-xl group hover:border-primary/40 transition-all">
+              <div class="flex gap-5">
+                <div class="w-20 h-20 bg-surface-container-high rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-outline" style="font-size:36px">music_note</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex justify-between items-start gap-2">
+                    <h3 class="font-headline-md text-lg text-on-surface truncate">Venom Jazz IV</h3>
+                    <span class="px-2 py-1 bg-secondary-container/50 text-secondary text-[10px] font-bold uppercase tracking-widest rounded flex-shrink-0">Em Produção</span>
+                  </div>
+                  <p class="text-on-surface-variant text-sm mt-1">Pedido #DTL-88219</p>
+                  <div class="mt-3 flex items-center justify-between">
+                    <span class="text-primary font-label-bold">R$ 18.500,00</span>
+                    <button class="text-on-surface-variant hover:text-primary transition-colors">
+                      <span class="material-symbols-outlined">arrow_forward</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Order Card 2 -->
+            <div class="glass-panel p-6 rounded-xl group hover:border-primary/40 transition-all">
+              <div class="flex gap-5">
+                <div class="w-20 h-20 bg-surface-container-high rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-outline" style="font-size:36px">library_music</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex justify-between items-start gap-2">
+                    <h3 class="font-headline-md text-lg text-on-surface truncate">Premium Accessories Kit</h3>
+                    <span class="px-2 py-1 bg-surface-variant/50 text-on-surface-variant text-[10px] font-bold uppercase tracking-widest rounded flex-shrink-0">Entregue</span>
+                  </div>
+                  <p class="text-on-surface-variant text-sm mt-1">Pedido #DTL-88104</p>
+                  <div class="mt-3 flex items-center justify-between">
+                    <span class="text-primary font-label-bold">R$ 1.250,00</span>
+                    <button class="text-on-surface-variant hover:text-primary transition-colors">
+                      <span class="material-symbols-outlined">arrow_forward</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Preferências de Tom -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8" id="tone">
+          <div class="glass-panel p-8 rounded-xl">
+            <h2 class="font-label-bold text-on-surface uppercase tracking-[0.2em] mb-6 flex items-center gap-3">
+              <span class="w-1 h-6 bg-primary-container block rounded-full"></span>
+              Madeiras Favoritas
+            </h2>
+            <div class="flex flex-wrap gap-3">
+              <span class="px-4 py-2 bg-surface-container-high border border-outline-variant/30 rounded-full text-sm font-label-bold flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-primary-container"></span> Rosewood
+              </span>
+              <span class="px-4 py-2 bg-surface-container-high border border-outline-variant/30 rounded-full text-sm font-label-bold flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-primary-container"></span> Ebony
+              </span>
+              <span class="px-4 py-2 bg-surface-container-high border border-outline-variant/30 rounded-full text-sm font-label-bold flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-primary-container"></span> Roasted Maple
+              </span>
+              <button class="px-4 py-2 border border-dashed border-outline-variant/50 rounded-full text-sm font-label-bold hover:border-primary transition-all text-outline">+</button>
+            </div>
+          </div>
+          <div class="glass-panel p-8 rounded-xl">
+            <h2 class="font-label-bold text-on-surface uppercase tracking-[0.2em] mb-6 flex items-center gap-3">
+              <span class="w-1 h-6 bg-primary-container block rounded-full"></span>
+              Configuração de Captadores
+            </h2>
+            <div class="space-y-4">
+              <div class="flex justify-between items-center p-3 bg-surface-container-low rounded-lg border border-outline-variant/10">
+                <span class="font-label-bold text-sm">PJ Configuration</span>
+                <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1">check_circle</span>
+              </div>
+              <div class="flex justify-between items-center p-3 bg-surface-container-low rounded-lg border border-outline-variant/10">
+                <span class="font-label-bold text-sm">Active Pre-amp (18V)</span>
+                <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1">check_circle</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Segurança -->
+        <section class="glass-panel p-8 rounded-xl" id="security">
+          <h2 class="font-headline-md text-headline-md mb-8 flex items-center gap-3">
+            <span class="w-1 h-8 bg-primary-container block rounded-full"></span>
+            Segurança
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="flex flex-col gap-2">
+              <label class="font-label-bold text-on-surface-variant uppercase text-xs tracking-widest">Senha Atual</label>
+              <input
+                class="bg-surface-container-low border border-outline-variant/50 rounded-lg p-4 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                type="password" placeholder="••••••••" />
+            </div>
+            <div class="flex flex-col gap-2">
+              <label class="font-label-bold text-on-surface-variant uppercase text-xs tracking-widest">Nova Senha</label>
+              <input
+                class="bg-surface-container-low border border-outline-variant/50 rounded-lg p-4 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                type="password" placeholder="••••••••" />
+            </div>
+            <div class="md:col-span-2 pt-2">
+              <button
+                type="button"
+                class="bg-surface-container-high border border-outline-variant/50 hover:bg-surface-variant px-8 py-4 rounded-lg font-label-bold uppercase tracking-widest text-xs transition-all active:scale-95">
+                Alterar Senha
+              </button>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-black/95 w-full border-t border-white/5 py-12">
+    <div class="flex flex-col md:flex-row justify-between items-center px-12 gap-8">
+      <div class="flex flex-col items-center md:items-start">
+        <div class="text-lg font-bold text-white mb-2">DeepTone Luthier Studio</div>
+        <div class="font-sans text-sm tracking-tight text-gray-500">Crafted for Low-End Precision.</div>
+      </div>
+      <div class="flex flex-wrap justify-center gap-8">
+        <a class="text-gray-500 hover:text-primary-container transition-colors font-sans text-sm tracking-tight"
+          href="#">Privacy</a>
+        <a class="text-gray-500 hover:text-primary-container transition-colors font-sans text-sm tracking-tight"
+          href="#">Terms</a>
+        <a class="text-gray-500 hover:text-primary-container transition-colors font-sans text-sm tracking-tight"
+          href="#">Shipping</a>
+        <a class="text-gray-500 hover:text-primary-container transition-colors font-sans text-sm tracking-tight"
+          href="#">Returns</a>
+        <a class="text-gray-500 hover:text-primary-container transition-colors font-sans text-sm tracking-tight"
+          href="#">Newsletter</a>
+      </div>
+      <div class="flex gap-6">
+        <a class="text-gray-500 hover:text-white transition-colors" href="#"><span
+            class="material-symbols-outlined">share</span></a>
+        <a class="text-gray-500 hover:text-white transition-colors" href="#"><span
+            class="material-symbols-outlined">alternate_email</span></a>
+        <a class="text-gray-500 hover:text-white transition-colors" href="#"><span
+            class="material-symbols-outlined">room</span></a>
+      </div>
+    </div>
+    <div class="text-center mt-12 font-sans text-xs tracking-tight text-gray-700">
+      © 2024 DeepTone Luthier Studio. Crafted for Low-End Precision.
+    </div>
+  </footer>
+
+</div>

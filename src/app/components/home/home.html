@@ -1,40 +1,6 @@
 <!-- Home Landing Page -->
 <main class="bg-background text-on-background selection:bg-primary-container selection:text-white">
 
-  <!-- Custom Navigation for Landing Page (Overlays the global one if needed, but better if we hide global) -->
-  <!-- Note: We keep the user's nav but integrate it with the page -->
-  <nav
-    class="fixed top-0 w-full z-50 border-b border-white/10 bg-black/80 backdrop-blur-xl shadow-[0_4px_30px_rgba(38,1,8,0.4)] flex justify-between items-center px-8 h-20 max-w-full mx-auto">
-    <div class="text-2xl font-black tracking-tighter text-white uppercase italic">DeepTone Luthier</div>
-    <div class="hidden md:flex gap-8 font-sans uppercase tracking-widest font-bold text-xs items-center">
-      <a class="text-primary-container border-b-2 border-primary-container pb-1 transition-all duration-300"
-        href="/">Home</a>
-      <a class="text-gray-400 hover:text-white transition-colors transition-all duration-300" href="/catalogo">Shop</a>
-      <a class="text-gray-400 hover:text-white transition-colors transition-all duration-300"
-        href="/admin/baixo-custom">Custom Shop</a>
-      <a class="text-gray-400 hover:text-white transition-colors transition-all duration-300" href="#">Services</a>
-      <a class="text-gray-400 hover:text-white transition-colors transition-all duration-300" href="#">About</a>
-    </div>
-    <div class="flex items-center gap-6">
-      <div class="relative hidden lg:block">
-        <input
-          class="bg-white/5 border border-white/10 rounded-full px-4 py-1.5 text-xs focus:outline-none focus:border-primary-container transition-all w-48"
-          placeholder="Search precision..." type="text" />
-        <span
-          class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 scale-75">search</span>
-      </div>
-      <div class="flex gap-4 items-center">
-        <button class="text-gray-400 hover:text-white transition-all scale-95 active:opacity-80">
-          <span class="material-symbols-outlined">shopping_cart</span>
-        </button>
-        <button
-          class="font-sans uppercase tracking-widest font-bold text-xs bg-primary-container text-white px-4 py-2 rounded-sm hover:bg-[#A60321] transition-all">
-          Account
-        </button>
-      </div>
-    </div>
-  </nav>
-
   <!-- Hero Section -->
   <section class="relative h-[870px] flex items-center overflow-hidden">
     <div class="absolute inset-0 z-0">
@@ -266,37 +232,4 @@
       </div>
     </div>
   </section>
-
-  <!-- Footer -->
-  <footer class="bg-black/95 w-full border-t border-white/5 py-12">
-    <div class="flex flex-col md:flex-row justify-between items-center px-12 gap-8">
-      <div class="flex flex-col items-center md:items-start">
-        <div class="text-lg font-bold text-white mb-2">DeepTone Luthier Studio</div>
-        <div class="font-sans text-sm tracking-tight text-gray-500">Crafted for Low-End Precision.</div>
-      </div>
-      <div class="flex flex-wrap justify-center gap-8">
-        <a class="text-gray-500 hover:text-primary-container transition-colors font-sans text-sm tracking-tight"
-          href="#">Privacy</a>
-        <a class="text-gray-500 hover:text-primary-container transition-colors font-sans text-sm tracking-tight"
-          href="#">Terms</a>
-        <a class="text-gray-500 hover:text-primary-container transition-colors font-sans text-sm tracking-tight"
-          href="#">Shipping</a>
-        <a class="text-gray-500 hover:text-primary-container transition-colors font-sans text-sm tracking-tight"
-          href="#">Returns</a>
-        <a class="text-gray-500 hover:text-primary-container transition-colors font-sans text-sm tracking-tight"
-          href="#">Newsletter</a>
-      </div>
-      <div class="flex gap-6">
-        <a class="text-gray-500 hover:text-white transition-colors" href="#"><span
-            class="material-symbols-outlined">share</span></a>
-        <a class="text-gray-500 hover:text-white transition-colors" href="#"><span
-            class="material-symbols-outlined">alternate_email</span></a>
-        <a class="text-gray-500 hover:text-white transition-colors" href="#"><span
-            class="material-symbols-outlined">room</span></a>
-      </div>
-    </div>
-    <div class="text-center mt-12 font-sans text-xs tracking-tight text-gray-700">
-      © 2024 DeepTone Luthier Studio. Crafted for Low-End Precision.
-    </div>
-  </footer>
 </main>

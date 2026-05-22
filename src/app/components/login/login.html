@@ -22,14 +22,17 @@
 <h2 class="font-headline-md text-headline-md text-white mb-1">Acesso do Artista</h2>
 <p class="font-body-md text-on-surface-variant">Entre para gerenciar seus projetos e encomendas.</p>
 </header>
-<form class="space-y-6">
-<!-- Email Input -->
+<form [formGroup]="form" (ngSubmit)="enviar()" class="space-y-6">
+<!-- Login Input -->
 <div class="space-y-2">
-<label class="font-label-bold text-label-bold text-outline uppercase tracking-wider" for="email">Email</label>
+<label class="font-label-bold text-label-bold text-outline uppercase tracking-wider" for="login">Login / Usuário</label>
 <div class="relative group">
-<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">mail</span>
-<input class="w-full bg-surface-container-high border border-outline-variant focus:border-primary-container focus:ring-1 focus:ring-primary-container text-white rounded-lg py-4 pl-12 pr-4 transition-all outline-none placeholder:text-outline/40" id="email" placeholder="nome@exemplo.com" type="email"/>
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">person</span>
+<input class="w-full bg-surface-container-high border border-outline-variant focus:border-primary-container focus:ring-1 focus:ring-primary-container text-white rounded-lg py-4 pl-12 pr-4 transition-all outline-none placeholder:text-outline/40" id="login" placeholder="Ex: admin" type="text" formControlName="login" autocomplete="username"/>
 </div>
+@if (form.controls.login.touched && form.controls.login.invalid) {
+  <p class="text-xs text-red-500 mt-1">Informe seu login.</p>
+}
 </div>
 <!-- Password Input -->
 <div class="space-y-2">
@@ -39,18 +42,30 @@
 </div>
 <div class="relative group">
 <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">lock</span>
-<input class="w-full bg-surface-container-high border border-outline-variant focus:border-primary-container focus:ring-1 focus:ring-primary-container text-white rounded-lg py-4 pl-12 pr-4 transition-all outline-none placeholder:text-outline/40" id="password" placeholder="••••••••" type="password"/>
+<input class="w-full bg-surface-container-high border border-outline-variant focus:border-primary-container focus:ring-1 focus:ring-primary-container text-white rounded-lg py-4 pl-12 pr-4 transition-all outline-none placeholder:text-outline/40" id="password" placeholder="••••••••" type="password" formControlName="senha" autocomplete="current-password"/>
 </div>
+@if (form.controls.senha.touched && form.controls.senha.invalid) {
+  <p class="text-xs text-red-500 mt-1">A senha deve ter no mínimo 4 caracteres.</p>
+}
 </div>
 <!-- Remember Me -->
 <div class="flex items-center gap-3">
 <input class="w-4 h-4 rounded border-outline-variant bg-surface-container-high text-primary-container focus:ring-offset-background focus:ring-primary-container transition-all" id="remember" type="checkbox"/>
 <label class="font-body-md text-sm text-on-surface-variant select-none" for="remember">Manter conectado</label>
 </div>
+
+@if (erro()) {
+  <p class="text-sm text-red-500 text-center font-bold">{{ erro() }}</p>
+}
+
 <!-- Primary Action -->
-<button class="w-full bg-primary-container hover:bg-on-primary-fixed-variant text-white font-label-bold text-md py-4 rounded-lg transition-all duration-300 transform active:scale-[0.98] shadow-lg shadow-primary-container/20 uppercase tracking-widest" type="submit">
-                        Entrar na Oficina
-                    </button>
+<button class="w-full bg-primary-container hover:bg-on-primary-fixed-variant text-white font-label-bold text-md py-4 rounded-lg transition-all duration-300 transform active:scale-[0.98] shadow-lg shadow-primary-container/20 uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed" type="submit" [disabled]="enviando()">
+  @if (enviando()) {
+    Entrando...
+  } @else {
+    Entrar na Oficina
+  }
+</button>
 </form>
 <!-- Divider -->
 <div class="relative my-10">

@@ -1,8 +1,9 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProdutoService } from '../../services/produto.service';
 import { ArquivoService } from '../../services/arquivo.service';
 import { Produto } from '../../models/produto.model';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-catalogo',
@@ -12,6 +13,7 @@ import { Produto } from '../../models/produto.model';
   styleUrl: './catalogo.css'
 })
 export class Catalogo implements OnInit {
+  readonly authService = inject(AuthService);
   produtos = signal<Produto[]>([]);
   paginaAtual = signal(0);
   itensPorPagina = 12;

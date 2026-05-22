@@ -1,7 +1,9 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-cadastro',
@@ -11,13 +13,18 @@ import { CommonModule } from '@angular/common';
   styleUrl: './cadastro.css',
 })
 export class Cadastro {
+  private readonly fb = inject(FormBuilder);
+  private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
+
   cadastroForm: FormGroup;
   isLoading = signal(false);
   showSuccess = signal(false);
+  erro = signal('');
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor() {
     this.cadastroForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3)]],
+      username: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]],
@@ -34,7 +41,6 @@ export class Cadastro {
         confirmPassword.setErrors({ passwordMismatch: true });
         return { passwordMismatch: true };
       } else {
-        // Clear error if they match now
         if (confirmPassword.hasError('passwordMismatch')) {
           const errors = confirmPassword.errors;
           if (errors) {
@@ -48,19 +54,36 @@ export class Cadastro {
   }
 
   onSubmit(): void {
+    this.erro.set('');
+
     if (this.cadastroForm.invalid) {
       this.cadastroForm.markAllAsTouched();
       return;
     }
 
-    this.isLoading.set(true);
-    this.showSuccess.set(true);
+    const email = this.cadastroForm.controls['email'].value;
+    const username = this.cadastroForm.controls['username'].value;
+    const password = this.cadastroForm.controls['password'].value;
 
-    // Simulate backend response
-    setTimeout(() => {
-      this.isLoading.set(false);
-      this.showSuccess.set(false);
-      this.router.navigate(['/login']);
-    }, 2500);
+    this.isLoading.set(true);
+
+    this.authService.register(email, username, password).subscribe({
+      next: () => {
+        this.isLoading.set(false);
+        this.showSuccess.set(true);
+        setTimeout(() => {
+          this.showSuccess.set(false);
+          this.router.navigate(['/login']);
+        }, 2000);
+      },
+      error: (error: HttpErrorResponse) => {
+        this.isLoading.set(false);
+        if (error.status === 409 || error.error?.message?.includes('unique') || error.error?.message?.includes('duplicate')) {
+          this.erro.set('O nome de usuário ou e-mail já está cadastrado.');
+        } else {
+          this.erro.set('Não foi possível realizar o cadastro. Tente novamente mais tarde.');
+        }
+      }
+    });
   }
 }

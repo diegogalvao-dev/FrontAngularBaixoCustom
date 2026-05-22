@@ -16,35 +16,47 @@ import { Home } from './components/home/home';
 import { Catalogo } from './components/catalogo/catalogo';
 import { Login } from './components/login/login';
 import { Cadastro } from './components/cadastro/cadastro';
+import { Perfil } from './components/perfil/perfil';
+import { UserLayout } from './components/layouts/user-layout/user-layout';
 
 export const routes: Routes = [
-   {path: '', component: Home, title: 'DeepTone Luthier'},
-   {path: 'catalogo', component: Catalogo, title: 'Catálogo de Produtos'},
+
    {path: 'login', component: Login, title: 'Login'},
    {path: 'cadastro', component: Cadastro, title: 'Cadastro'},
 
-   {path: 'admin', children: [
-      {path: '', redirectTo: 'produto', pathMatch: 'full'},
-      {path: 'acessorios', component: AcessorioList, title: 'Listagem de Acessórios'},
-      {path: 'acessorios/edit/:id', component: AcessorioForms, title: 'Edição de Acessório', 
-         resolve: {acessorio: acessorioResolver}  },
-      {path: 'acessorios/new', component: AcessorioForms, title: 'Cadastro de Acessório'}, 
+   {path: '', 
+      component: UserLayout,
+      children: [
+         {path: '', component: Home, title: 'DeepTone Luthier'},
+         {path: 'catalogo', component: Catalogo, title: 'Catálogo de Produtos'},
+         {path: 'perfil', component: Perfil, title: 'Perfil do Usuário'},
+      ]  
+   },   
 
-      {path: 'baixo', component: BaixoList, title: 'Listagem de Baixos'},
-      {path: 'baixo/edit/:id', component: BaixoForm, title: 'Edição de Baixo', 
-         resolve: {baixo: baixoResolver}  },
-      {path: 'baixo/new', component: BaixoForm, title: 'Cadastro de Baixo'},
+   {path: 'admin', 
+      children: [
+         {path: '', redirectTo: 'produto', pathMatch: 'full'},
+         {path: 'acessorios', component: AcessorioList, title: 'Listagem de Acessórios'},
+         {path: 'acessorios/edit/:id', component: AcessorioForms, title: 'Edição de Acessório', 
+            resolve: {acessorio: acessorioResolver}  },
+         {path: 'acessorios/new', component: AcessorioForms, title: 'Cadastro de Acessório'}, 
 
-      {path: 'baixo-custom', component: BaixocustomList, title: 'Listagem de Baixos'},
-      {path: 'baixo-custom/edit/:id', component: BaixocustomForm, title: 'Edição de Baixo', 
-         resolve: {baixo: baixocustomResolver}  },
-      {path: 'baixo-custom/new', component: BaixocustomForm, title: 'Cadastro de Baixo'},
+         {path: 'baixo', component: BaixoList, title: 'Listagem de Baixos'},
+         {path: 'baixo/edit/:id', component: BaixoForm, title: 'Edição de Baixo', 
+            resolve: {baixo: baixoResolver}  },
+         {path: 'baixo/new', component: BaixoForm, title: 'Cadastro de Baixo'},
 
-      {path: 'produto', component: ProdutoList, title: 'Listagem de Produtos'},
+         {path: 'baixo-custom', component: BaixocustomList, title: 'Listagem de Baixos'},
+         {path: 'baixo-custom/edit/:id', component: BaixocustomForm, title: 'Edição de Baixo', 
+            resolve: {baixo: baixocustomResolver}  },
+         {path: 'baixo-custom/new', component: BaixocustomForm, title: 'Cadastro de Baixo'},
 
-      {path: 'captadores', component: CaptadorList, title: 'Listagem de Captadores'},
-      {path: 'captadores/edit/:id', component: CaptadorForm, title: 'Edição de Captador', 
-         resolve: {captador: captadorResolver}  },
-      {path: 'captadores/new', component: CaptadorForm, title: 'Cadastro de Captador'},
-   ]},
+         {path: 'produto', component: ProdutoList, title: 'Listagem de Produtos'},
+
+         {path: 'captadores', component: CaptadorList, title: 'Listagem de Captadores'},
+         {path: 'captadores/edit/:id', component: CaptadorForm, title: 'Edição de Captador', 
+            resolve: {captador: captadorResolver}  },
+         {path: 'captadores/new', component: CaptadorForm, title: 'Cadastro de Captador'},
+      ]
+   },
 ];
