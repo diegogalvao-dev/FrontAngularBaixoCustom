@@ -1,0 +1,345 @@
+<!-- Custom Shop Client Page -->
+<div class="min-h-screen font-body-md selection:bg-primary-container selection:text-white"
+     style="background-color:#1e100f; color:#f9dcda; overflow-x:hidden;">
+
+  <main class="pt-32 pb-20 px-4 md:px-16 max-w-[1280px] mx-auto">
+    <div class="grid lg:grid-cols-12 gap-6">
+
+      <!-- ═══ LEFT: Visual & Preview ═══ -->
+      <div class="lg:col-span-7">
+        <div class="preview-card space-y-8 sticky top-32">
+
+          <!-- Bass Image Card -->
+          <div class="bass-image-container group rounded-xl overflow-hidden shadow-2xl relative" style="border:1px solid rgba(255,255,255,0.05); min-height: 400px; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, #2b1c1b 0%, #1e100f 100%);">
+            
+            <img
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuB02ynIHF7f-ABSrzzTh1EusarJcL-b4GzQDL3ey069Q874eN_JA3NjyC0tSfYPEWtKW6eLXUBR2WsgrzymZTY_-IrAKVBHKGryIQiqu3MPOpq83MghU6NnwCe1jzL5zPS78jIvVPboIlorpkwb-srk5b31kjC0MlFMc3wD8XYBFp8FJyoMit0ziz7cGQuaWSd3C34TIG7JoE3h1UYlAMctqJKyIAZ0oY5nxGw943Lvs4kJ6K6qrb6yfznLOwPA0cAaQtXTnmyWC-q_"
+              alt="DeepTone Custom Bass"
+              style="max-width: 80%; transform: rotate(-15deg); filter: drop-shadow(0 20px 30px rgba(0,0,0,0.8)); transition: transform 0.5s ease;"
+              class="group-hover:scale-105"
+            />
+
+            <!-- Price Overlay -->
+            <div class="absolute bottom-6 left-6 right-6 flex justify-between items-end bg-black/60 backdrop-blur-md p-4 rounded-xl border border-white/10">
+              <div>
+                <p style="font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:#e3bebc;">Total Estimado</p>
+                <h2 style="font-size:24px; font-weight:700; color:#ffb3b3;">
+                  {{ estimatedPrice() | currency:'BRL':'symbol':'1.0-0' }}
+                </h2>
+              </div>
+              <span class="material-symbols-outlined animate-pulse" style="color:#a60321; font-size:2rem;">new_releases</span>
+            </div>
+          </div>
+
+          <!-- Current Config Summary -->
+          <div class="carbon-texture glass-panel rounded-xl p-8" style="border-left:4px solid #a60321; background: rgba(255,255,255,0.03);">
+            <h3 style="font-size:14px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:white; margin-bottom:1.5rem;">
+              Sua Configuração
+            </h3>
+            
+            <div class="space-y-4">
+              <!-- Projeto Info -->
+              <div>
+                <span style="display:block; font-size:10px; text-transform:uppercase; letter-spacing:0.05em; color:#e3bebc;">Nome do Projeto</span>
+                <span style="font-size:16px; font-weight:600; color:#f9dcda;">{{ projetoNome() || 'Sem título' }}</span>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4 pt-2 border-t border-white/10">
+                <div class="space-y-1">
+                  <span style="display:block; font-size:10px; text-transform:uppercase; letter-spacing:0.05em; color:#e3bebc;">Modelo Base</span>
+                  <span style="font-size:14px; font-weight:600; color:#f9dcda;">{{ selectedModeloBase() }}</span>
+                </div>
+                <div class="space-y-1">
+                  <span style="display:block; font-size:10px; text-transform:uppercase; letter-spacing:0.05em; color:#e3bebc;">Cor</span>
+                  <span class="flex items-center gap-2" style="font-size:14px; font-weight:600; color:#f9dcda;">
+                    <span class="inline-block w-4 h-4 rounded-full border border-white/20"
+                          [style.background]="selectedColor().color"></span>
+                    {{ selectedColor().label }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Eletrônica -->
+              <div class="pt-2 border-t border-white/10">
+                <span style="display:block; font-size:10px; text-transform:uppercase; letter-spacing:0.05em; color:#e3bebc; margin-bottom: 0.25rem;">Eletrônica</span>
+                @if (configEletronica().id) {
+                  <span style="font-size:14px; font-weight:600; color:#f9dcda;">
+                    {{ configEletronica().ativo ? 'Circuito Ativo' : 'Circuito Passivo' }} 
+                    (V:{{ configEletronica().volumeKnobs }} / T:{{ configEletronica().toneKnobs }})
+                  </span>
+                } @else {
+                  <span style="font-size:14px; font-weight:600; color:#e3bebc; opacity: 0.6;">Não configurada</span>
+                }
+              </div>
+
+              <!-- Captadores -->
+              <div class="pt-2 border-t border-white/10">
+                <span style="display:block; font-size:10px; text-transform:uppercase; letter-spacing:0.05em; color:#e3bebc; margin-bottom: 0.25rem;">Captadores</span>
+                @if (captadoresData().length > 0) {
+                  <div class="space-y-1">
+                    @for (cap of captadoresData(); track cap.id; let i = $index) {
+                      <span style="display:block; font-size:14px; font-weight:600; color:#f9dcda;">
+                        {{ i + 1 }}. {{ cap.marca }} - {{ cap.type }}
+                      </span>
+                    }
+                  </div>
+                } @else {
+                  <span style="font-size:14px; font-weight:600; color:#e3bebc; opacity: 0.6;">Nenhum captador adicionado</span>
+                }
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ═══ RIGHT: Configuration Panel ═══ -->
+      <div class="lg:col-span-5">
+        <div class="space-y-10">
+
+          <!-- Header -->
+          <section>
+            <h1 style="font-size:48px; font-weight:800; letter-spacing:-0.02em; color:#f9dcda; margin-bottom:0.5rem; line-height:1.1;">
+              DeepTone Custom
+            </h1>
+            <p style="font-size:18px; line-height:1.6; color:#e3bebc;">
+              Projete do zero. Sua identidade, suas regras, nosso trabalho artesanal.
+            </p>
+          </section>
+
+          <!-- Step 1: Identificação -->
+          <section>
+            <h4 class="step-title" style="font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:#ffb3b3; margin-bottom:1rem; padding-bottom:0.5rem; border-bottom:1px solid rgba(255,255,255,0.1);">
+              Passo 1: Identidade do Projeto
+            </h4>
+            <div class="space-y-4">
+              <div>
+                <label style="font-size:10px; text-transform:uppercase; font-weight:600; color:#e3bebc; padding:0 4px; display:block; margin-bottom: 0.25rem;">Nome do Projeto *</label>
+                <input type="text"
+                       [ngModel]="projetoNome()"
+                       (ngModelChange)="projetoNome.set($event)"
+                       placeholder="Ex: My Dream Jazz Bass"
+                       class="w-full rounded-lg py-3 px-4 transition-all"
+                       style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#f9dcda; outline:none; focus:border-[#a60321]" />
+              </div>
+              <div>
+                <label style="font-size:10px; text-transform:uppercase; font-weight:600; color:#e3bebc; padding:0 4px; display:block; margin-bottom: 0.25rem;">Descrição *</label>
+                <textarea rows="3"
+                          [ngModel]="projetoDescricao()"
+                          (ngModelChange)="projetoDescricao.set($event)"
+                          placeholder="Fale um pouco sobre o timbre e visual que você busca..."
+                          class="w-full rounded-lg py-3 px-4 transition-all"
+                          style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#f9dcda; outline:none; resize:vertical; focus:border-[#a60321]"></textarea>
+              </div>
+            </div>
+          </section>
+
+          <!-- Step 2: Modelo Base e Cor -->
+          <section>
+            <h4 class="step-title" style="font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:#ffb3b3; margin-bottom:1rem; padding-bottom:0.5rem; border-bottom:1px solid rgba(255,255,255,0.1);">
+              Passo 2: Estética
+            </h4>
+            
+            <div class="space-y-6">
+              <!-- Modelo Base -->
+              <div>
+                <label style="font-size:10px; text-transform:uppercase; font-weight:600; color:#e3bebc; padding:0 4px; display:block; margin-bottom: 0.5rem;">Modelo Base</label>
+                <div class="grid grid-cols-2 gap-3">
+                  @for (mod of optionsModelos; track mod.value) {
+                    <div class="p-3 rounded-lg flex items-center gap-3 cursor-pointer transition-all border"
+                         [ngStyle]="selectedModeloBase() === mod.value ? {'background': 'rgba(166,3,33,0.1)', 'border-color': '#a60321'} : {'background': 'rgba(255,255,255,0.05)', 'border-color': 'transparent'}"
+                         (click)="selectModeloBase(mod.value)">
+                      <span class="material-symbols-outlined" [style.color]="selectedModeloBase() === mod.value ? '#ffb3b3' : '#e3bebc'">{{ mod.icon }}</span>
+                      <span style="font-size:14px; font-weight:600; color:#f9dcda;">{{ mod.label }}</span>
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <!-- Cor Principal -->
+              <div>
+                <label style="font-size:10px; text-transform:uppercase; font-weight:600; color:#e3bebc; padding:0 4px; display:block; margin-bottom: 0.5rem;">Cor Principal</label>
+                <div class="flex flex-wrap gap-4">
+                  @for (cor of optionsCores; track cor.value) {
+                    <div class="flex flex-col items-center gap-2 cursor-pointer group" (click)="selectColor(cor)">
+                      <div class="w-10 h-10 rounded-full border-2 transition-all"
+                           [style.background]="cor.color"
+                           [style.border-color]="selectedColor().value === cor.value ? '#ffb3b3' : 'rgba(255,255,255,0.2)'"
+                           [class.scale-110]="selectedColor().value === cor.value"
+                           class="group-hover:scale-110 shadow-lg">
+                      </div>
+                      <span style="font-size:9px; text-transform:uppercase; letter-spacing:0.05em;"
+                            [style.color]="selectedColor().value === cor.value ? '#ffb3b3' : '#e3bebc'">
+                        {{ cor.label }}
+                      </span>
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Step 3: Eletrônica & Captação (O Core do Custom Shop) -->
+          <section>
+            <h4 class="step-title" style="font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:#ffb3b3; margin-bottom:1rem; padding-bottom:0.5rem; border-bottom:1px solid rgba(255,255,255,0.1);">
+              Passo 3: Coração do Instrumento *
+            </h4>
+
+            <div class="space-y-6">
+              <!-- Eletrônica -->
+              <div class="bg-black/20 p-5 rounded-xl border border-white/5">
+                <div class="flex justify-between items-center mb-4">
+                  <div>
+                    <h5 style="font-size:14px; font-weight:600; color:#f9dcda; margin-bottom:0.25rem;">Circuito Eletrônico</h5>
+                    <p style="font-size:11px; color:#e3bebc;">Defina a parte ativa/passiva do seu baixo</p>
+                  </div>
+                  <button type="button" (click)="openDialogEletronica()"
+                          class="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg text-xs font-bold uppercase tracking-widest text-zinc-300 border border-white/10 transition-colors">
+                    {{ configEletronica().id ? 'Editar Circuito' : 'Configurar Circuito' }}
+                  </button>
+                </div>
+                
+                @if (configEletronica().id) {
+                  <div class="grid grid-cols-2 gap-4 mt-4 bg-white/5 p-4 rounded-lg">
+                    <div>
+                      <span style="display:block; font-size:10px; text-transform:uppercase; color:#e3bebc;">Tipo</span>
+                      <span style="font-size:14px; font-weight:600; color:#f9dcda;">{{ configEletronica().ativo ? 'Ativo' : 'Passivo' }}</span>
+                    </div>
+                    <div class="flex gap-4">
+                      <div>
+                        <span style="display:block; font-size:10px; text-transform:uppercase; color:#e3bebc;">Vol. Knobs</span>
+                        <span style="font-size:14px; font-weight:600; color:#f9dcda;">{{ configEletronica().volumeKnobs }}</span>
+                      </div>
+                      <div>
+                        <span style="display:block; font-size:10px; text-transform:uppercase; color:#e3bebc;">Tone Knobs</span>
+                        <span style="font-size:14px; font-weight:600; color:#f9dcda;">{{ configEletronica().toneKnobs }}</span>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+
+              <!-- Captadores -->
+              <div class="bg-black/20 p-5 rounded-xl border border-white/5">
+                <div class="flex justify-between items-center mb-4">
+                  <div>
+                    <h5 style="font-size:14px; font-weight:600; color:#f9dcda; margin-bottom:0.25rem;">Captadores ({{ captadoresData().length }}/2)</h5>
+                    <p style="font-size:11px; color:#e3bebc;">Adicione o(s) captador(es) para o seu instrumento</p>
+                  </div>
+                  @if (captadoresData().length < 2) {
+                    <button type="button" (click)="openCaptadorDialog()"
+                            class="px-4 py-2 bg-[#a60321]/20 hover:bg-[#a60321]/40 text-[#ffb3b3] rounded-lg text-xs font-bold uppercase tracking-widest border border-[#a60321]/50 transition-colors">
+                      + Adicionar
+                    </button>
+                  }
+                </div>
+
+                <div class="space-y-3">
+                  @for (cap of captadoresData(); track cap.id; let i = $index) {
+                    <div class="bg-white/5 p-4 rounded-lg flex justify-between items-center group relative overflow-hidden border border-white/5">
+                      <div class="absolute left-0 top-0 bottom-0 w-1 bg-[#a60321]"></div>
+                      <div>
+                        <span style="display:block; font-size:10px; text-transform:uppercase; color:#a60321; font-weight: 700; margin-bottom: 0.25rem;">Posição {{ i + 1 }}</span>
+                        <h6 style="font-size:16px; font-weight:700; color:#f9dcda;">{{ cap.marca }}</h6>
+                        <div class="flex gap-4 mt-1">
+                          <span style="font-size:11px; color:#e3bebc;">Tipo: {{ cap.type }}</span>
+                          <span style="font-size:11px; color:#e3bebc;">Posição: {{ cap.captadorPosicao }}</span>
+                          <span style="font-size:11px; font-weight:600; color:#ffb3b3;">+ R$ {{ cap.price }}</span>
+                        </div>
+                      </div>
+                      
+                      <div class="flex gap-2">
+                        <button type="button" (click)="openCaptadorDialog(i)"
+                                class="p-2 bg-white/10 hover:bg-white/20 rounded-lg text-zinc-300 transition-colors" title="Editar">
+                          <span class="material-symbols-outlined text-sm">edit</span>
+                        </button>
+                        <button type="button" (click)="removeCaptador(i)"
+                                class="p-2 bg-red-500/10 hover:bg-red-500/30 rounded-lg text-red-400 transition-colors" title="Remover">
+                          <span class="material-symbols-outlined text-sm">delete</span>
+                        </button>
+                      </div>
+                    </div>
+                  }
+                  @if (captadoresData().length === 0) {
+                    <div class="p-6 border-2 border-dashed border-white/10 rounded-lg text-center opacity-50">
+                      <span class="material-symbols-outlined text-3xl mb-2 text-zinc-500">vibration</span>
+                      <p style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:white;">Nenhum captador adicionado</p>
+                    </div>
+                  }
+                </div>
+              </div>
+
+            </div>
+          </section>
+
+          <!-- CTA -->
+          <div style="padding-top:2rem; border-top:1px solid rgba(255,255,255,0.1);">
+            <div class="flex gap-4">
+              <button
+                class="submit-btn flex-1 bg-surface-variant text-on-surface hover:bg-white/10 transition-colors"
+                style="background: rgba(255,255,255,0.05); box-shadow: none; border-radius: 8px; padding: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px;"
+                [disabled]="submitting()"
+                (click)="salvarProjeto()">
+                @if (submitting()) {
+                  <span class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                } @else {
+                  <span class="material-symbols-outlined">save</span>
+                  Salvar Projeto
+                }
+              </button>
+
+              <button
+                class="submit-btn flex-[2] bg-[#a60321] hover:bg-[#800118] text-white transition-all shadow-xl shadow-red-900/30"
+                style="border-radius: 8px; padding: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px;"
+                [disabled]="submitting() || !isFormValid()"
+                [class.opacity-50]="!isFormValid()"
+                [title]="!isFormValid() ? 'Preencha todos os campos obrigatórios' : ''"
+                (click)="encomendar()">
+                @if (submitting()) {
+                  <span class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                  Adicionando...
+                } @else {
+                  <span class="material-symbols-outlined">add_shopping_cart</span>
+                  Adicionar ao Carrinho
+                }
+              </button>
+            </div>
+
+            <div class="mt-8 flex justify-between px-2">
+              <div class="flex items-center gap-2" style="color:#e3bebc;">
+                <span class="material-symbols-outlined" style="font-size:18px;">local_shipping</span>
+                <span style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.05em;">Envio Global Grátis</span>
+              </div>
+              <div class="flex items-center gap-2" style="color:#e3bebc;">
+                <span class="material-symbols-outlined" style="font-size:18px;">verified_user</span>
+                <span style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.05em;">Garantia Vitalícia</span>
+              </div>
+            </div>
+
+            @if (!authService.logado()) {
+              <p class="text-center mt-6" style="font-size:13px; color:#e3bebc;">
+                <a routerLink="/login" style="color:#ffb3b3; text-decoration:underline;">Faça login</a> para encomendar seu instrumento.
+              </p>
+            }
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Toast Notification -->
+  @if (toastMsg()) {
+    <div class="fixed top-8 right-8 z-50 p-4 rounded-xl border shadow-2xl animate-in fade-in slide-in-from-top-4"
+         [style.background]="toastType() === 'success' ? 'rgba(30,16,15,0.95)' : 'rgba(147,0,10,0.95)'"
+         [style.border-color]="toastType() === 'success' ? 'rgba(255,179,176,0.3)' : 'rgba(255,180,171,0.3)'">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined" [style.color]="toastType() === 'success' ? '#ffb3b0' : '#ffb4ab'">
+          {{ toastType() === 'success' ? 'check_circle' : 'error' }}
+        </span>
+        <p style="font-size:14px; font-weight:600; color:#f9dcda;">{{ toastMsg() }}</p>
+      </div>
+    </div>
+  }
+</div>

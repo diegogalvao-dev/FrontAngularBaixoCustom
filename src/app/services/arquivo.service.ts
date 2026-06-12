@@ -38,6 +38,12 @@ export class ArquivoService {
     });
   }
 
+  uploadFotoPerfil(file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.patch(`${this.baseUrl}/usuario/foto`, formData, { responseType: 'text' });
+  }
+
   remove(fid: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}/${fid}`);
   }

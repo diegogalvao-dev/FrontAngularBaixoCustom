@@ -5,7 +5,14 @@ export class Produto {
     price!: number;
     quantidadeEstoque!: number;
     fornecedor!: string;
-    nomeImagens!: string[];
+    nomeImagens?: string[];
     imagemPrincipal!: string;
+    type?: string;
+    baixoModeloBase?: string;
+    numeroCordas?: number;
+    baixoCor?: string;
+    acessorioTipo?: string;
+    material?: string;
+    tamanho?: number;
 
 }

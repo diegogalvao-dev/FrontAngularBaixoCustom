@@ -7,57 +7,55 @@ import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-esqueci-senha',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, RouterLink],
-  templateUrl: './login.html',
-  styleUrl: './login.css',
+  templateUrl: './esqueci-senha.html',
+  styleUrl: './esqueci-senha.css',
 })
-export class Login {
+export class EsqueciSenhaComponent {
   private readonly formBuilder = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
   readonly erro = signal('');
+  readonly sucesso = signal(false);
   readonly enviando = signal(false);
 
   readonly form = this.formBuilder.group({
-    login: ['', [Validators.required]],
-    senha: ['', [Validators.required, Validators.minLength(4)]],
+    username: ['', [Validators.required]],
   });
 
   enviar(): void {
     this.erro.set('');
+    this.sucesso.set(false);
 
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
 
-    const login = this.form.controls.login.value ?? '';
-    const senha = this.form.controls.senha.value ?? '';
+    const username = this.form.controls.username.value ?? '';
 
     this.enviando.set(true);
 
     this.authService
-      .login(login, senha)
+      .esqueciSenha(username)
       .pipe(finalize(() => this.enviando.set(false)))
       .subscribe({
-        next: (usuario) => {
-          if (usuario.perfil.nome.toLowerCase() === 'admin' || usuario.perfil.id === 1) {
-            this.router.navigate(['/admin']);
-          } else {
-            this.router.navigate(['/']);
-          }
+        next: () => {
+          this.sucesso.set(true);
+          setTimeout(() => {
+            this.router.navigate(['/login']);
+          }, 4000);
         },
         error: (error: HttpErrorResponse) => {
-          if (error.status === 401) {
-            this.erro.set('Login ou senha inválidos.');
+          if (error.status === 404) {
+            this.erro.set('Usuário não encontrado.');
             return;
           }
-          this.erro.set('Não foi possível entrar no momento. Tente novamente mais tarde.');
+          this.erro.set('Não foi possível solicitar a nova senha. Tente novamente mais tarde.');
         },
       });
   }
 }
-

@@ -1,11 +1,11 @@
 import { Component, HostListener, OnInit, signal } from '@angular/core';
-import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
+import { Router, NavigationEnd, RouterOutlet, RouterLink } from '@angular/router';
 import { filter } from 'rxjs';
 import { LeftSidebar } from "./components/left-side-bar/left-side-bar";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, LeftSidebar],
+  imports: [RouterOutlet, RouterLink, LeftSidebar],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

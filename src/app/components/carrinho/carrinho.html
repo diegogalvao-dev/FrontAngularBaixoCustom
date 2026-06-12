@@ -1,0 +1,171 @@
+<div class="carrinho-page font-body-md text-on-surface">
+  <main class="pt-32 pb-20 px-4 md:px-16 max-w-[1280px] mx-auto">
+    <!-- Cart Header -->
+    <header class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div>
+        <span class="font-label-bold text-secondary uppercase tracking-[0.2em] mb-2 block">Your Workshop Bench</span>
+        <h1 class="font-headline-xl text-on-surface text-4xl font-bold">Shopping Cart</h1>
+      </div>
+      <p class="font-body-lg text-on-surface-variant italic">{{ carrinhoService.totalItens() }} Precision Instruments Reserved</p>
+    </header>
+  
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+      <!-- Left Column: Items List -->
+      <section class="lg:col-span-8 space-y-6" id="cart-items">
+        
+        <!-- Angular For Loop over items -->
+        @for (item of carrinhoService.carrinhoItems(); track $index) {
+          <article class="glass-card rounded-xl p-6 flex flex-col sm:flex-row gap-6 relative group transition-all duration-500 hover:border-primary/20">
+            <button 
+              class="absolute top-4 right-4 text-on-surface-variant hover:text-primary transition-colors" 
+              title="Remove item"
+              (click)="removerItem(item.produto ? item.produto.id : (item.baixocustom ? item.baixocustom.id : 0), !!item.baixocustom)">
+              <span class="material-symbols-outlined">close</span>
+            </button>
+            
+            <div class="w-full sm:w-48 h-48 rounded-lg overflow-hidden flex-shrink-0 bg-surface-container-high border border-white/5">
+              @if (item.produto) {
+                <img 
+                  [src]="item.produto.imagemPrincipal ? arquivoService.getUrlDownload(item.produto.imagemPrincipal) : '/assets/placeholder.jpg'" 
+                  [alt]="item.produto.name" 
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+                />
+              } @else if (item.baixocustom) {
+                <!-- TODO: Could use item.baixocustom.nomeImagens[0] if available, else placeholder -->
+                <img 
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuB02ynIHF7f-ABSrzzTh1EusarJcL-b4GzQDL3ey069Q874eN_JA3NjyC0tSfYPEWtKW6eLXUBR2WsgrzymZTY_-IrAKVBHKGryIQiqu3MPOpq83MghU6NnwCe1jzL5zPS78jIvVPboIlorpkwb-srk5b31kjC0MlFMc3wD8XYBFp8FJyoMit0ziz7cGQuaWSd3C34TIG7JoE3h1UYlAMctqJKyIAZ0oY5nxGw943Lvs4kJ6K6qrb6yfznLOwPA0cAaQtXTnmyWC-q_" 
+                  alt="Custom Bass" 
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+                />
+              }
+            </div>
+            
+            <div class="flex-grow flex flex-col justify-between">
+              <div>
+                <div class="flex justify-between items-start mb-2">
+                  <h3 class="font-headline-md text-on-surface group-hover:text-primary transition-colors text-2xl font-bold">
+                    {{ item.produto ? item.produto.name : 'Baixo Customizado' }}
+                  </h3>
+                </div>
+                <ul class="flex flex-col gap-1 text-on-surface-variant font-label-bold mb-4 text-sm font-semibold text-gray-400">
+                  <li class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">sell</span> {{ item.produto ? (item.produto.type || 'Instrument') : 'Custom Shop' }}</li>
+                  @if (item.baixocustom) {
+                    <li class="flex items-center gap-1 text-xs opacity-70 mt-1 line-clamp-2" [title]="item.baixocustom.description">
+                      {{ item.baixocustom.description }}
+                    </li>
+                  }
+                </ul>
+              </div>
+              
+              <div class="flex flex-wrap items-center justify-between gap-6">
+                <div class="flex items-center border border-white/20 rounded-full p-1 h-12">
+                  <button 
+                    class="w-10 h-10 flex items-center justify-center hover:bg-white/10 rounded-full transition-colors" 
+                    (click)="diminuirQuantidade(item.produto ? item.produto.id : (item.baixocustom ? item.baixocustom.id : 0), item.quantidade, !!item.baixocustom)">
+                    <span class="material-symbols-outlined">remove</span>
+                  </button>
+                  <input 
+                    class="w-12 bg-transparent border-none text-center font-headline-md text-on-surface focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" 
+                    type="number" 
+                    [value]="item.quantidade" 
+                    readonly />
+                  <button 
+                    class="w-10 h-10 flex items-center justify-center hover:bg-white/10 rounded-full transition-colors text-primary" 
+                    (click)="aumentarQuantidade(item.produto ? item.produto.id : (item.baixocustom ? item.baixocustom.id : 0), item.quantidade, !!item.baixocustom)">
+                    <span class="material-symbols-outlined">add</span>
+                  </button>
+                </div>
+                
+                <div class="text-right">
+                  <p class="text-secondary font-headline-md text-xl font-bold text-red-300">
+                    {{ (item.produto ? item.produto.price : (item.baixocustom?.price || 0)) | currency:'BRL' }}
+                  </p>
+                  <p class="text-[10px] uppercase tracking-widest text-on-surface-variant">Luthier Certified</p>
+                </div>
+              </div>
+            </div>
+          </article>
+        }
+        
+        <!-- Empty State -->
+        @if (carrinhoService.carrinhoItems().length === 0) {
+          <div class="py-24 flex flex-col items-center justify-center text-center space-y-6 glass-card rounded-xl border-dashed border-white/10" id="empty-state">
+            <div class="w-24 h-24 rounded-full bg-surface-variant/30 flex items-center justify-center text-primary-container">
+              <span class="material-symbols-outlined text-6xl text-red-500">shopping_bag</span>
+            </div>
+            <div>
+              <h2 class="font-headline-lg text-on-surface text-2xl font-bold">Your bench is empty</h2>
+              <p class="text-on-surface-variant mt-2 max-w-sm mx-auto text-gray-400">It seems you haven't selected any precision instruments for your collection yet.</p>
+            </div>
+            <button 
+              routerLink="/catalogo"
+              class="px-8 py-3 bg-white/10 hover:bg-white/20 text-on-surface rounded-full transition-all duration-300 font-label-bold flex items-center gap-2">
+              <span class="material-symbols-outlined">explore</span> Browse Gallery
+            </button>
+          </div>
+        }
+      </section>
+  
+      <!-- Right Column: Sticky Summary -->
+      <aside class="lg:col-span-4 lg:sticky lg:top-32" [class.opacity-50]="carrinhoService.carrinhoItems().length === 0" [class.pointer-events-none]="carrinhoService.carrinhoItems().length === 0">
+        <div class="glass-card rounded-xl p-8 space-y-8">
+          <h2 class="font-headline-md text-on-surface pb-4 border-b border-white/5 text-xl font-bold">Order Summary</h2>
+          
+          <div class="space-y-4">
+            <div class="flex justify-between text-body-md">
+              <span class="text-on-surface-variant text-gray-400">Subtotal</span>
+              <span class="text-on-surface">{{ carrinhoService.subtotal() | currency:'BRL' }}</span>
+            </div>
+            <div class="flex justify-between text-body-md">
+              <div class="flex flex-col">
+                <span class="text-on-surface-variant text-gray-400">Shipping</span>
+                <span class="text-[10px] text-primary uppercase tracking-wider font-label-bold text-red-400">Secure Global Shipping</span>
+              </div>
+              <!-- Fixed shipping for demo purposes -->
+              <span class="text-on-surface">{{ (carrinhoService.carrinhoItems().length > 0 ? 120 : 0) | currency:'BRL' }}</span>
+            </div>
+            <div class="flex justify-between text-body-md">
+              <span class="text-on-surface-variant text-gray-400">Taxes (Estimated)</span>
+              <span class="text-on-surface">{{ (carrinhoService.subtotal() * 0.08) | currency:'BRL' }}</span>
+            </div>
+          </div>
+  
+          <!-- Promo Accordion -->
+          <details class="group">
+            <summary class="flex items-center justify-between cursor-pointer list-none text-on-surface-variant hover:text-primary transition-colors font-label-bold text-sm text-gray-400 font-bold">
+              <span>HAVE A PROMO CODE?</span>
+              <span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+            </summary>
+            <div class="pt-4 flex gap-2">
+              <input class="flex-grow bg-white/5 border border-white/10 rounded-lg px-4 py-2 focus:border-primary-container focus:ring-0 transition-all text-on-surface placeholder:text-white/20 bg-transparent text-white" placeholder="CODE2024" type="text"/>
+              <button class="bg-[#423030] hover:bg-[#372625] px-4 py-2 rounded-lg transition-colors font-label-bold text-on-surface text-white">Apply</button>
+            </div>
+          </details>
+  
+          <div class="pt-6 border-t border-white/5 flex justify-between items-end">
+            <div class="flex flex-col">
+              <span class="font-label-bold text-on-surface-variant font-bold text-gray-400">Total</span>
+              <span class="text-[10px] text-[#ff9e9f]">Inclusive of all duties</span>
+            </div>
+            <span class="font-headline-md text-primary text-2xl font-bold text-red-400">{{ (carrinhoService.subtotal() + (carrinhoService.carrinhoItems().length > 0 ? 120 : 0) + (carrinhoService.subtotal() * 0.08)) | currency:'BRL' }}</span>
+          </div>
+  
+          <button routerLink="/checkout" class="w-full bg-[#a60321] hover:bg-[#86262f] text-white py-4 rounded-full font-headline-md font-bold transition-all duration-300 shadow-[0_0_20px_rgba(166,3,33,0.3)] flex items-center justify-center gap-2 group">
+            <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">shopping_cart_checkout</span>
+            Secure Checkout
+          </button>
+  
+          <!-- Trust Badges -->
+          <div class="grid grid-cols-2 gap-4 pt-4 opacity-50">
+            <div class="flex items-center gap-2 text-[10px] font-label-bold text-on-surface-variant uppercase tracking-tighter text-gray-400">
+              <span class="material-symbols-outlined text-sm">lock</span> 256-bit Encrypted
+            </div>
+            <div class="flex items-center gap-2 text-[10px] font-label-bold text-on-surface-variant uppercase tracking-tighter text-gray-400">
+              <span class="material-symbols-outlined text-sm">verified_user</span> Lifetime Warranty
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+</div>

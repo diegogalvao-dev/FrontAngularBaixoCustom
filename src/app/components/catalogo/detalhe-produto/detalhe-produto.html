@@ -1,0 +1,228 @@
+<main class="detalhe-main">
+  <!-- Voltar -->
+  <div class="mb-8">
+    <a routerLink="/catalogo" class="voltar-link">
+      <span class="material-symbols-outlined">arrow_back</span>
+      Voltar para o Catálogo
+    </a>
+  </div>
+
+  @if (produto()) {
+    <!-- Grid do Produto -->
+    <div class="detalhe-grid">
+      <!-- Seção da Galeria -->
+      <div class="galeria-secao">
+        <div class="imagem-principal-card" style="position: relative;">
+          @if (imagemSelecionada()) {
+            <img class="imagem-principal" [alt]="produto()?.name" [src]="imagemSelecionada()"/>
+          } @else {
+            <div class="imagem-placeholder">Nenhuma Imagem</div>
+          }
+          <button 
+            class="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center transition-all duration-300 z-10 hover:text-[#ffb3b3] hover:scale-110"
+            [class.text-white/75]="!wishlistService.isFavorito(produto()!.id)"
+            [class.favorito-ativo]="wishlistService.isFavorito(produto()!.id)"
+            (click)="toggleFavorito()"
+            title="Lista de Desejos"
+          >
+            <span 
+              class="material-symbols-outlined text-[22px]" 
+              [style.fontVariationSettings]="wishlistService.isFavorito(produto()!.id) ? '\'FILL\' 1' : '\'FILL\' 0'"
+            >
+              favorite
+            </span>
+          </button>
+          <div class="imagem-sombra"></div>
+        </div>
+        
+        <!-- Miniaturas -->
+        @if (produto()?.nomeImagens && produto()!.nomeImagens!.length > 0) {
+          <div class="miniaturas-grid">
+            <!-- Miniatura da Imagem Principal -->
+            @if (produto()?.imagemPrincipal) {
+              <div class="miniatura-card" (click)="selecionarImagem(produto()!.imagemPrincipal!)">
+                <img class="miniatura-img" [src]="arquivoService.getUrlDownload(produto()!.imagemPrincipal!)"/>
+              </div>
+            }
+            <!-- Outras Miniaturas -->
+            @for (img of produto()?.nomeImagens; track img) {
+              <div class="miniatura-card" (click)="selecionarImagem(img)">
+                <img class="miniatura-img" [src]="arquivoService.getUrlDownload(img)"/>
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Seção de Informações -->
+      <div class="info-secao">
+        <div class="info-sticky">
+          <header>
+            <div class="tags-row">
+              <span class="categoria-tag">{{ produto()?.type === 'BAIXO' ? 'ContraBaixo' : 'Acessório' }}</span>
+              <span class="estoque-tag" [class.sem-estoque]="produto()!.quantidadeEstoque! <= 0">
+                {{ produto()!.quantidadeEstoque! > 0 ? 'Em Estoque (' + produto()!.quantidadeEstoque + ')' : 'Indisponível' }}
+              </span>
+            </div>
+            <h1 class="produto-titulo">{{ produto()?.name }}</h1>
+            <p class="produto-preco">R$ {{ produto()?.price | number:'1.2-2' }}</p>
+          </header>
+
+          <div class="instrumento-desc">
+            <h3 class="secao-subtitulo">O Instrumento</h3>
+            <p class="desc-texto">
+              Produto premium luthierizado e inspecionado para assegurar a melhor qualidade tonal, tocabilidade impecável e precisão no acabamento. Ideal para músicos exigentes.
+            </p>
+          </div>
+
+          <div class="cards-rapidos">
+            <div class="card-rapido">
+              <p class="card-rapido-titulo">Fornecedor</p>
+              <p class="card-rapido-valor">{{ produto()?.fornecedor || 'DeepTone' }}</p>
+            </div>
+            <div class="card-rapido">
+              <p class="card-rapido-titulo">Garantia</p>
+              <p class="card-rapido-valor">Vitalícia</p>
+            </div>
+          </div>
+
+          <div class="botoes-acao">
+            <button class="btn-comprar" (click)="adicionarAoCarrinho(true)">
+              Comprar agora
+            </button>
+            <button class="btn-customizar" (click)="adicionarAoCarrinho(false)">
+              <span class="material-symbols-outlined" id="iconShopping">shopping_bag</span>
+              Adicionar ao Carrinho
+            </button>
+          </div>
+
+          <!-- Popup / Toast de Adicionado ao Carrinho -->
+          @if (exibirPopup()) {
+            <div class="carrinho-popup-overlay">
+              <div class="carrinho-popup-card">
+                <div class="popup-header">
+                  <span class="material-symbols-outlined popup-check-icon">check_circle</span>
+                  <div class="popup-title-group">
+                    <h4 class="popup-title">Adicionado ao Carrinho!</h4>
+                    <p class="popup-subtitle">{{ produto()?.name }} foi reservado na sua bancada.</p>
+                  </div>
+                </div>
+                <div class="popup-buttons">
+                  <button class="popup-btn-continuar" (click)="exibirPopup.set(false)">Continuar Comprando</button>
+                  <button class="popup-btn-carrinho" routerLink="/carrinho">Ir para o Carrinho</button>
+                </div>
+              </div>
+            </div>
+          }
+
+          <div class="beneficios-lista">
+            <div class="beneficio-item">
+              <span class="material-symbols-outlined">local_shipping</span>
+              Envio Seguro para todo o Brasil
+            </div>
+            <div class="beneficio-item">
+              <span class="material-symbols-outlined">verified_user</span>
+              Garantia de Autenticidade
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Especificações Técnicas -->
+    <section class="especificacoes-secao">
+      <h2 class="secao-titulo">Especificações Técnicas</h2>
+      <div class="especificacoes-card">
+        <table class="especificacoes-tabela">
+          <thead>
+            <tr>
+              <th>Especificação</th>
+              <th>Detalhe do Componente</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="tabela-linha">
+              <td>Fornecedor</td>
+              <td>{{ produto()?.fornecedor || 'DeepTone Luthier' }}</td>
+            </tr>
+            <!-- Se for Baixo -->
+            @if (produto()?.type === 'BAIXO') {
+              <tr class="tabela-linha">
+                <td>Modelo Base</td>
+                <td>{{ produto()?.baixoModeloBase || 'Não informado' }}</td>
+              </tr>
+              <tr class="tabela-linha">
+                <td>Número de Cordas</td>
+                <td>{{ produto()?.numeroCordas || 'Não informado' }}</td>
+              </tr>
+              <tr class="tabela-linha">
+                <td>Cor do Acabamento</td>
+                <td>{{ produto()?.baixoCor || 'Não informado' }}</td>
+              </tr>
+            }
+            <!-- Se for Acessório -->
+            @if (produto()?.type === 'ACESSORIO') {
+              <tr class="tabela-linha">
+                <td>Tipo de Acessório</td>
+                <td>{{ produto()?.acessorioTipo || 'Não informado' }}</td>
+              </tr>
+              <tr class="tabela-linha">
+                <td>Material</td>
+                <td>{{ produto()?.material || 'Não informado' }}</td>
+              </tr>
+              <tr class="tabela-linha">
+                <td>Dimensões / Tamanho</td>
+                <td>{{ produto()?.tamanho ? produto()?.tamanho + ' cm' : 'Não informado' }}</td>
+              </tr>
+            }
+            <tr class="tabela-linha">
+              <td>Categoria Principal</td>
+              <td>{{ produto()?.type }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Produtos Relacionados -->
+    <section class="relacionados-secao">
+      <div class="relacionados-header">
+        <div>
+          <h2 class="secao-titulo">Produtos Relacionados</h2>
+          <p class="relacionados-desc">Outras obras-primas da bancada do Luthier.</p>
+        </div>
+        <a routerLink="/catalogo" class="ver-catalogo-link">
+          Ver Catálogo Completo
+          <span class="material-symbols-outlined">arrow_forward</span>
+        </a>
+      </div>
+
+      <div class="relacionados-grid">
+        @for (item of produtosRelacionados(); track item.id) {
+          <div [routerLink]="['/catalogo', item.id]" class="relacionado-card">
+            <div class="relacionado-img-wrapper">
+              @if (item.imagemPrincipal) {
+                <img class="relacionado-img" [alt]="item.name" [src]="arquivoService.getUrlDownload(item.imagemPrincipal)"/>
+              } @else {
+                <div class="relacionado-placeholder">Nenhuma Imagem</div>
+              }
+            </div>
+            <div class="relacionado-info">
+              <p class="relacionado-tag">Luthier Select</p>
+              <h4 class="relacionado-titulo">{{ item.name }}</h4>
+              <div class="relacionado-footer">
+                <span class="relacionado-preco">R$ {{ item.price | number:'1.2-2' }}</span>
+                <span class="material-symbols-outlined seta-link">arrow_outward</span>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+  } @else {
+    <!-- Skeleton/Carregando -->
+    <div class="text-center py-20">
+      <p class="text-gray-400">Carregando detalhes do produto...</p>
+    </div>
+  }
+</main>

@@ -86,11 +86,15 @@ export class BaixocustomService {
       tap(() => this.notifyUpdate())
     );
   }
-  //  Deletar
+  // Deletar
   delete(id: number): Observable<void> {
     return this.httpClient.delete<void>(`${this.api}/${id}`).pipe(
       tap(() => this.notifyUpdate())
     );
   }
 
+  // Buscar meus projetos
+  getMyProjetos(): Observable<Baixocustom[]> {
+    return this.httpClient.get<Baixocustom[]>(`${this.api}/me`);
+  }
 }

@@ -1,66 +1,83 @@
 <!-- Perfil Page -->
-<div class="min-h-screen text-on-surface">
-
-  <!-- Nav -->
-  <nav
-    class="fixed top-0 w-full z-50 border-b border-white/10 bg-black/80 backdrop-blur-xl shadow-[0_4px_30px_rgba(38,1,8,0.4)] flex justify-between items-center px-8 h-20 max-w-full mx-auto">
-    <div class="text-2xl font-black tracking-tighter text-white uppercase italic">DeepTone Luthier</div>
-    <div class="hidden md:flex gap-8 font-sans uppercase tracking-widest font-bold text-xs items-center">
-      <a class="text-primary-container border-b-2 border-primary-container pb-1 transition-all duration-300"
-        href="/">Home</a>
-      <a class="text-gray-400 hover:text-white transition-colors transition-all duration-300" href="/catalogo">Shop</a>
-      <a class="text-gray-400 hover:text-white transition-colors transition-all duration-300"
-        href="/admin/baixo-custom">Custom Shop</a>
-      <a class="text-gray-400 hover:text-white transition-colors transition-all duration-300" href="#">Services</a>
-      <a class="text-gray-400 hover:text-white transition-colors transition-all duration-300" href="#">About</a>
-    </div>
-    <div class="flex items-center gap-6">
-      <div class="relative hidden lg:block">
-        <input
-          class="bg-white/5 border border-white/10 rounded-full px-4 py-1.5 text-xs focus:outline-none focus:border-primary-container transition-all w-48"
-          placeholder="Search precision..." type="text" />
-        <span
-          class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 scale-75">search</span>
-      </div>
-      <div class="flex gap-4 items-center">
-        <button class="text-gray-400 hover:text-white transition-all scale-95 active:opacity-80">
-          <span class="material-symbols-outlined">shopping_cart</span>
-        </button>
-        @if (authService.logado()) {
-          <!-- Profile avatar when logged in -->
-          <button
-            routerLink="/perfil"
-            [title]="authService.nomeUsuario() ?? 'Meu Perfil'"
-            class="relative w-9 h-9 rounded-full bg-primary-container flex items-center justify-center hover:ring-2 hover:ring-primary-container hover:ring-offset-2 hover:ring-offset-black transition-all duration-300 overflow-hidden group">
-            <span class="material-symbols-outlined text-white text-[1.2rem]">account_circle</span>
-          </button>
-        } @else {
-          <!-- Login button when not logged in -->
-          <button
-            routerLink="/login"
-            class="font-sans uppercase tracking-widest font-bold text-xs bg-primary-container text-white px-4 py-2 rounded-sm hover:bg-[#A60321] transition-all">
-            Login
-          </button>
-        }
-
-      </div>
-    </div>
-  </nav>
+<div class="min-h-screen flex flex-col font-sans antialiased bg-surface-dim carbon-texture text-on-background">
 
   <main class="pt-28 pb-20 px-4 md:px-16 max-w-[1280px] mx-auto">
 
+    <!-- Back Button -->
+    <div class="mb-6 flex justify-start">
+      <button (click)="goBack()" class="flex items-center gap-2 text-on-surface-variant hover:text-white transition-colors font-label-bold uppercase tracking-widest text-xs px-4 py-2 bg-surface-container-low rounded-lg border border-outline-variant/30 hover:border-outline-variant/60">
+        <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+        Voltar
+      </button>
+    </div>
+
     <!-- Hero / Profile Card -->
     <section class="mb-12">
-      <div class="glass-panel p-8 rounded-xl flex flex-col md:flex-row items-center gap-8 relative overflow-hidden">
+      <div class="glass-card p-8 rounded-xl flex flex-col md:flex-row items-center gap-8 relative overflow-hidden">
         <!-- Glow accent -->
         <div class="absolute -right-20 -top-20 w-64 h-64 bg-primary-container/20 blur-[100px] rounded-full pointer-events-none"></div>
 
-        <!-- Avatar -->
-        <div class="relative flex-shrink-0">
-          <div class="w-28 h-28 rounded-full border-2 border-primary-container p-1 bg-surface-container-high flex items-center justify-center">
-            <span class="material-symbols-outlined text-primary-container" style="font-size: 64px; font-variation-settings: 'FILL' 1, 'wght' 300;">account_circle</span>
-          </div>
+        <!-- Avatar com Upload -->
+        <div class="relative flex-shrink-0 group">
+          <!-- Input de arquivo oculto -->
+          <input
+            type="file"
+            id="foto-perfil-input"
+            accept="image/*"
+            class="hidden"
+            (change)="onFotoSelected($event)" />
+
+          <!-- Avatar clicável -->
+          <label
+            for="foto-perfil-input"
+            class="cursor-pointer block relative w-28 h-28 rounded-full border-2 border-primary-container p-0.5 bg-surface-container-high overflow-hidden"
+            title="Clique para trocar a foto">
+            @if (getFotoUrl()) {
+              <img
+                [src]="getFotoUrl()"
+                alt="Foto de perfil"
+                class="w-full h-full rounded-full object-cover" />
+            } @else {
+              <div class="w-full h-full rounded-full flex items-center justify-center">
+                <span class="material-symbols-outlined text-primary-container" style="font-size: 64px; font-variation-settings: 'FILL' 1, 'wght' 300;">account_circle</span>
+              </div>
+            }
+
+            <!-- Overlay de hover -->
+            <div class="absolute inset-0 rounded-full bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+              <span class="material-symbols-outlined text-white text-3xl">photo_camera</span>
+            </div>
+          </label>
+
+          <!-- Indicador de upload ativo -->
+          @if (uploadingFoto()) {
+            <div class="absolute inset-0 rounded-full bg-black/70 flex items-center justify-center">
+              <div class="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          }
         </div>
+
+        <!-- Barra de confirmação da foto (aparece ao selecionar) -->
+        @if (fotoFile() && !uploadingFoto()) {
+          <div class="absolute bottom-0 left-0 right-0 bg-surface-container-low/90 backdrop-blur-sm rounded-b-xl flex items-center justify-between px-6 py-3 border-t border-white/5">
+            <span class="text-on-surface-variant text-sm font-label-bold">Nova foto selecionada</span>
+            <div class="flex gap-3">
+              <button
+                type="button"
+                (click)="cancelarFoto()"
+                class="px-4 py-2 rounded-lg border border-outline-variant/50 font-label-bold text-xs text-on-surface-variant hover:bg-white/5 transition-all">
+                Cancelar
+              </button>
+              <button
+                type="button"
+                (click)="uploadFoto()"
+                class="px-4 py-2 rounded-lg bg-primary-container text-white font-label-bold text-xs hover:bg-[#92001b] transition-all shadow-md shadow-primary-container/20">
+                Salvar Foto
+              </button>
+            </div>
+          </div>
+        }
+
 
         <!-- Info -->
         <div class="flex flex-col items-center md:items-start gap-2">
@@ -92,7 +109,7 @@
 
       <!-- Sidebar -->
       <aside class="lg:col-span-3">
-        <nav class="glass-panel p-4 rounded-xl sticky top-28">
+        <nav class="glass-card p-4 rounded-xl sticky top-28">
           <div class="flex flex-col gap-1">
             <button
               (click)="scrollTo('personal')"
@@ -106,20 +123,26 @@
             <button
               (click)="scrollTo('orders')"
               [class.text-primary]="activeSection === 'orders'"
+              [class.bg-white]="activeSection === 'orders'"
+              [class.bg-opacity-5]="activeSection === 'orders'"
               class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-white/5 hover:text-primary rounded-lg font-label-bold transition-all w-full text-left">
               <span class="material-symbols-outlined">shopping_bag</span>
               Meus Pedidos
             </button>
             <button
-              (click)="scrollTo('tone')"
-              [class.text-primary]="activeSection === 'tone'"
+              (click)="scrollTo('projects')"
+              [class.text-primary]="activeSection === 'projects'"
+              [class.bg-white]="activeSection === 'projects'"
+              [class.bg-opacity-5]="activeSection === 'projects'"
               class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-white/5 hover:text-primary rounded-lg font-label-bold transition-all w-full text-left">
-              <span class="material-symbols-outlined">equalizer</span>
-              Preferências
+              <span class="material-symbols-outlined">handyman</span>
+              Projetos Salvos
             </button>
             <button
               (click)="scrollTo('security')"
               [class.text-primary]="activeSection === 'security'"
+              [class.bg-white]="activeSection === 'security'"
+              [class.bg-opacity-5]="activeSection === 'security'"
               class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-white/5 hover:text-primary rounded-lg font-label-bold transition-all w-full text-left">
               <span class="material-symbols-outlined">security</span>
               Segurança
@@ -137,30 +160,51 @@
       </aside>
 
       <!-- Content -->
-      <div class="lg:col-span-9 space-y-12">
+      <div class="lg:col-span-9">
 
+        @if (activeSection === 'personal') {
         <!-- Dados Pessoais -->
-        <section class="glass-panel p-8 rounded-xl" id="personal">
+        <section class="glass-card p-8 rounded-xl animate-fade-in" id="personal">
           <h2 class="font-headline-md text-headline-md mb-8 flex items-center gap-3">
             <span class="w-1 h-8 bg-primary-container block rounded-full"></span>
             Dados Pessoais
           </h2>
-          <form class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          @if (perfilSalvo()) {
+            <div class="mb-6 flex items-center gap-3 px-4 py-3 bg-green-500/10 border border-green-500/30 rounded-lg text-green-400 text-sm font-label-bold">
+              <span class="material-symbols-outlined text-[18px]">check_circle</span>
+              Dados atualizados com sucesso!
+            </div>
+          }
+
+          <form class="grid grid-cols-1 md:grid-cols-2 gap-6" (ngSubmit)="salvarDadosPessoais()">
             <div class="flex flex-col gap-2">
               <label class="font-label-bold text-on-surface-variant uppercase text-xs tracking-widest">Nome Completo</label>
               <input
                 class="bg-surface-container-low border border-outline-variant/50 rounded-lg p-4 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
                 type="text"
-                [value]="authService.nomeUsuario() ?? ''"
-                placeholder="Seu nome" />
+                [(ngModel)]="editNome"
+                name="nome"
+                placeholder="Seu nome completo" />
             </div>
             <div class="flex flex-col gap-2">
               <label class="font-label-bold text-on-surface-variant uppercase text-xs tracking-widest">Usuário</label>
               <input
                 class="bg-surface-container-low border border-outline-variant/50 rounded-lg p-4 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
                 type="text"
-                [value]="authService.username() ?? ''"
-                placeholder="Username" />
+                [(ngModel)]="editUsername"
+                name="username"
+                placeholder="Seu nome de usuário" />
+              <span class="text-[10px] text-on-surface-variant/60 uppercase tracking-widest mt-1">Aviso: Se alterar, precisará logar novamente.</span>
+            </div>
+            <div class="flex flex-col gap-2">
+              <label class="font-label-bold text-on-surface-variant uppercase text-xs tracking-widest">Telefone</label>
+              <input
+                class="bg-surface-container-low border border-outline-variant/50 rounded-lg p-4 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                type="tel"
+                [(ngModel)]="editTelefone"
+                name="telefone"
+                placeholder="+55 (11) 00000-0000" />
             </div>
             <div class="flex flex-col gap-2">
               <label class="font-label-bold text-on-surface-variant uppercase text-xs tracking-widest">Perfil</label>
@@ -170,180 +214,229 @@
                 [value]="authService.perfil() ?? ''"
                 readonly />
             </div>
-            <div class="flex flex-col gap-2">
-              <label class="font-label-bold text-on-surface-variant uppercase text-xs tracking-widest">Telefone</label>
-              <input
-                class="bg-surface-container-low border border-outline-variant/50 rounded-lg p-4 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
-                type="tel"
-                placeholder="+55 (11) 00000-0000" />
-            </div>
             <div class="md:col-span-2 pt-2">
               <button
-                type="button"
-                class="bg-primary-container hover:bg-[#92001b] text-white px-8 py-4 rounded-lg font-label-bold uppercase tracking-widest text-xs transition-all active:scale-95 shadow-lg shadow-primary-container/20">
-                Atualizar Informações
+                type="submit"
+                [disabled]="salvandoPerfil()"
+                class="bg-primary-container hover:bg-[#92001b] text-white px-8 py-4 rounded-lg font-label-bold uppercase tracking-widest text-xs transition-all active:scale-95 shadow-lg shadow-primary-container/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+                @if (salvandoPerfil()) {
+                  <span class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                  Salvando...
+                } @else {
+                  Atualizar Informações
+                }
               </button>
             </div>
           </form>
         </section>
+        }
 
+
+        @if (activeSection === 'orders') {
         <!-- Pedidos -->
-        <section id="orders">
+        <section class="animate-fade-in" id="orders">
           <div class="flex justify-between items-end mb-8">
             <h2 class="font-headline-md text-headline-md flex items-center gap-3">
               <span class="w-1 h-8 bg-primary-container block rounded-full"></span>
-              Pedidos Recentes
+              Histórico de Compras
             </h2>
-            <a class="text-primary font-label-bold text-sm hover:underline" href="#">Ver Histórico Completo</a>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Order Card 1 -->
-            <div class="glass-panel p-6 rounded-xl group hover:border-primary/40 transition-all">
-              <div class="flex gap-5">
-                <div class="w-20 h-20 bg-surface-container-high rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center">
-                  <span class="material-symbols-outlined text-outline" style="font-size:36px">music_note</span>
-                </div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex justify-between items-start gap-2">
-                    <h3 class="font-headline-md text-lg text-on-surface truncate">Venom Jazz IV</h3>
-                    <span class="px-2 py-1 bg-secondary-container/50 text-secondary text-[10px] font-bold uppercase tracking-widest rounded flex-shrink-0">Em Produção</span>
+
+          @if (loadingPedidos()) {
+            <div class="flex justify-center p-8">
+              <div class="w-8 h-8 border-4 border-primary-container border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          } @else if (pedidos().length === 0) {
+            <div class="glass-card p-12 text-center rounded-xl">
+              <span class="material-symbols-outlined text-outline/30 text-6xl mb-4">shopping_bag</span>
+              <p class="text-on-surface-variant text-lg">Você ainda não possui nenhum pedido.</p>
+              <a routerLink="/catalogo" class="text-primary hover:underline mt-2 inline-block font-label-bold">Ir para o catálogo</a>
+            </div>
+          } @else {
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              @for (pedido of pedidos(); track pedido.id) {
+                <div class="glass-card p-6 rounded-xl group hover:border-primary/40 transition-all flex flex-col justify-between h-full">
+                  <div>
+                    <div class="flex gap-5 mb-4">
+                      <div class="w-20 h-20 bg-surface-container-high rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-outline" style="font-size:36px">inventory_2</span>
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <div class="flex justify-between items-start gap-2">
+                          <h3 class="font-headline-md text-lg text-on-surface truncate">
+                            Pedido #{{ pedido.id }}
+                          </h3>
+                          <span class="px-2 py-1 bg-secondary-container/50 text-secondary text-[10px] font-bold uppercase tracking-widest rounded flex-shrink-0">
+                            Pendente
+                          </span>
+                        </div>
+                        <p class="text-on-surface-variant text-sm mt-1">Realizado em {{ pedido.data | date:'dd/MM/yyyy' }}</p>
+                        <p class="text-on-surface-variant text-xs mt-1">{{ pedido.itens.length }} item(ns)</p>
+                      </div>
+                    </div>
                   </div>
-                  <p class="text-on-surface-variant text-sm mt-1">Pedido #DTL-88219</p>
-                  <div class="mt-3 flex items-center justify-between">
-                    <span class="text-primary font-label-bold">R$ 18.500,00</span>
-                    <button class="text-on-surface-variant hover:text-primary transition-colors">
-                      <span class="material-symbols-outlined">arrow_forward</span>
+                  
+                  <div class="mt-3 pt-3 border-t border-outline-variant/20 flex items-center justify-between">
+                    <span class="text-primary font-label-bold text-lg">{{ pedido.valorTotal | currency:'BRL' }}</span>
+                    <button class="text-on-surface-variant hover:text-primary transition-colors text-sm font-label-bold uppercase tracking-widest">
+                      Detalhes <span class="material-symbols-outlined align-middle ml-1 text-[18px]">arrow_forward</span>
                     </button>
                   </div>
                 </div>
-              </div>
+              }
             </div>
-            <!-- Order Card 2 -->
-            <div class="glass-panel p-6 rounded-xl group hover:border-primary/40 transition-all">
-              <div class="flex gap-5">
-                <div class="w-20 h-20 bg-surface-container-high rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center">
-                  <span class="material-symbols-outlined text-outline" style="font-size:36px">library_music</span>
-                </div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex justify-between items-start gap-2">
-                    <h3 class="font-headline-md text-lg text-on-surface truncate">Premium Accessories Kit</h3>
-                    <span class="px-2 py-1 bg-surface-variant/50 text-on-surface-variant text-[10px] font-bold uppercase tracking-widest rounded flex-shrink-0">Entregue</span>
+          }
+        </section>
+        }
+
+        @if (activeSection === 'projects') {
+        <!-- Projetos Salvos -->
+        <section class="animate-fade-in" id="projects">
+          <div class="flex justify-between items-end mb-8">
+            <h2 class="font-headline-md text-headline-md flex items-center gap-3">
+              <span class="w-1 h-8 bg-primary-container block rounded-full"></span>
+              Projetos Salvos (Custom Shop)
+            </h2>
+          </div>
+
+          @if (loadingProjetos()) {
+            <div class="flex justify-center p-8">
+              <div class="w-8 h-8 border-4 border-primary-container border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          } @else if (projetos().length === 0) {
+            <div class="glass-card p-12 text-center rounded-xl">
+              <span class="material-symbols-outlined text-outline/30 text-6xl mb-4">handyman</span>
+              <p class="text-on-surface-variant text-lg">Você ainda não salvou nenhum projeto.</p>
+              <a routerLink="/admin/baixo-custom" class="text-primary hover:underline mt-2 inline-block font-label-bold">Criar novo baixo</a>
+            </div>
+          } @else {
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              @for (projeto of projetos(); track projeto.id) {
+                <div class="glass-card p-6 rounded-xl group hover:border-primary/40 transition-all flex flex-col justify-between h-full">
+                  <div>
+                    <div class="flex gap-5 mb-4">
+                      <div class="w-20 h-20 bg-surface-container-high rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-outline" style="font-size:36px">guitar</span>
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <div class="flex justify-between items-start gap-2">
+                          <h3 class="font-headline-md text-lg text-on-surface truncate">
+                            Projeto #{{ projeto.id }}
+                          </h3>
+                          <span class="px-2 py-1 bg-secondary-container/50 text-secondary text-[10px] font-bold uppercase tracking-widest rounded flex-shrink-0">
+                            {{ projeto.baixoStatus }}
+                          </span>
+                        </div>
+                        <p class="text-on-surface-variant text-xs mt-1 truncate" [title]="projeto.description">{{ projeto.description }}</p>
+                      </div>
+                    </div>
                   </div>
-                  <p class="text-on-surface-variant text-sm mt-1">Pedido #DTL-88104</p>
-                  <div class="mt-3 flex items-center justify-between">
-                    <span class="text-primary font-label-bold">R$ 1.250,00</span>
-                    <button class="text-on-surface-variant hover:text-primary transition-colors">
-                      <span class="material-symbols-outlined">arrow_forward</span>
+                  
+                  <div class="mt-3 pt-3 border-t border-outline-variant/20 flex items-center justify-between">
+                    <span class="text-primary font-label-bold text-lg">{{ projeto.price | currency:'BRL' }}</span>
+                    <button class="text-primary hover:text-white transition-colors text-sm font-label-bold uppercase tracking-widest flex items-center gap-1"
+                            (click)="adicionarAoCarrinho(projeto)">
+                      <span class="material-symbols-outlined align-middle text-[18px]">add_shopping_cart</span> Encomendar
                     </button>
                   </div>
                 </div>
-              </div>
+              }
             </div>
-          </div>
+          }
         </section>
+        }
 
-        <!-- Preferências de Tom -->
-        <section class="grid grid-cols-1 md:grid-cols-2 gap-8" id="tone">
-          <div class="glass-panel p-8 rounded-xl">
-            <h2 class="font-label-bold text-on-surface uppercase tracking-[0.2em] mb-6 flex items-center gap-3">
-              <span class="w-1 h-6 bg-primary-container block rounded-full"></span>
-              Madeiras Favoritas
-            </h2>
-            <div class="flex flex-wrap gap-3">
-              <span class="px-4 py-2 bg-surface-container-high border border-outline-variant/30 rounded-full text-sm font-label-bold flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-primary-container"></span> Rosewood
-              </span>
-              <span class="px-4 py-2 bg-surface-container-high border border-outline-variant/30 rounded-full text-sm font-label-bold flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-primary-container"></span> Ebony
-              </span>
-              <span class="px-4 py-2 bg-surface-container-high border border-outline-variant/30 rounded-full text-sm font-label-bold flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-primary-container"></span> Roasted Maple
-              </span>
-              <button class="px-4 py-2 border border-dashed border-outline-variant/50 rounded-full text-sm font-label-bold hover:border-primary transition-all text-outline">+</button>
-            </div>
-          </div>
-          <div class="glass-panel p-8 rounded-xl">
-            <h2 class="font-label-bold text-on-surface uppercase tracking-[0.2em] mb-6 flex items-center gap-3">
-              <span class="w-1 h-6 bg-primary-container block rounded-full"></span>
-              Configuração de Captadores
-            </h2>
-            <div class="space-y-4">
-              <div class="flex justify-between items-center p-3 bg-surface-container-low rounded-lg border border-outline-variant/10">
-                <span class="font-label-bold text-sm">PJ Configuration</span>
-                <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1">check_circle</span>
-              </div>
-              <div class="flex justify-between items-center p-3 bg-surface-container-low rounded-lg border border-outline-variant/10">
-                <span class="font-label-bold text-sm">Active Pre-amp (18V)</span>
-                <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1">check_circle</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
+        @if (activeSection === 'security') {
         <!-- Segurança -->
-        <section class="glass-panel p-8 rounded-xl" id="security">
+        <section class="glass-card p-8 rounded-xl animate-fade-in" id="security">
           <h2 class="font-headline-md text-headline-md mb-8 flex items-center gap-3">
             <span class="w-1 h-8 bg-primary-container block rounded-full"></span>
             Segurança
           </h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="flex flex-col gap-2">
-              <label class="font-label-bold text-on-surface-variant uppercase text-xs tracking-widest">Senha Atual</label>
+
+          @if (senhaSalva()) {
+            <div class="mb-6 flex items-center gap-3 px-4 py-3 bg-green-500/10 border border-green-500/30 rounded-lg text-green-400 text-sm font-label-bold">
+              <span class="material-symbols-outlined text-[18px]">check_circle</span>
+              Senha alterada com sucesso!
+            </div>
+          }
+          @if (erroSenha()) {
+            <div class="mb-6 flex items-center gap-3 px-4 py-3 bg-error/10 border border-error/30 rounded-lg text-error text-sm font-label-bold">
+              <span class="material-symbols-outlined text-[18px]">error</span>
+              {{ erroSenha() }}
+            </div>
+          }
+
+          <form class="grid grid-cols-1 md:grid-cols-2 gap-6" (ngSubmit)="alterarSenha()">
+            <div class="flex flex-col gap-2 md:col-span-2">
+              <label class="font-label-bold text-on-surface-variant uppercase text-xs tracking-widest">Senha Atual (Confirmação)</label>
               <input
                 class="bg-surface-container-low border border-outline-variant/50 rounded-lg p-4 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
-                type="password" placeholder="••••••••" />
+                type="password"
+                [(ngModel)]="senhaAtual"
+                name="senhaAtual"
+                placeholder="Digite sua senha atual para confirmar a troca" />
             </div>
             <div class="flex flex-col gap-2">
               <label class="font-label-bold text-on-surface-variant uppercase text-xs tracking-widest">Nova Senha</label>
               <input
                 class="bg-surface-container-low border border-outline-variant/50 rounded-lg p-4 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
-                type="password" placeholder="••••••••" />
+                type="password"
+                [(ngModel)]="novaSenha"
+                name="novaSenha"
+                placeholder="••••••••" />
+            </div>
+            <div class="flex flex-col gap-2">
+              <label class="font-label-bold text-on-surface-variant uppercase text-xs tracking-widest">Confirmar Nova Senha</label>
+              <input
+                class="bg-surface-container-low border border-outline-variant/50 rounded-lg p-4 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                type="password"
+                [(ngModel)]="confirmarSenha"
+                name="confirmarSenha"
+                placeholder="••••••••" />
             </div>
             <div class="md:col-span-2 pt-2">
               <button
-                type="button"
-                class="bg-surface-container-high border border-outline-variant/50 hover:bg-surface-variant px-8 py-4 rounded-lg font-label-bold uppercase tracking-widest text-xs transition-all active:scale-95">
-                Alterar Senha
+                type="submit"
+                [disabled]="salvandoSenha()"
+                class="bg-surface-container-high border border-outline-variant/50 hover:bg-surface-variant px-8 py-4 rounded-lg font-label-bold uppercase tracking-widest text-xs transition-all active:scale-95 flex items-center gap-2">
+                @if (salvandoSenha()) {
+                  <span class="w-4 h-4 border-2 border-primary-container border-t-transparent rounded-full animate-spin"></span>
+                  Validando...
+                } @else {
+                  Alterar Senha
+                }
               </button>
             </div>
-          </div>
+          </form>
         </section>
-
-      </div>
+        }      </div>
     </div>
+
+<!-- Modal de Sucesso - Alteração de Username -->
+@if (showLogoutModal()) {
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-md animate-fade-in">
+  <div class="glass-card max-w-md w-full p-8 rounded-2xl border border-primary/20 shadow-[0_0_40px_-10px_rgba(var(--primary-rgb),0.3)] flex flex-col items-center text-center animate-slide-up">
+    <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-6 text-primary border border-primary/20">
+      <span class="material-symbols-outlined text-[40px]">security_update_good</span>
+    </div>
+    
+    <h3 class="font-headline-sm text-on-surface mb-3">Usuário Atualizado!</h3>
+    
+    <p class="text-on-surface-variant font-body-md mb-8">
+      Seu nome de usuário foi alterado com sucesso. Por motivos de segurança, sua sessão expirou e você precisa fazer login novamente com a nova credencial.
+    </p>
+    
+    <button
+      (click)="confirmarLogout()"
+      class="w-full bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container px-8 py-4 rounded-xl font-label-bold uppercase tracking-widest text-sm transition-all active:scale-95 shadow-lg shadow-primary/20">
+      Fazer Login
+    </button>
+  </div>
+</div>
+}
   </main>
 
-  <!-- Footer -->
-  <footer class="bg-black/95 w-full border-t border-white/5 py-12">
-    <div class="flex flex-col md:flex-row justify-between items-center px-12 gap-8">
-      <div class="flex flex-col items-center md:items-start">
-        <div class="text-lg font-bold text-white mb-2">DeepTone Luthier Studio</div>
-        <div class="font-sans text-sm tracking-tight text-gray-500">Crafted for Low-End Precision.</div>
-      </div>
-      <div class="flex flex-wrap justify-center gap-8">
-        <a class="text-gray-500 hover:text-primary-container transition-colors font-sans text-sm tracking-tight"
-          href="#">Privacy</a>
-        <a class="text-gray-500 hover:text-primary-container transition-colors font-sans text-sm tracking-tight"
-          href="#">Terms</a>
-        <a class="text-gray-500 hover:text-primary-container transition-colors font-sans text-sm tracking-tight"
-          href="#">Shipping</a>
-        <a class="text-gray-500 hover:text-primary-container transition-colors font-sans text-sm tracking-tight"
-          href="#">Returns</a>
-        <a class="text-gray-500 hover:text-primary-container transition-colors font-sans text-sm tracking-tight"
-          href="#">Newsletter</a>
-      </div>
-      <div class="flex gap-6">
-        <a class="text-gray-500 hover:text-white transition-colors" href="#"><span
-            class="material-symbols-outlined">share</span></a>
-        <a class="text-gray-500 hover:text-white transition-colors" href="#"><span
-            class="material-symbols-outlined">alternate_email</span></a>
-        <a class="text-gray-500 hover:text-white transition-colors" href="#"><span
-            class="material-symbols-outlined">room</span></a>
-      </div>
-    </div>
-    <div class="text-center mt-12 font-sans text-xs tracking-tight text-gray-700">
-      © 2024 DeepTone Luthier Studio. Crafted for Low-End Precision.
-    </div>
-  </footer>
+
 
 </div>

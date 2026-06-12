@@ -9,4 +9,6 @@ export interface Usuario {
   username: string;
   email?: string;
   perfil: PerfilUsuario;
+  fotoPerfil?: string | null;
+  telefone?: string | null;
 }

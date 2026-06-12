@@ -33,6 +33,8 @@ export class AuthService {
   readonly nomeUsuario = computed(() => this.stateSignal().usuario?.nome ?? null);
   readonly username = computed(() => this.stateSignal().usuario?.username ?? null);
   readonly perfil = computed(() => this.stateSignal().usuario?.perfil.nome ?? null);
+  readonly fotoPerfil = computed(() => this.stateSignal().usuario?.fotoPerfil ?? null);
+  readonly telefone = computed(() => this.stateSignal().usuario?.telefone ?? null);
   readonly token = computed(() => this.stateSignal().token);
   readonly tipo = computed(() => this.stateSignal().tipo);
 
@@ -62,6 +64,10 @@ export class AuthService {
       senha: senha.trim(),
     };
     return this.httpClient.post<Usuario>('http://localhost:8080/auth/register', payload);
+  }
+
+  esqueciSenha(username: string): Observable<void> {
+    return this.httpClient.post<void>('http://localhost:8080/auth/esqueci-senha', { username: username.trim() });
   }
 
   ensureUsuarioCarregado(): Observable<Usuario | null> {
@@ -109,6 +115,33 @@ export class AuthService {
     const nextState: AuthState = { token: null, tipo: null, usuario: null };
     this.stateSignal.set(nextState);
     this.save(nextState);
+  }
+
+  updateFotoPerfil(fid: string): void {
+    const current = this.stateSignal();
+    if (current.usuario) {
+      const nextState: AuthState = {
+        ...current,
+        usuario: { ...current.usuario, fotoPerfil: fid }
+      };
+      this.stateSignal.set(nextState);
+      this.save(nextState);
+    }
+  }
+
+  atualizarPerfil(dados: { nome: string; username: string; telefone: string }): Observable<Usuario> {
+    return this.httpClient.patch<Usuario>('http://localhost:8080/auth/me', dados).pipe(
+      tap((usuario) => {
+        const current = this.stateSignal();
+        const nextState: AuthState = { ...current, usuario };
+        this.stateSignal.set(nextState);
+        this.save(nextState);
+      })
+    );
+  }
+
+  alterarSenha(senhaAtual: string, novaSenha: string): Observable<void> {
+    return this.httpClient.put<void>('http://localhost:8080/auth/me/senha', { senhaAtual, novaSenha });
   }
 
   authorizationValue(): string | null {
@@ -174,6 +207,7 @@ export class AuthService {
         id: value.perfil.id,
         nome: value.perfil.nome,
       },
+      fotoPerfil: value.fotoPerfil ?? null,
     };
   }
 

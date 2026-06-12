@@ -1,3 +1,18 @@
+.search-container input{
+    background: rgba(20, 10, 10, 0.4);
+    border: 1px solid rgba(166, 3, 33, 0.3);
+    border-radius: 20px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(12px);
+}
 
-
-
+.search-container .search-input {
+  width: 100%;
+  padding: 0.8rem 1.25rem 0.8rem 3.5rem;
+  border: none;
+  background-color: transparent;
+  color: var(--on-surface);
+  font-size: 0.95rem;
+  outline: none;
+  border-radius: 20px;
+}

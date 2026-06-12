@@ -324,7 +324,7 @@ html {
 }
 
 .pagination-btn.active {
-  background: #a60321 !important; 
+  background: #a60321 !important;
   color: white !important;
   border-color: #d32f2f !important;
   box-shadow: 0 4px 15px rgba(166, 3, 33, 0.4) !important;
@@ -419,4 +419,26 @@ html {
 
 .black-snackbar .mdc-snackbar__label {
   color: #ffffff !important;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Heart button active state */
+.favorito-ativo,
+.favorito-ativo span {
+  color: #ff3b30 !important;
 }

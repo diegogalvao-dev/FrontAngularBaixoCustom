@@ -1,91 +1,69 @@
 <!-- Catalogo de Produtos -->
-<div class="min-h-screen flex flex-col font-sans antialiased bg-surface-dim carbon-texture text-on-background">
+<div class="catalogo-page carbon-texture">
 
   <!-- MainContent -->
-  <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 w-full">
+  <main class="catalogo-main">
     <!-- Page Header & Breadcrumbs -->
-    <div class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+    <div class="page-header">
       <div>
-        <h1 class="text-3xl font-light text-white mb-2">ContraBaixo</h1>
-        <nav aria-label="Breadcrumb" class="flex text-sm text-white/60">
-          <ol class="inline-flex items-center space-x-1 md:space-x-3">
-            <li class="inline-flex items-center">
-              <a class="hover:text-primary transition-colors" href="/">Início</a>
+        <h1 class="page-title">ContraBaixo</h1>
+        <nav aria-label="Breadcrumb" class="breadcrumb-nav">
+          <ol class="breadcrumb-list">
+            <li>
+              <a class="breadcrumb-link" href="/">Início</a>
             </li>
             <li>
-              <div class="flex items-center">
-                <svg aria-hidden="true" class="w-3 h-3 mx-1 text-outline" fill="none" viewBox="0 0 6 10" xmlns="http://www.w3.org/2000/svg">
+              <div class="filter-item">
+                <svg aria-hidden="true" class="breadcrumb-separator" fill="none" viewBox="0 0 6 10" xmlns="http://www.w3.org/2000/svg">
                   <path d="m1 9 4-4-4-4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
                 </svg>
-                <span class="ml-1 md:ml-2 text-white">ContraBaixo</span>
+                <span class="breadcrumb-current">ContraBaixo</span>
               </div>
             </li>
           </ol>
         </nav>
       </div>
-      <div class="flex flex-col sm:flex-row items-center gap-4 text-sm">
-        <span class="text-white/60">Exibindo 1-24 de 31 produtos</span>
-        <div class="flex items-center gap-2">
-          <label class="text-white font-medium" for="sort">Ordenar por</label>
-          <select class="bg-black border border-zinc-700 text-white rounded-md focus:ring-primary focus:border-primary block p-2 text-sm" id="sort">
-            <option>Mais vendidos</option>
-            <option>Menor Preço</option>
-            <option>Maior Preço</option>
-            <option>Lançamentos</option>
+      <div class="sort-bar">
+        <span class="product-count">Exibindo 1-24 de 31 produtos</span>
+        <div class="sort-group">
+          <label class="sort-label" for="sort">Ordenar por</label>
+          <select class="sort-select" id="sort" (change)="onSortChange($event)">
+            <option value="maisVendidos">Mais vendidos</option>
+            <option value="precoAsc">Menor Preço</option>
+            <option value="precoDesc">Maior Preço</option>
+            <option value="lancamentos">Lançamentos</option>
           </select>
         </div>
       </div>
     </div>
 
-    <div class="flex flex-col lg:flex-row gap-8">
-      <!-- Sidebar Filters - Changed to Black -->
-      <aside class="w-full lg:w-64 flex-shrink-0">
-        <div class="bg-black rounded-xl border border-zinc-700 p-6 space-y-8 sticky top-32">
-          <!-- Filter: Marca -->
-          <div>
-            <h3 class="font-semibold text-lg text-white mb-4">Marca</h3>
-            <ul class="space-y-3">
-              <li>
-                <div class="flex items-center">
-                  <input class="w-4 h-4 text-primary bg-black border-outline rounded focus:ring-primary focus:ring-2" id="brand-seven" type="checkbox" value=""/>
-                  <label class="ml-2 text-sm text-white/80 hover:text-white cursor-pointer flex-grow flex justify-between" for="brand-seven">
-                    <span>Seven</span>
-                    <span class="text-white/50">(1)</span>
-                  </label>
-                </div>
-              </li>
-              <li>
-                <div class="flex items-center">
-                  <input checked="" class="w-4 h-4 text-primary bg-black border-outline rounded focus:ring-primary focus:ring-2" id="brand-seven-guitars" type="checkbox" value=""/>
-                  <label class="ml-2 text-sm text-white/80 hover:text-white cursor-pointer flex-grow flex justify-between" for="brand-seven-guitars">
-                    <span>Seven Guitars</span>
-                    <span class="text-white/50">(30)</span>
-                  </label>
-                </div>
-              </li>
-            </ul>
+    <div class="catalogo-content">
+      <!-- Sidebar Filters -->
+      <aside class="catalogo-sidebar">
+
+        <div class="filter-panel">
+          <!-- Search -->
+          <div class="catalogo-search">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" (keyup.enter)="searchByName(input.value)" placeholder="Buscar produtos..." #input class="search-input" />
           </div>
           <!-- Filter: Preço -->
           <div>
-            <h3 class="font-semibold text-lg text-white mb-4">Preço</h3>
-            <div class="flex items-center gap-2">
-              <div class="flex-1">
+            <h3 class="filter-title">Preço</h3>
+            <div class="price-filter-row">
+              <div class="price-input-wrapper">
                 <label class="sr-only" for="price-min">De</label>
-                <div class="relative">
-                  <span class="absolute inset-y-0 left-0 flex items-center pl-2 text-white/50 text-xs">R$</span>
-                  <input class="w-full bg-black border border-zinc-700 text-white text-sm rounded-md focus:ring-primary focus:border-primary block pl-7 p-2" id="price-min" placeholder="947" type="number"/>
-                </div>
+                <span class="price-currency">R$</span>
+                <input class="price-input" id="min" placeholder="947" type="number" #minInput/>
               </div>
-              <span class="text-outline">-</span>
-              <div class="flex-1">
+              <span class="price-separator">-</span>
+              <div class="price-input-wrapper">
                 <label class="sr-only" for="price-max">Até</label>
-                <div class="relative">
-                  <span class="absolute inset-y-0 left-0 flex items-center pl-2 text-white/50 text-xs">R$</span>
-                  <input class="w-full bg-black border border-zinc-700 text-white text-sm rounded-md focus:ring-primary focus:border-primary block pl-7 p-2" id="price-max" placeholder="1487" type="number"/>
-                </div>
+                <span class="price-currency">R$</span>
+                <input class="price-input" id="max" placeholder="1487" type="number" #maxInput/>
               </div>
             </div>
-            <button class="mt-4 w-full bg-black hover:bg-black text-white font-medium py-2 px-4 rounded-md transition-colors border border-zinc-700">
+            <button class="filter-apply-btn" (click)="aplicarFiltroPreco(minInput.value, maxInput.value)">
               Aplicar Filtro
             </button>
           </div>
@@ -93,27 +71,41 @@
       </aside>
 
       <!-- Product Grid -->
-      <div class="flex-1">
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+      <div class="product-grid-wrapper">
+        <div class="product-grid">
           @for (produto of produtos(); track produto.id) {
-          <article class="bg-black rounded-xl border border-zinc-700 overflow-hidden flex flex-col group hover:border-primary/50 transition-colors duration-300">
-            <div class="relative aspect-[3/4] bg-zinc-900/50 p-4 flex items-center justify-center overflow-hidden">
+          <article class="product-card">
+            <div class="product-image-container" [routerLink]="['/catalogo', produto.id]" style="cursor: pointer; position: relative;">
               @if (produto.imagemPrincipal) {
-                <img [alt]="produto.name" class="object-contain w-full h-full group-hover:scale-105 transition-transform duration-500" [src]="arquivoService.getUrlDownload(produto.imagemPrincipal)"/>
+                <img [alt]="produto.name" class="product-image" [src]="arquivoService.getUrlDownload(produto.imagemPrincipal)"/>
               } @else {
-                <div class="product-image-placeholder w-full h-full opacity-20"></div>
+                <div class="product-image-placeholder-catalog"></div>
               }
-              <div class="absolute top-2 left-2 bg-primary text-on-primary text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Novo</div>
+              <button 
+                class="absolute top-2 right-2 w-8 h-8 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center transition-all duration-300 z-10 hover:text-[#ffb3b3] hover:scale-110"
+                [class.text-white/75]="!wishlistService.isFavorito(produto.id)"
+                [class.favorito-ativo]="wishlistService.isFavorito(produto.id)"
+                (click)="toggleFavorito(produto, $event)"
+                title="Lista de Desejos"
+              >
+                <span 
+                  class="material-symbols-outlined text-[18px]" 
+                  [style.fontVariationSettings]="wishlistService.isFavorito(produto.id) ? '\'FILL\' 1' : '\'FILL\' 0'"
+                >
+                  favorite
+                </span>
+              </button>
+              <div class="product-badge">Novo</div>
             </div>
-            <div class="p-4 flex flex-col flex-grow">
-              <h2 class="text-sm font-medium text-white/90 line-clamp-2 mb-2 group-hover:text-primary transition-colors">{{produto.name}}</h2>
-              <div class="mt-auto flex flex-col items-center">
-                <span class="text-lg font-bold text-white">R$ {{produto.price | number:'1.2-2'}}</span>
-                <span class="text-xs text-white/60 flex items-center gap-1 mt-1">
-                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            <div class="product-info">
+              <h2 class="product-name" [routerLink]="['/catalogo', produto.id]" style="cursor: pointer;">{{produto.name}}</h2>
+              <div class="product-pricing">
+                <span class="product-price">R$ {{produto.price | number:'1.2-2'}}</span>
+                <span class="product-installment">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
                   Até 6x de R$ {{(produto.price / 6) | number:'1.2-2'}}
                 </span>
-                <button class="mt-4 w-full bg-black hover:bg-primary hover:text-on-primary border border-zinc-700 text-white font-medium py-2 px-4 rounded transition-all duration-300">
+                <button class="product-buy-btn" [routerLink]="['/catalogo', produto.id]">
                   COMPRAR
                 </button>
               </div>
@@ -122,17 +114,17 @@
           }
         </div>
         <!-- Pagination -->
-        <div class="mt-12 flex justify-center">
-          <nav aria-label="Pagination" class="inline-flex rounded-md shadow-sm -space-x-px">
-            <a class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-zinc-700 bg-black text-sm font-medium text-white/70 hover:bg-zinc-800 cursor-pointer" (click)="mudarPagina(paginaAtual() - 1, $event)" [class.opacity-50]="paginaAtual() === 0" [class.pointer-events-none]="paginaAtual() === 0">
+        <div class="pagination-wrapper">
+          <nav aria-label="Pagination" class="pagination-nav">
+            <a class="page-link page-link-prev" (click)="mudarPagina(paginaAtual() - 1, $event)" [class.page-link-disabled]="paginaAtual() === 0">
               <span class="sr-only">Anterior</span>
-              <svg aria-hidden="true" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+              <svg aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
             </a>
-            <a (click)="mudarPagina(0, $event)" [class.bg-primary-container]="paginaAtual() === 0" [class.bg-black]="paginaAtual() !== 0" class="border-zinc-700 text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium cursor-pointer hover:bg-zinc-800 transition-colors">1</a>
-            <a (click)="mudarPagina(1, $event)" [class.bg-primary-container]="paginaAtual() === 1" [class.bg-black]="paginaAtual() !== 1" class="border-zinc-700 text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium cursor-pointer hover:bg-zinc-800 transition-colors">2</a>
-            <a class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-zinc-700 bg-black text-sm font-medium text-white/70 hover:bg-zinc-800 cursor-pointer" (click)="mudarPagina(paginaAtual() + 1, $event)" [class.opacity-50]="produtos().length < itensPorPagina" [class.pointer-events-none]="produtos().length < itensPorPagina">
+            <a (click)="mudarPagina(0, $event)" class="page-link page-link-num" [class.page-link-active]="paginaAtual() === 0">1</a>
+            <a (click)="mudarPagina(1, $event)" class="page-link page-link-num" [class.page-link-active]="paginaAtual() === 1">2</a>
+            <a class="page-link page-link-next" (click)="mudarPagina(paginaAtual() + 1, $event)" [class.page-link-disabled]="produtos().length < itensPorPagina">
               <span class="sr-only">Próxima</span>
-              <svg aria-hidden="true" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" fill-rule="evenodd"></path></svg>
+              <svg aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" fill-rule="evenodd"></path></svg>
             </a>
           </nav>
         </div>
@@ -140,7 +132,6 @@
     </div>
 
   </main>
-
 
 
 

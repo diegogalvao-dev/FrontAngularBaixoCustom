@@ -5,7 +5,7 @@
       {{ mode === 'selection' ? 'Catálogo de Captadores' : (form.get('id')?.value ? 'Editar Captador' : 'Novo Captador') }}
     </h2>
     <div class="header-actions" *ngIf="mode === 'selection'">
-      <button (click)="switchToForm()" class="btn-create-new">
+      <button type="button" (click)="switchToForm()" class="btn-create-new">
         <span class="material-symbols-outlined">add</span>
         CRIAR NOVO
       </button>
@@ -25,7 +25,7 @@
         placeholder="Buscar por marca, tipo ou posição..."
         class="search-input"
       >
-      <button *ngIf="searchTerm()" (click)="searchTerm.set('')" class="clear-btn">
+      <button type="button" *ngIf="searchTerm()" (click)="searchTerm.set('')" class="clear-btn">
         <span class="material-symbols-outlined">close</span>
       </button>
     </div>
@@ -60,13 +60,13 @@
     </div>
 
     <div class="dialog-actions">
-      <button (click)="onCancel()" class="btn-cancel">Cancelar</button>
-      <button (click)="confirmSelection()" [disabled]="!selectedFromList" class="btn-save">Confirmar Seleção</button>
+      <button type="button" (click)="onCancel()" class="btn-cancel">Cancelar</button>
+      <button type="button" (click)="confirmSelection()" [disabled]="!selectedFromList" class="btn-save">Confirmar Seleção</button>
     </div>
   </div>
 
   <!-- MODO FORMULÁRIO (COMPOSIÇÃO/EDIÇÃO) -->
-  <form *ngIf="mode === 'form'" [formGroup]="form" (ngSubmit)="onSave()" class="animate-fade">
+  <form *ngIf="mode === 'form'" [formGroup]="form" class="animate-fade">
     <div class="dialog-content">
       <div class="fields-grid">
         <mat-form-field appearance="outline" class="full-width">
@@ -137,7 +137,7 @@
 
     <div class="dialog-actions">
       <button type="button" (click)="backToSelection()" class="btn-cancel">Voltar para Lista</button>
-      <button type="submit" class="btn-save">Salvar e Selecionar</button>
+      <button type="button" (click)="onSave()" class="btn-save">Salvar e Selecionar</button>
     </div>
   </form>
 </div>
